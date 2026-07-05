@@ -1,24 +1,30 @@
 import React from "react";
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getMockPosts } from "@/lib/mockData";
 import ArticleCard from "@/components/article/ArticleCard";
 import ExternalArticleCard from "@/components/article/ExternalArticleCard";
 import Sidebar from "@/components/layout/Sidebar";
+import FilterBar from "@/components/ui/FilterBar";
+import EmptyState from "@/components/ui/EmptyState";
+import Pagination from "@/components/ui/Pagination";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { fetchExternalNews } from "@/lib/externalNews";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { Newspaper, X } from "lucide-react";
+import { paginate, parsePageParam } from "@/lib/pagination";
+import type { ListingPost } from "@/lib/post-types";
+import { Newspaper } from "lucide-react";
 
 interface PageProps {
   searchParams: Promise<{
     q?: string;
     category?: string;
     tag?: string;
+    page?: string;
   }>;
 }
 
-async function getNews(filters: { search?: string; category?: string; tag?: string }) {
+async function getNews(filters: { search?: string; category?: string; tag?: string }): Promise<ListingPost[]> {
   try {
     const whereClause: Prisma.PostWhereInput = {
       type: "NEWS",
@@ -37,7 +43,6 @@ async function getNews(filters: { search?: string; category?: string; tag?: stri
       whereClause.OR = [
         { title: { contains: filters.search, mode: "insensitive" } },
         { excerpt: { contains: filters.search, mode: "insensitive" } },
-        { content: { contains: filters.search, mode: "insensitive" } },
       ];
     }
 
@@ -58,10 +63,10 @@ async function getNews(filters: { search?: string; category?: string; tag?: stri
         search: filters.search,
         category: filters.category,
         tag: filters.tag,
-      });
+      }) as ListingPost[];
     }
 
-    return news;
+    return news as ListingPost[];
   } catch (error) {
     console.warn("Using fallback news due to DB availability:", error);
     return getMockPosts({
@@ -69,15 +74,16 @@ async function getNews(filters: { search?: string; category?: string; tag?: stri
       search: filters.search,
       category: filters.category,
       tag: filters.tag,
-    });
+    }) as ListingPost[];
   }
 }
 
 export default async function NewsPage({ searchParams }: PageProps) {
-  const { q, category, tag } = await searchParams;
-  const newsList = await getNews({ search: q, category, tag });
+  const { q, category, tag, page } = await searchParams;
+  const allNews = await getNews({ search: q, category, tag });
   const externalArticles = await fetchExternalNews();
   const isFiltered = !!(q || category || tag);
+  const paginated = paginate(allNews, parsePageParam(page));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -85,72 +91,64 @@ export default async function NewsPage({ searchParams }: PageProps) {
         <div className="lg:col-span-2 space-y-10">
           <div className="space-y-6">
             <ScrollAnimationWrapper>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-4">
-                <div className="space-y-1">
-                  <h1 className="text-3xl font-black italic tracking-tight uppercase border-l-4 border-primary pl-3 flex items-center gap-2 font-display">
-                    <Newspaper size={24} className="text-primary" />
-                    Borilačke Novosti
-                  </h1>
-                  <p className="text-muted-foreground text-xs pl-4 font-medium">
-                    Pratite najnovija zbivanja, najave turnira i vijesti iz ringa i oktogona.
-                  </p>
-                </div>
-                
-                {isFiltered && (
-                  <div className="flex items-center gap-3 self-end sm:self-auto">
-                    <Link
-                      href="/novosti"
-                      className="text-xs font-bold text-primary hover:text-red-400 flex items-center gap-1 transition-colors uppercase tracking-wider bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20"
-                    >
-                      <X size={14} />
-                      Očisti filtere
-                    </Link>
-                  </div>
-                )}
-              </div>
+              <SectionHeading
+                title="Borilačke Novosti"
+                description="Pratite najnovija zbivanja, najave turnira i vijesti iz ringa i oktogona."
+                icon={Newspaper}
+                as="h1"
+              />
             </ScrollAnimationWrapper>
 
-            {newsList.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-white/10 bg-card/30 p-12 text-center text-muted-foreground">
-                Nisu pronađene vijesti koje odgovaraju vašim kriterijima.
-              </div>
+            <FilterBar
+              basePath="/novosti"
+              activeCategory={category}
+              activeTag={tag}
+              activeQuery={q}
+              resultCount={paginated.total}
+            />
+
+            {paginated.items.length === 0 ? (
+              <EmptyState
+                message="Nisu pronađene vijesti koje odgovaraju vašim kriterijima."
+                basePath="/novosti"
+              />
             ) : (
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-                {newsList.map((post, index) => (
-                  <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
-                    <ArticleCard
-                      title={post.title}
-                      slug={post.slug}
-                      excerpt={post.excerpt}
-                      featuredImage={post.featuredImage}
-                      type={post.type}
-                      publishedAt={post.publishedAt}
-                      category={post.category}
-                      author={post.author}
-                      variant={index === 0 ? "horizontal" : "vertical"}
-                    />
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
+              <>
+                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {paginated.items.map((post, index) => (
+                    <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                      <ArticleCard
+                        title={post.title}
+                        slug={post.slug}
+                        excerpt={post.excerpt}
+                        featuredImage={post.featuredImage}
+                        type={post.type}
+                        publishedAt={post.publishedAt}
+                        category={post.category}
+                        author={post.author}
+                        variant={index === 0 ? "horizontal" : "vertical"}
+                      />
+                    </StaggerItem>
+                  ))}
+                </StaggerContainer>
+
+                <Pagination
+                  basePath="/novosti"
+                  currentPage={paginated.currentPage}
+                  totalPages={paginated.totalPages}
+                  params={{ q, category, tag }}
+                />
+              </>
             )}
           </div>
 
-          {/* Section: Live vijesti iz svijeta */}
-          {!isFiltered && externalArticles.length > 0 && (
+          {!isFiltered && paginated.currentPage === 1 && externalArticles.length > 0 && (
             <div className="pt-8 border-t border-white/5 space-y-6">
               <ScrollAnimationWrapper>
-                <div className="space-y-1">
-                  <h2 className="text-xl font-black italic tracking-tight uppercase border-l-4 border-primary pl-3 flex items-center gap-2 font-display">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></span>
-                    </span>
-                    Vijesti iz Svijeta (Uživo)
-                  </h2>
-                  <p className="text-muted-foreground text-xs pl-5 font-medium">
-                    Najnoviji članci preneseni u realnom vremenu s vodećih stranih borilačkih portala.
-                  </p>
-                </div>
+                <SectionHeading
+                  title="Vijesti iz Svijeta (Uživo)"
+                  description="Najnoviji članci preneseni u realnom vremenu s vodećih stranih borilačkih portala."
+                />
               </ScrollAnimationWrapper>
 
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-5">

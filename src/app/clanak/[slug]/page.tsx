@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -9,8 +10,13 @@ import Sidebar from "@/components/layout/Sidebar";
 import ShareButtons from "@/components/article/ShareButtons";
 import ArticleCard from "@/components/article/ArticleCard";
 import ReadingProgressBar from "@/components/ui/ReadingProgressBar";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import TypeBadge from "@/components/ui/TypeBadge";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { Calendar, User, Tag, Clock } from "lucide-react";
+import { TYPE_ROUTES, TYPE_SECTION_NAMES, PostTypeKey } from "@/lib/constants";
+import type { ListingPost } from "@/lib/post-types";
+import { Calendar, User, Clock, Hash } from "lucide-react";
 
 async function getArticle(slug: string) {
   try {
@@ -20,13 +26,14 @@ async function getArticle(slug: string) {
         author: true,
         category: true,
         prediction: true,
+        tags: true,
       },
     });
-    
+
     if (!post) {
       return getMockArticleBySlug(slug);
     }
-    
+
     return post;
   } catch (error) {
     console.warn("DB not accessible. Using fallback for slug: ", slug, error);
@@ -34,11 +41,15 @@ async function getArticle(slug: string) {
   }
 }
 
-async function getRelatedArticles(slug: string, categorySlug: string | undefined, categoryId: string | null) {
+async function getRelatedArticles(
+  slug: string,
+  categorySlug: string | undefined,
+  categoryId: string | null
+) {
   try {
-    let related: any[] = [];
+    let related: ListingPost[] = [];
     if (categoryId) {
-      related = await prisma.post.findMany({
+      related = (await prisma.post.findMany({
         where: {
           categoryId,
           slug: { not: slug },
@@ -52,18 +63,18 @@ async function getRelatedArticles(slug: string, categorySlug: string | undefined
           publishedAt: "desc",
         },
         take: 2,
-      });
+      })) as ListingPost[];
     }
 
     if (related.length === 0) {
       const allMock = getMockPosts({ category: categorySlug });
-      return allMock.filter(p => p.slug !== slug).slice(0, 2);
+      return allMock.filter((p) => p.slug !== slug).slice(0, 2) as ListingPost[];
     }
     return related;
   } catch (error) {
     console.warn("DB not accessible. Using fallback for related articles:", error);
     const allMock = getMockPosts({ category: categorySlug });
-    return allMock.filter(p => p.slug !== slug).slice(0, 2);
+    return allMock.filter((p) => p.slug !== slug).slice(0, 2) as ListingPost[];
   }
 }
 
@@ -99,7 +110,11 @@ export default async function ArticlePage({ params }: PageProps) {
     notFound();
   }
 
-  const relatedArticles = await getRelatedArticles(slug, article.category?.slug, article.categoryId);
+  const relatedArticles = await getRelatedArticles(
+    slug,
+    article.category?.slug,
+    article.categoryId
+  );
 
   const formattedDate = article.publishedAt
     ? new Date(article.publishedAt).toLocaleDateString("hr-HR", {
@@ -109,21 +124,37 @@ export default async function ArticlePage({ params }: PageProps) {
       })
     : "";
 
-  // Estimated reading time
   const wordCount = article.content ? article.content.split(/\s+/).length : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
-  // Priprema strukturiranih JSON-LD podataka
+  const postType = article.type as PostTypeKey;
+  const sectionRoute = TYPE_ROUTES[postType];
+  const sectionName = TYPE_SECTION_NAMES[postType];
+
+  const tags = "tags" in article && Array.isArray(article.tags) ? article.tags : [];
+
+  const breadcrumbItems = [
+    { label: sectionName, href: sectionRoute },
+    ...(article.category
+      ? [{ label: article.category.name, href: `${sectionRoute}?category=${article.category.slug}` }]
+      : []),
+    { label: article.title },
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "headline": article.title,
-    "image": article.featuredImage ? [article.featuredImage] : [],
-    "datePublished": article.publishedAt ? new Date(article.publishedAt).toISOString() : new Date().toISOString(),
-    "author": [{
-      "@type": "Person",
-      "name": article.author.name,
-    }]
+    headline: article.title,
+    image: article.featuredImage ? [article.featuredImage] : [],
+    datePublished: article.publishedAt
+      ? new Date(article.publishedAt).toISOString()
+      : new Date().toISOString(),
+    author: [
+      {
+        "@type": "Person",
+        name: article.author.name,
+      },
+    ],
   };
 
   return (
@@ -134,38 +165,50 @@ export default async function ArticlePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Article Body */}
         <article className="lg:col-span-2 space-y-6">
-          {/* Category / Date / Reading Time */}
+          <Breadcrumbs items={breadcrumbItems} />
+
           <ScrollAnimationWrapper>
             <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-muted-foreground uppercase">
+              <TypeBadge type={postType} />
               {article.category && (
-                <span className="text-primary font-extrabold flex items-center gap-1">
-                  <Tag size={12} />
-                  {article.category.name}
-                </span>
+                <>
+                  <span className="opacity-30" aria-hidden="true">
+                    •
+                  </span>
+                  <Link
+                    href={`${sectionRoute}?category=${article.category.slug}`}
+                    className="text-primary font-extrabold hover:text-red-400 transition-premium"
+                  >
+                    {article.category.name}
+                  </Link>
+                </>
               )}
-              <span className="opacity-30">•</span>
-              <span className="flex items-center gap-1">
-                <Calendar size={12} />
-                {formattedDate}
+              <span className="opacity-30" aria-hidden="true">
+                •
               </span>
-              <span className="opacity-30">•</span>
+              <span className="flex items-center gap-1">
+                <Calendar size={12} aria-hidden="true" />
+                <time dateTime={article.publishedAt ? new Date(article.publishedAt).toISOString() : undefined}>
+                  {formattedDate}
+                </time>
+              </span>
+              <span className="opacity-30" aria-hidden="true">
+                •
+              </span>
               <span className="flex items-center gap-1 text-slate-500">
-                <Clock size={12} />
+                <Clock size={12} aria-hidden="true" />
                 {readingTime} min čitanja
               </span>
             </div>
           </ScrollAnimationWrapper>
 
-          {/* Title */}
           <ScrollAnimationWrapper delay={0.05}>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground leading-tight font-display">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight font-display">
               {article.title}
             </h1>
           </ScrollAnimationWrapper>
 
-          {/* Author */}
           <ScrollAnimationWrapper delay={0.1}>
             <div className="flex items-center gap-3 border-y border-white/5 py-4">
               {article.author.avatarUrl ? (
@@ -174,16 +217,20 @@ export default async function ArticlePage({ params }: PageProps) {
                   alt={article.author.name}
                   width={40}
                   height={40}
+                  sizes="40px"
                   className="rounded-full object-cover border border-white/10 shadow-sm"
                 />
               ) : (
-                <div className="h-10 w-10 rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-white font-black">
+                <div
+                  className="h-10 w-10 rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-white font-extrabold"
+                  aria-hidden="true"
+                >
                   {article.author.name.charAt(0)}
                 </div>
               )}
               <div>
-                <p className="text-sm font-black text-foreground flex items-center gap-1.5">
-                  <User size={14} className="text-primary" />
+                <p className="text-sm font-extrabold text-foreground flex items-center gap-1.5">
+                  <User size={14} className="text-primary" aria-hidden="true" />
                   {article.author.name}
                 </p>
                 {article.author.bio && (
@@ -193,10 +240,9 @@ export default async function ArticlePage({ params }: PageProps) {
             </div>
           </ScrollAnimationWrapper>
 
-          {/* Featured Image */}
           {article.featuredImage && (
             <ScrollAnimationWrapper delay={0.15}>
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-slate-900 shadow-lg border border-white/5">
+              <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)] bg-slate-900 shadow-[var(--shadow-card)] border border-white/5">
                 <Image
                   src={article.featuredImage}
                   alt={article.title}
@@ -209,17 +255,31 @@ export default async function ArticlePage({ params }: PageProps) {
             </ScrollAnimationWrapper>
           )}
 
-          {/* Share Buttons */}
           <ShareButtons title={article.title} />
 
-          {/* Content with custom prose styling class */}
           <ScrollAnimationWrapper delay={0.1}>
             <div className="prose-custom text-base sm:text-lg leading-relaxed whitespace-pre-line">
               {article.content}
             </div>
           </ScrollAnimationWrapper>
 
-          {/* Prediction Widget */}
+          {tags.length > 0 && (
+            <ScrollAnimationWrapper>
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <Hash size={14} className="text-primary" aria-hidden="true" />
+                {tags.map((tag: { slug: string; name: string }) => (
+                  <Link
+                    key={tag.slug}
+                    href={`/tag/${tag.slug}`}
+                    className="rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-white/5 border border-white/10 text-muted-foreground hover:border-primary/30 hover:text-primary transition-premium"
+                  >
+                    #{tag.name}
+                  </Link>
+                ))}
+              </div>
+            </ScrollAnimationWrapper>
+          )}
+
           {article.type === "PREDICTION" && article.prediction && (
             <ScrollAnimationWrapper>
               <PredictionWidget
@@ -234,12 +294,9 @@ export default async function ArticlePage({ params }: PageProps) {
             </ScrollAnimationWrapper>
           )}
 
-          {/* Related Articles Section */}
           {relatedArticles.length > 0 && (
             <div className="border-t border-white/5 pt-8 mt-12 space-y-6">
-              <h3 className="text-xl font-black italic tracking-tight uppercase border-l-4 border-primary pl-3 flex items-center gap-2 font-display text-white">
-                Povezani Članci
-              </h3>
+              <SectionHeading title="Povezani Članci" as="h2" />
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {relatedArticles.map((item) => (
                   <StaggerItem key={item.id}>
@@ -260,7 +317,6 @@ export default async function ArticlePage({ params }: PageProps) {
           )}
         </article>
 
-        {/* Sidebar */}
         <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
           <Sidebar />
         </ScrollAnimationWrapper>
@@ -268,5 +324,3 @@ export default async function ArticlePage({ params }: PageProps) {
     </div>
   );
 }
-
-

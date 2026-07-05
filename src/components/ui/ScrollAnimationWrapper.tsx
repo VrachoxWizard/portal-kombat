@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { EASE_OUT } from "@/lib/motion";
 
 interface ScrollAnimationWrapperProps {
   children: React.ReactNode;
@@ -11,9 +12,9 @@ interface ScrollAnimationWrapperProps {
 }
 
 const directionOffsets = {
-  up: { x: 0, y: 30 },
-  left: { x: -30, y: 0 },
-  right: { x: 30, y: 0 },
+  up: { x: 0, y: 24 },
+  left: { x: -24, y: 0 },
+  right: { x: 24, y: 0 },
 };
 
 export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
@@ -22,7 +23,12 @@ export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
   delay = 0,
   direction = "up",
 }) => {
+  const prefersReducedMotion = useReducedMotion();
   const offset = directionOffsets[direction];
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
@@ -30,9 +36,9 @@ export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.55,
+        duration: 0.42,
         delay,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASE_OUT,
       }}
       className={className}
     >
@@ -41,7 +47,6 @@ export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
   );
 };
 
-// Staggered container for lists of items
 interface StaggerContainerProps {
   children: React.ReactNode;
   className?: string;
@@ -53,6 +58,12 @@ export const StaggerContainer: React.FC<StaggerContainerProps> = ({
   className = "",
   staggerDelay = 0.08,
 }) => {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -76,14 +87,20 @@ export const StaggerItem: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 25 },
+        hidden: { opacity: 0, y: 20 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+          transition: { duration: 0.4, ease: EASE_OUT },
         },
       }}
       className={className}

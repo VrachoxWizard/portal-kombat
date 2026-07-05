@@ -1,10 +1,10 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Calendar, Tag } from "lucide-react";
+import { Calendar } from "lucide-react";
+import TypeBadge from "@/components/ui/TypeBadge";
+import CategoryBadge from "@/components/ui/CategoryBadge";
+import { PostTypeKey } from "@/lib/constants";
 
 interface Author {
   name: string;
@@ -21,11 +21,16 @@ interface ArticleCardProps {
   slug: string;
   excerpt?: string | null;
   featuredImage?: string | null;
-  type: "NEWS" | "BLOG" | "PREDICTION";
+  type: PostTypeKey;
   publishedAt?: Date | string | null;
   category?: Category | null;
   author: Author;
   variant?: "vertical" | "horizontal";
+  predictionTeaser?: {
+    fighterA: string;
+    fighterB: string;
+    winner: string;
+  } | null;
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -38,6 +43,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   category,
   author,
   variant = "vertical",
+  predictionTeaser,
 }) => {
   const formattedDate = publishedAt
     ? new Date(publishedAt).toLocaleDateString("hr-HR", {
@@ -47,98 +53,110 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       })
     : "";
 
-  const typeLabels = {
-    NEWS: "Vijest",
-    BLOG: "Blog",
-    PREDICTION: "Predikcija",
-  };
-
-  const typeColor = {
-    NEWS: "bg-gradient-to-r from-red-600 to-rose-700 text-white border border-red-500/30",
-    BLOG: "bg-gradient-to-r from-amber-500 to-orange-600 text-white border border-amber-500/30",
-    PREDICTION: "bg-gradient-to-r from-emerald-500 to-teal-600 text-white border border-emerald-500/30",
-  };
-
   const isHorizontal = variant === "horizontal";
 
   return (
-    <motion.article 
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`group flex overflow-hidden rounded-xl border border-white/5 bg-[#0c0f1c]/45 backdrop-blur-md hover-glow hover:shadow-md h-full ${
+    <article
+      className={`group flex overflow-hidden surface-card hover-glow h-full ${
         isHorizontal ? "flex-col sm:flex-row" : "flex-col"
       }`}
     >
-      {/* Featured Image Container */}
-      <div className={`relative overflow-hidden bg-slate-950 ${
-        isHorizontal ? "aspect-video sm:aspect-auto w-full sm:w-[45%] min-h-[200px] sm:min-h-full" : "aspect-video w-full"
-      }`}>
-        <Image
-          src={featuredImage || "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&h=450&q=80"}
-          alt={title}
-          fill
-          sizes={isHorizontal ? "(max-width: 768px) 100vw, 500px" : "(max-width: 768px) 100vw, 400px"}
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-90"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-        <div className="absolute left-4 top-4 flex gap-2 z-10">
-          <span className={`rounded-md px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest ${typeColor[type]}`}>
-            {typeLabels[type]}
-          </span>
-          {category && (
-            <span className="flex items-center gap-1 rounded-md bg-black/60 border border-white/10 backdrop-blur-md px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/90">
-              <Tag size={9} className="text-primary" />
-              {category.name}
-            </span>
-          )}
+      <div
+        className={`relative overflow-hidden bg-slate-950 shrink-0 ${
+          isHorizontal
+            ? "aspect-video sm:aspect-[16/10] w-full sm:w-[45%] sm:min-h-[220px]"
+            : "aspect-video w-full"
+        }`}
+      >
+        <Link href={`/clanak/${slug}`} className="block absolute inset-0 z-0" tabIndex={-1} aria-hidden="true">
+          <Image
+            src={
+              featuredImage ||
+              "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&h=450&q=80"
+            }
+            alt=""
+            fill
+            sizes={isHorizontal ? "(max-width: 768px) 100vw, 500px" : "(max-width: 768px) 100vw, 400px"}
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:opacity-90"
+            loading="lazy"
+          />
+        </Link>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2 z-10 pointer-events-none">
+          <TypeBadge type={type} />
         </div>
+        {category && (
+          <div className="absolute left-4 top-12 z-20">
+            <CategoryBadge name={category.name} slug={category.slug} />
+          </div>
+        )}
       </div>
 
-      {/* Content */}
       <div className="flex flex-1 flex-col p-6 justify-between">
         <div className="flex-1">
-          <h3 className={`font-display font-black italic tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary leading-snug uppercase ${
-            isHorizontal ? "text-xl sm:text-2xl mb-3" : "text-lg mb-2"
-          }`}>
-            <Link href={`/clanak/${slug}`}>
-              {title}
-            </Link>
+          <h3
+            className={`font-display font-extrabold italic tracking-tight text-foreground transition-premium group-hover:text-primary leading-snug uppercase ${
+              isHorizontal ? "text-xl sm:text-2xl mb-3" : "text-lg mb-2"
+            }`}
+          >
+            <Link href={`/clanak/${slug}`}>{title}</Link>
           </h3>
+
+          {predictionTeaser && (
+            <div className="mb-3 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+              <span className="text-white/70">{predictionTeaser.fighterA}</span>
+              <span className="mx-2 text-red-400">VS</span>
+              <span className="text-white/70">{predictionTeaser.fighterB}</span>
+              <span className="block mt-1 text-emerald-400 normal-case tracking-normal text-xs">
+                Prognoza: {predictionTeaser.winner}
+              </span>
+            </div>
+          )}
+
           {excerpt && (
-            <p className={`text-slate-400 leading-relaxed ${
-              isHorizontal ? "text-sm sm:text-base line-clamp-4 mb-4" : "text-xs sm:text-sm line-clamp-3 mb-2"
-            }`}>
+            <p
+              className={`text-slate-400 leading-relaxed ${
+                isHorizontal
+                  ? "text-sm sm:text-base line-clamp-4 mb-4"
+                  : "text-xs sm:text-sm line-clamp-3 mb-2"
+              }`}
+            >
               {excerpt}
             </p>
           )}
         </div>
 
-        {/* Footer info */}
         <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             {author.avatarUrl ? (
               <Image
                 src={author.avatarUrl}
-                alt={author.name}
+                alt=""
                 width={22}
                 height={22}
+                sizes="22px"
                 className="rounded-full object-cover border border-white/10 shadow-sm"
               />
             ) : (
-              <div className="h-[22px] w-[22px] rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-[10px] text-primary font-black">
+              <div
+                className="h-[22px] w-[22px] rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-[10px] text-primary font-extrabold"
+                aria-hidden="true"
+              >
                 {author.name.charAt(0)}
               </div>
             )}
             <span className="font-bold text-white/90">{author.name}</span>
           </div>
-          <span className="flex items-center gap-1 font-medium text-slate-500">
-            <Calendar size={12} />
+          <time
+            dateTime={publishedAt ? new Date(publishedAt).toISOString() : undefined}
+            className="flex items-center gap-1 font-medium text-slate-500"
+          >
+            <Calendar size={12} aria-hidden="true" />
             {formattedDate}
-          </span>
+          </time>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 };
 

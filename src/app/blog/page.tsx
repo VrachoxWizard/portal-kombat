@@ -1,22 +1,28 @@
 import React from "react";
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getMockPosts } from "@/lib/mockData";
 import ArticleCard from "@/components/article/ArticleCard";
 import Sidebar from "@/components/layout/Sidebar";
+import FilterBar from "@/components/ui/FilterBar";
+import EmptyState from "@/components/ui/EmptyState";
+import Pagination from "@/components/ui/Pagination";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { BookOpen, X } from "lucide-react";
+import { paginate, parsePageParam } from "@/lib/pagination";
+import type { ListingPost } from "@/lib/post-types";
+import { BookOpen } from "lucide-react";
 
 interface PageProps {
   searchParams: Promise<{
     q?: string;
     category?: string;
     tag?: string;
+    page?: string;
   }>;
 }
 
-async function getBlogs(filters: { search?: string; category?: string; tag?: string }) {
+async function getBlogs(filters: { search?: string; category?: string; tag?: string }): Promise<ListingPost[]> {
   try {
     const whereClause: Prisma.PostWhereInput = {
       type: "BLOG",
@@ -35,7 +41,6 @@ async function getBlogs(filters: { search?: string; category?: string; tag?: str
       whereClause.OR = [
         { title: { contains: filters.search, mode: "insensitive" } },
         { excerpt: { contains: filters.search, mode: "insensitive" } },
-        { content: { contains: filters.search, mode: "insensitive" } },
       ];
     }
 
@@ -49,17 +54,17 @@ async function getBlogs(filters: { search?: string; category?: string; tag?: str
         publishedAt: "desc",
       },
     });
-    
+
     if (blogs.length === 0) {
       return getMockPosts({
         type: "BLOG",
         search: filters.search,
         category: filters.category,
         tag: filters.tag,
-      });
+      }) as ListingPost[];
     }
-    
-    return blogs;
+
+    return blogs as ListingPost[];
   } catch (error) {
     console.warn("Using fallback blogs due to DB availability:", error);
     return getMockPosts({
@@ -67,67 +72,68 @@ async function getBlogs(filters: { search?: string; category?: string; tag?: str
       search: filters.search,
       category: filters.category,
       tag: filters.tag,
-    });
+    }) as ListingPost[];
   }
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
-  const { q, category, tag } = await searchParams;
-  const blogs = await getBlogs({ search: q, category, tag });
-  const isFiltered = !!(q || category || tag);
+  const { q, category, tag, page } = await searchParams;
+  const allBlogs = await getBlogs({ search: q, category, tag });
+  const paginated = paginate(allBlogs, parsePageParam(page));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <ScrollAnimationWrapper>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-4">
-              <div className="space-y-1">
-                <h1 className="text-3xl font-black italic tracking-tight uppercase border-l-4 border-primary pl-3 flex items-center gap-2 font-display">
-                  <BookOpen size={24} className="text-primary" />
-                  Urednički Blogovi i Kolumne
-                </h1>
-                <p className="text-muted-foreground text-xs pl-4 font-medium">
-                  Pročitajte stručna mišljenja, dubinske rasprave i analize povijesti borilačkih sportova.
-                </p>
-              </div>
-              
-              {isFiltered && (
-                <div className="flex items-center gap-3 self-end sm:self-auto">
-                  <Link
-                    href="/blog"
-                    className="text-xs font-bold text-primary hover:text-red-400 flex items-center gap-1 transition-colors uppercase tracking-wider bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20"
-                  >
-                    <X size={14} />
-                    Očisti filtere
-                  </Link>
-                </div>
-              )}
-            </div>
+            <SectionHeading
+              title="Urednički Blogovi i Kolumne"
+              description="Pročitajte stručna mišljenja, dubinske rasprave i analize povijesti borilačkih sportova."
+              icon={BookOpen}
+              as="h1"
+            />
           </ScrollAnimationWrapper>
 
-          {blogs.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-white/10 bg-card/30 p-12 text-center text-muted-foreground">
-              Nisu pronađeni blogovi koji odgovaraju vašim kriterijima.
-            </div>
+          <FilterBar
+            basePath="/blog"
+            activeCategory={category}
+            activeTag={tag}
+            activeQuery={q}
+            resultCount={paginated.total}
+          />
+
+          {paginated.items.length === 0 ? (
+            <EmptyState
+              message="Nisu pronađeni blogovi koji odgovaraju vašim kriterijima."
+              basePath="/blog"
+            />
           ) : (
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-              {blogs.map((post, index) => (
-                <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
-                  <ArticleCard
-                    title={post.title}
-                    slug={post.slug}
-                    excerpt={post.excerpt}
-                    featuredImage={post.featuredImage}
-                    type={post.type}
-                    publishedAt={post.publishedAt}
-                    category={post.category}
-                    author={post.author}
-                    variant={index === 0 ? "horizontal" : "vertical"}
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+            <>
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {paginated.items.map((post, index) => (
+                  <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                    <ArticleCard
+                      title={post.title}
+                      slug={post.slug}
+                      excerpt={post.excerpt}
+                      featuredImage={post.featuredImage}
+                      type={post.type}
+                      publishedAt={post.publishedAt}
+                      category={post.category}
+                      author={post.author}
+                      variant={index === 0 ? "horizontal" : "vertical"}
+                    />
+                  </StaggerItem>
+                ))}
+              </StaggerContainer>
+
+              <Pagination
+                basePath="/blog"
+                currentPage={paginated.currentPage}
+                totalPages={paginated.totalPages}
+                params={{ q, category, tag }}
+              />
+            </>
           )}
         </div>
 

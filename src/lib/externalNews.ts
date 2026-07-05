@@ -103,8 +103,9 @@ export async function fetchExternalNews(): Promise<ExternalArticle[]> {
     }
   }
   
-  // Sort articles by publication date desc
-  return articles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return articles
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, 6);
 }
 
 function decodeHtmlEntities(str: string): string {

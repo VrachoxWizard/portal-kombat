@@ -1,0 +1,32 @@
+import React from "react";
+import { SkeletonHero, SkeletonCard } from "@/components/ui/SkeletonCard";
+
+export default function ArticleLoading() {
+  return (
+    <div
+      className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+      aria-busy="true"
+      aria-live="polite"
+      aria-label="Učitavanje članka"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="h-4 w-48 rounded bg-white/5 skeleton-shimmer" aria-hidden="true" />
+          <div className="h-12 w-full rounded bg-white/5 skeleton-shimmer" aria-hidden="true" />
+          <div className="h-16 w-full rounded bg-white/5 skeleton-shimmer" aria-hidden="true" />
+          <div className="relative aspect-video w-full rounded-xl surface-card skeleton-shimmer" aria-hidden="true" />
+          <div className="space-y-3" aria-hidden="true">
+            <div className="h-4 w-full rounded bg-white/5 skeleton-shimmer" />
+            <div className="h-4 w-full rounded bg-white/5 skeleton-shimmer" />
+            <div className="h-4 w-5/6 rounded bg-white/5 skeleton-shimmer" />
+            <div className="h-4 w-4/6 rounded bg-white/5 skeleton-shimmer" />
+          </div>
+        </div>
+        <div className="lg:col-span-1 space-y-6" aria-hidden="true">
+          <div className="h-12 w-full rounded-xl surface-card skeleton-shimmer" />
+          <div className="h-64 w-full rounded-xl surface-card skeleton-shimmer" />
+        </div>
+      </div>
+    </div>
+  );
+}
