@@ -1,65 +1,180 @@
-import Image from "next/image";
+import React from "react";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+import { getMockPosts } from "@/lib/mockData";
+import HeroArticle from "@/components/article/HeroArticle";
+import ArticleCard from "@/components/article/ArticleCard";
+import Sidebar from "@/components/layout/Sidebar";
+import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
+import { X, Flame } from "lucide-react";
 
-export default function Home() {
+interface PageProps {
+  searchParams: Promise<{
+    q?: string;
+    category?: string;
+    tag?: string;
+  }>;
+}
+
+async function getPosts(filters: { search?: string; category?: string; tag?: string }) {
+  try {
+    const whereClause: Prisma.PostWhereInput = {
+      status: "PUBLISHED",
+    };
+
+    if (filters.category) {
+      whereClause.category = { slug: filters.category };
+    }
+
+    if (filters.tag) {
+      whereClause.tags = { some: { slug: filters.tag } };
+    }
+
+    if (filters.search) {
+      whereClause.OR = [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { excerpt: { contains: filters.search, mode: "insensitive" } },
+        { content: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
+
+    const posts = await prisma.post.findMany({
+      where: whereClause,
+      include: {
+        author: true,
+        category: true,
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+    });
+
+    if (posts.length === 0) {
+      return getMockPosts({
+        search: filters.search,
+        category: filters.category,
+        tag: filters.tag,
+      });
+    }
+
+    return posts;
+  } catch (error) {
+    console.warn("Baza podataka nije dostupna, koriste se mock podaci:", error);
+    return getMockPosts({
+      search: filters.search,
+      category: filters.category,
+      tag: filters.tag,
+    });
+  }
+}
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const { q, category, tag } = await searchParams;
+  const posts = await getPosts({ search: q, category, tag });
+  
+  const isFiltered = !!(q || category || tag);
+  const heroPost = posts[0];
+  const remainingPosts = posts.slice(1);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {/* Hero Section (samo ako nismo pod pretragom/filterom) */}
+      {!isFiltered && heroPost && (
+        <ScrollAnimationWrapper className="mb-12">
+          <HeroArticle
+            title={heroPost.title}
+            slug={heroPost.slug}
+            excerpt={heroPost.excerpt}
+            content={heroPost.content}
+            featuredImage={heroPost.featuredImage}
+            type={heroPost.type}
+            publishedAt={heroPost.publishedAt}
+            category={heroPost.category}
+            author={heroPost.author}
+          />
+        </ScrollAnimationWrapper>
+      )}
+
+      {/* Main Grid: Articles + Sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Side: Articles */}
+        <div className="lg:col-span-2 space-y-8">
+          <ScrollAnimationWrapper>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-4">
+              <h2 className="text-2xl font-black italic tracking-tight uppercase border-l-4 border-primary pl-3 flex items-center gap-2 font-display">
+                <Flame size={20} className="text-primary animate-pulse" />
+                {isFiltered ? "Rezultati pretraživanja" : "Najnovije Objave"}
+              </h2>
+              
+              {isFiltered && (
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full flex items-center gap-2 font-medium">
+                    Aktivni filteri
+                    {q && ` (Pretraga: "${q}")`}
+                    {category && ` (Kategorija: ${category.toUpperCase()})`}
+                    {tag && ` (#${tag})`}
+                  </span>
+                  <Link
+                    href="/"
+                    className="text-xs font-bold text-primary hover:text-red-400 flex items-center gap-1 transition-colors uppercase tracking-wider"
+                  >
+                    <X size={14} />
+                    Očisti
+                  </Link>
+                </div>
+              )}
+            </div>
+          </ScrollAnimationWrapper>
+          
+          {posts.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-white/10 bg-card/30 p-12 text-center text-muted-foreground">
+              Nisu pronađene objave koje odgovaraju vašim kriterijima.
+            </div>
+          ) : (
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Ako smo filtrirani, i prvi post se prikazuje kao kartica umjesto Heroja */}
+              {isFiltered
+                ? posts.map((post, index) => (
+                    <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                      <ArticleCard
+                        title={post.title}
+                        slug={post.slug}
+                        excerpt={post.excerpt}
+                        featuredImage={post.featuredImage}
+                        type={post.type}
+                        publishedAt={post.publishedAt}
+                        category={post.category}
+                        author={post.author}
+                        variant={index === 0 ? "horizontal" : "vertical"}
+                      />
+                    </StaggerItem>
+                  ))
+                : remainingPosts.map((post, index) => (
+                    <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                      <ArticleCard
+                        title={post.title}
+                        slug={post.slug}
+                        excerpt={post.excerpt}
+                        featuredImage={post.featuredImage}
+                        type={post.type}
+                        publishedAt={post.publishedAt}
+                        category={post.category}
+                        author={post.author}
+                        variant={index === 0 ? "horizontal" : "vertical"}
+                      />
+                    </StaggerItem>
+                  ))}
+            </StaggerContainer>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        {/* Right Side: Sidebar */}
+        <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
+          <Sidebar />
+        </ScrollAnimationWrapper>
+      </div>
     </div>
   );
 }
+

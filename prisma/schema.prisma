@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PostType {
+  NEWS
+  BLOG
+  PREDICTION
+}
+
+enum PublishStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String   @default("EDITOR")
+  avatarUrl String?
+  bio       String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  posts Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  posts Post[]
+}
+
+model Post {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  excerpt       String?
+  content       String        @db.Text
+  featuredImage String?
+  type          PostType      @default(NEWS)
+  status        PublishStatus @default(DRAFT)
+  
+  authorId      String
+  author        User          @relation(fields: [authorId], references: [id])
+  
+  categoryId    String?
+  category      Category?     @relation(fields: [categoryId], references: [id])
+  
+  tags          Tag[]
+  
+  prediction    Prediction?
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  publishedAt   DateTime?
+
+  @@index([slug])
+  @@index([publishedAt])
+}
+
+model Prediction {
+  id               String @id @default(cuid())
+  postId           String @unique
+  post             Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  fighterA         String
+  fighterB         String
+  winner           String
+  method           String
+  predictedRound   String?
+  confidenceScore  Int
+  keyReasoning     String @db.Text
+}
