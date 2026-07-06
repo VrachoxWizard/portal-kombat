@@ -13,6 +13,7 @@ const navigation = [
   { name: "Novosti", href: "/novosti" },
   { name: "Blog", href: "/blog" },
   { name: "Predikcije", href: "/predikcije" },
+  { name: "Borci", href: "/borci" },
 ];
 
 export const Header: React.FC = () => {

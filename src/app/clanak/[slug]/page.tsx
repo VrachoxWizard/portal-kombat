@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getMockArticleBySlug, getMockPosts } from "@/lib/mockData";
 import PredictionWidget from "@/components/prediction/PredictionWidget";
+import CommentsWidget from "@/components/article/CommentsWidget";
 import Sidebar from "@/components/layout/Sidebar";
 import ShareButtons from "@/components/article/ShareButtons";
 import ArticleCard from "@/components/article/ArticleCard";
@@ -313,6 +314,10 @@ export default async function ArticlePage({ params }: PageProps) {
               />
             </ScrollAnimationWrapper>
           )}
+
+          <ScrollAnimationWrapper>
+            <CommentsWidget postId={article.id} />
+          </ScrollAnimationWrapper>
 
           {relatedArticles.length > 0 && (
             <div className="border-t border-white/5 pt-8 mt-12 space-y-6">

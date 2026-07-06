@@ -18,6 +18,7 @@ async function main() {
   await prisma.category.deleteMany({});
   await prisma.event.deleteMany({});
   await prisma.subscriber.deleteMany({});
+  await prisma.fighter.deleteMany({});
   await prisma.user.deleteMany({});
 
   console.log('Baza podataka očišćena.');
@@ -94,6 +95,150 @@ async function main() {
   });
 
   console.log('Tagovi kreirani.');
+
+  // 3.5 Kreiraj borce (FIGHTERS)
+  const jones = await prisma.fighter.create({
+    data: {
+      name: 'Jon Jones',
+      slug: 'jon-jones',
+      weightClass: 'Teška (Heavyweight)',
+      record: '27-1-0 (1 NC)',
+      stance: 'Orthodox',
+      team: 'Jackson Wink MMA',
+      imageUrl: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Jon Jones se smatra jednim od najvećih MMA boraca svih vremena, bivši dugogodišnji prvak poluteške kategorije i trenutni UFC prvak teške kategorije.'
+    }
+  });
+
+  const miocic = await prisma.fighter.create({
+    data: {
+      name: 'Stipe Miočić',
+      slug: 'stipe-miocic',
+      weightClass: 'Teška (Heavyweight)',
+      record: '20-4-0',
+      stance: 'Orthodox',
+      team: 'Strong Style Fight Team',
+      imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Stipe Miočić je najuspješniji prvak teške kategorije u povijesti UFC-a s najviše uzastopnih obrana naslova.'
+    }
+  });
+
+  const rico = await prisma.fighter.create({
+    data: {
+      name: 'Rico Verhoeven',
+      slug: 'rico-verhoeven',
+      weightClass: 'Teška (Super Heavyweight)',
+      record: '60-10-0',
+      stance: 'Orthodox',
+      team: 'Superpro Sportcenter',
+      imageUrl: 'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Rico Verhoeven je nizozemski kickboksač i trenutni Glory prvak u teškoj kategoriji, poznat kao Kralj Kickboksa.'
+    }
+  });
+
+  const badr = await prisma.fighter.create({
+    data: {
+      name: 'Badr Hari',
+      slug: 'badr-hari',
+      weightClass: 'Teška (Heavyweight)',
+      record: '106-16-0',
+      stance: 'Orthodox',
+      team: "Mike's Gym",
+      imageUrl: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Badr Hari je marokansko-nizozemski kickboksač i bivši K-1 teškaški prvak, poznat po izrazito agresivnom stilu borbe.'
+    }
+  });
+
+  const joshua = await prisma.fighter.create({
+    data: {
+      name: 'Anthony Joshua',
+      slug: 'anthony-joshua',
+      weightClass: 'Teška (Heavyweight)',
+      record: '28-3-0',
+      stance: 'Orthodox',
+      team: 'Ben Davison Academy',
+      imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Anthony Joshua je britanski profesionalni boksač i dvostruki bivši ujedinjeni svjetski prvak u teškoj kategoriji.'
+    }
+  });
+
+  const prenga = await prisma.fighter.create({
+    data: {
+      name: 'Kristian Prenga',
+      slug: 'kristian-prenga',
+      weightClass: 'Teška (Heavyweight)',
+      record: '15-1-0',
+      stance: 'Orthodox',
+      team: 'Albanian Boxing',
+      imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Kristian Prenga je brzorastući albanski teškaški boksač s impresivnim omjerom nokauta.'
+    }
+  });
+
+  const makhachev = await prisma.fighter.create({
+    data: {
+      name: 'Islam Makhachev',
+      slug: 'islam-makhachev',
+      weightClass: 'Laka (Lightweight)',
+      record: '26-1-0',
+      stance: 'Southpaw',
+      team: 'Eagles MMA',
+      imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Islam Makhachev je ruski MMA borac i trenutni UFC prvak u lakoj kategoriji.'
+    }
+  });
+
+  const garry = await prisma.fighter.create({
+    data: {
+      name: 'Ian Garry',
+      slug: 'ian-garry',
+      weightClass: 'Velter (Welterweight)',
+      record: '15-0-0',
+      stance: 'Orthodox',
+      team: 'Kill Cliff FC',
+      imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Ian Garry je irski neporaženi UFC borac velter kategorije.'
+    }
+  });
+
+  const hrgovic = await prisma.fighter.create({
+    data: {
+      name: 'Filip Hrgović',
+      slug: 'filip-hrgovic',
+      weightClass: 'Teška (Heavyweight)',
+      record: '17-1-0',
+      stance: 'Orthodox',
+      imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Filip Hrgović je hrvatski teškaški boksač i osvajač brončane medalje na Olimpijskim igrama 2016.'
+    }
+  });
+
+  const itauma = await prisma.fighter.create({
+    data: {
+      name: 'Moses Itauma',
+      slug: 'moses-itauma',
+      weightClass: 'Teška (Heavyweight)',
+      record: '9-0-0',
+      stance: 'Southpaw',
+      imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Moses Itauma je iznimno perspektivni britanski teškaški boksač.'
+    }
+  });
+
+  const vitasovic = await prisma.fighter.create({
+    data: {
+      name: 'Ivan Vitasović',
+      slug: 'ivan-vitasovic',
+      weightClass: 'Teška (Heavyweight)',
+      record: '13-6-1',
+      stance: 'Orthodox',
+      team: 'Trojan Pula',
+      imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&h=400&q=80',
+      bio: 'Ivan Vitasović je hrvatski teškaški MMA borac i bivši FNC prvak teške kategorije.'
+    }
+  });
+
+  console.log('Borci kreirani.');
 
   // 4. Kreiraj Vijesti (NEWS)
   await prisma.post.create({
@@ -186,6 +331,8 @@ async function main() {
       postId: predictionPost1.id,
       fighterA: 'Jon Jones',
       fighterB: 'Stipe Miočić',
+      fighterAId: jones.id,
+      fighterBId: miocic.id,
       winner: 'Jon Jones',
       method: 'Tehnički nokaut (TKO - Ground and Pound)',
       predictedRound: '3. runda',
@@ -214,6 +361,8 @@ async function main() {
       postId: predictionPost2.id,
       fighterA: 'Rico Verhoeven',
       fighterB: 'Badr Hari',
+      fighterAId: rico.id,
+      fighterBId: badr.id,
       winner: 'Rico Verhoeven',
       method: 'Jednoglasna odluka sudaca (UD)',
       predictedRound: '5. runda',
@@ -224,13 +373,17 @@ async function main() {
   console.log('Predikcije kreirane.');
 
   // 7. Kreiraj Nadolazeće Borbe (EVENTS)
-  await prisma.event.createMany({
-    data: [
-      { fighterA: "Anthony Joshua", fighterB: "Kristian Prenga", event: "Boks: Riyadh Season", date: "25. srpnja" },
-      { fighterA: "Islam Makhachev", fighterB: "Ian Garry", event: "UFC 330", date: "15. kolovoza" },
-      { fighterA: "Filip Hrgović", fighterB: "Moses Itauma", event: "Boks: London", date: "29. kolovoza" },
-      { fighterA: "Ivan Vitasović", fighterB: "TBA", event: "FNC 33: Zagreb", date: "12. rujna" },
-    ]
+  await prisma.event.create({
+    data: { fighterA: "Anthony Joshua", fighterB: "Kristian Prenga", fighterAId: joshua.id, fighterBId: prenga.id, event: "Boks: Riyadh Season", date: "25. srpnja" }
+  });
+  await prisma.event.create({
+    data: { fighterA: "Islam Makhachev", fighterB: "Ian Garry", fighterAId: makhachev.id, fighterBId: garry.id, event: "UFC 330", date: "15. kolovoza" }
+  });
+  await prisma.event.create({
+    data: { fighterA: "Filip Hrgović", fighterB: "Moses Itauma", fighterAId: hrgovic.id, fighterBId: itauma.id, event: "Boks: London", date: "29. kolovoza" }
+  });
+  await prisma.event.create({
+    data: { fighterA: "Ivan Vitasović", fighterB: "TBA", fighterAId: vitasovic.id, event: "FNC 33: Zagreb", date: "12. rujna" }
   });
   console.log('Nadolazeće borbe kreirane.');
 

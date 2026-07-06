@@ -29,6 +29,7 @@ model User {
   posts        Post[]
   passwordHash String    @default("")
   sessions     Session[]
+  comments     Comment[]
   createdAt    DateTime  @default(now())
 }
 
@@ -65,6 +66,7 @@ model Post {
   tags          Tag[]
   
   prediction    Prediction?
+  comments      Comment[]
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -81,11 +83,36 @@ model Prediction {
   
   fighterA         String
   fighterB         String
+  
+  fighterAId       String?
+  fighterBId       String?
+  fighterARel      Fighter? @relation("FighterA", fields: [fighterAId], references: [id], onDelete: SetNull)
+  fighterBRel      Fighter? @relation("FighterB", fields: [fighterBId], references: [id], onDelete: SetNull)
+
   winner           String
   method           String
   predictedRound   String?
   confidenceScore  Int
   keyReasoning     String @db.Text
+}
+
+model Fighter {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  weightClass String
+  record      String   
+  stance      String?
+  team        String?
+  imageUrl    String?
+  bio         String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  predictionsAsA Prediction[] @relation("FighterA")
+  predictionsAsB Prediction[] @relation("FighterB")
+  eventsAsA      Event[]      @relation("EventFighterA")
+  eventsAsB      Event[]      @relation("EventFighterB")
 }
 
 model Session {
@@ -98,12 +125,18 @@ model Session {
 }
 
 model Event {
-  id        String   @id @default(cuid())
-  fighterA  String
-  fighterB  String
-  event     String
-  date      String
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  fighterA   String
+  fighterB   String
+  
+  fighterAId String?
+  fighterBId String?
+  fighterARel Fighter? @relation("EventFighterA", fields: [fighterAId], references: [id], onDelete: SetNull)
+  fighterBRel Fighter? @relation("EventFighterB", fields: [fighterBId], references: [id], onDelete: SetNull)
+
+  event      String
+  date       String
+  createdAt  DateTime @default(now())
 }
 
 model Subscriber {
@@ -111,4 +144,18 @@ model Subscriber {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model Comment {
+  id         String   @id @default(cuid())
+  authorName String
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+  
+  postId     String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  authorId   String?
+  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+}
+
 

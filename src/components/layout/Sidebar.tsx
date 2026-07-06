@@ -32,16 +32,22 @@ async function getSidebarData() {
     popularTags = getMockPopularTags();
   }
 
-  let upcomingFights: Array<{ id: string; fighterA: string; fighterB: string; event: string; date: string }> = [];
+  let upcomingFights: Array<{ id: string; fighterA: string; fighterB: string; fighterASlug?: string | null; fighterBSlug?: string | null; event: string; date: string }> = [];
   try {
     const eventsFromDb = await prisma.event.findMany({
       orderBy: { createdAt: "desc" },
       take: 5,
+      include: {
+        fighterARel: true,
+        fighterBRel: true,
+      },
     });
     upcomingFights = eventsFromDb.map((e) => ({
       id: e.id,
       fighterA: e.fighterA,
       fighterB: e.fighterB,
+      fighterASlug: e.fighterARel?.slug || null,
+      fighterBSlug: e.fighterBRel?.slug || null,
       event: e.event,
       date: e.date,
     }));
@@ -50,7 +56,11 @@ async function getSidebarData() {
   }
 
   if (upcomingFights.length === 0) {
-    upcomingFights = getMockUpcomingFights();
+    upcomingFights = getMockUpcomingFights().map((f) => ({
+      ...f,
+      fighterASlug: null,
+      fighterBSlug: null,
+    }));
   }
 
   return { popularTags, upcomingFights };
@@ -89,12 +99,24 @@ export const Sidebar: React.FC = async () => {
                   {fight.date}
                 </span>
               </div>
-              <div className="font-bold text-xs text-white/90 flex items-center justify-between gap-2 group-hover:text-primary transition-premium uppercase font-display">
-                <span className="truncate max-w-[100px]">{fight.fighterA}</span>
+              <div className="font-bold text-xs text-white/90 flex items-center justify-between gap-2 transition-premium uppercase font-display relative z-10">
+                {fight.fighterASlug ? (
+                  <Link href={`/borci/${fight.fighterASlug}`} className="truncate max-w-[90px] hover:text-primary transition-colors duration-200">
+                    {fight.fighterA}
+                  </Link>
+                ) : (
+                  <span className="truncate max-w-[90px]">{fight.fighterA}</span>
+                )}
                 <span className="text-[9px] text-red-500 font-extrabold px-1.5 py-0.5 rounded bg-red-950/20 border border-red-500/10 shadow-[var(--shadow-glow-sm)]">
                   VS
                 </span>
-                <span className="truncate max-w-[100px] text-right">{fight.fighterB}</span>
+                {fight.fighterBSlug ? (
+                  <Link href={`/borci/${fight.fighterBSlug}`} className="truncate max-w-[90px] hover:text-primary transition-colors duration-200 text-right">
+                    {fight.fighterB}
+                  </Link>
+                ) : (
+                  <span className="truncate max-w-[90px] text-right">{fight.fighterB}</span>
+                )}
               </div>
             </div>
           ))}
