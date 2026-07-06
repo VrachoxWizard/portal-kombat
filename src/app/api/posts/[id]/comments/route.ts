@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function GET(
   req: NextRequest,
@@ -23,6 +24,18 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      req.headers.get("x-real-ip") ??
+      "unknown";
+
+    if (!checkRateLimit(`comment:${ip}`)) {
+      return NextResponse.json(
+        { error: "Previše komentara. Pokušajte ponovo za minutu." },
+        { status: 429 }
+      );
+    }
+
     const { id: postId } = await params;
     const { authorName, content } = await req.json();
 

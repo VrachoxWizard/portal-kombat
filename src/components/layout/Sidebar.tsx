@@ -1,47 +1,26 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import SearchWidget from "./SearchWidget";
-import { prisma } from "@/lib/prisma";
 import { getMockPopularTags, getMockUpcomingFights } from "@/lib/mockData";
+import { shouldUseMockData } from "@/lib/env";
+import { getCachedSidebarTags, getCachedUpcomingEvents } from "@/lib/cached-data";
 import { Calendar, Hash, Trophy } from "lucide-react";
 
 async function getSidebarData() {
   let popularTags: { name: string; slug: string; count: number }[] = [];
+  let upcomingFights: Array<{
+    id: string;
+    fighterA: string;
+    fighterB: string;
+    fighterASlug?: string | null;
+    fighterBSlug?: string | null;
+    event: string;
+    date: string;
+  }> = [];
+
   try {
-    const tagsFromDb = await prisma.tag.findMany({
-      include: {
-        _count: {
-          select: { posts: true },
-        },
-      },
-    });
-
-    popularTags = tagsFromDb
-      .map((t) => ({
-        name: t.name,
-        slug: t.slug,
-        count: t._count.posts,
-      }))
-      .sort((a, b) => b.count - a.count);
-
-    if (popularTags.length === 0) {
-      popularTags = getMockPopularTags();
-    }
-  } catch (error) {
-    console.warn("DB not accessible. Using fallback for sidebar tags:", error);
-    popularTags = getMockPopularTags();
-  }
-
-  let upcomingFights: Array<{ id: string; fighterA: string; fighterB: string; fighterASlug?: string | null; fighterBSlug?: string | null; event: string; date: string }> = [];
-  try {
-    const eventsFromDb = await prisma.event.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: {
-        fighterARel: true,
-        fighterBRel: true,
-      },
-    });
+    popularTags = await getCachedSidebarTags();
+    const eventsFromDb = await getCachedUpcomingEvents();
     upcomingFights = eventsFromDb.map((e) => ({
       id: e.id,
       fighterA: e.fighterA,
@@ -52,10 +31,14 @@ async function getSidebarData() {
       date: e.date,
     }));
   } catch (error) {
-    console.warn("DB not accessible. Using fallback for upcoming fights:", error);
+    console.warn("Sidebar data error:", error);
   }
 
-  if (upcomingFights.length === 0) {
+  if (popularTags.length === 0 && shouldUseMockData()) {
+    popularTags = getMockPopularTags();
+  }
+
+  if (upcomingFights.length === 0 && shouldUseMockData()) {
     upcomingFights = getMockUpcomingFights().map((f) => ({
       ...f,
       fighterASlug: null,

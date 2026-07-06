@@ -89,11 +89,20 @@ model Prediction {
   fighterARel      Fighter? @relation("FighterA", fields: [fighterAId], references: [id], onDelete: SetNull)
   fighterBRel      Fighter? @relation("FighterB", fields: [fighterBId], references: [id], onDelete: SetNull)
 
+  eventId          String?
+  event            Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+
   winner           String
   method           String
   predictedRound   String?
   confidenceScore  Int
   keyReasoning     String @db.Text
+
+  actualWinner     String?
+  actualMethod     String?
+  actualRound      String?
+  isCorrect        Boolean?
+  resolvedAt       DateTime?
 }
 
 model Fighter {
@@ -137,6 +146,8 @@ model Event {
   event      String
   date       String
   createdAt  DateTime @default(now())
+
+  predictions Prediction[]
 }
 
 model Subscriber {

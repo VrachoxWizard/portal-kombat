@@ -71,8 +71,11 @@ export const TableOfContents: React.FC = () => {
             href={`#${heading.id}`}
             onClick={(e) => {
               e.preventDefault();
+              const reducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+              ).matches;
               document.getElementById(heading.id)?.scrollIntoView({
-                behavior: "smooth",
+                behavior: reducedMotion ? "auto" : "smooth",
               });
               setActiveId(heading.id);
             }}

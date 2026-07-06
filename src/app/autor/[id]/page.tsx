@@ -14,6 +14,8 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { PAGE_SIZE } from "@/lib/constants";
 import type { ListingPost } from "@/lib/post-types";
 import { User, BookOpen } from "lucide-react";
+import { getCachedPredictionStats } from "@/lib/cached-data";
+import { Target } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -119,7 +121,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `Autor: ${author.name} | CombatPortal HR`,
+    title: `Autor: ${author.name}`,
     description: author.bio || `Pregled svih članaka koje je napisao ${author.name}.`,
   };
 }
@@ -136,6 +138,13 @@ export default async function AuthorPage({ params, searchParams }: PageProps) {
   }
 
   const { items, total, totalPages } = await getAuthorPosts(id, currentPage);
+
+  let predictionStats = null;
+  try {
+    predictionStats = await getCachedPredictionStats(id);
+  } catch {
+    // ignore
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -172,6 +181,15 @@ export default async function AuthorPage({ params, searchParams }: PageProps) {
                   <BookOpen size={12} className="text-slate-500" />
                   <span>Ukupno objavljeno: {total} {total === 1 ? "članak" : "članaka"}</span>
                 </div>
+                {predictionStats && predictionStats.resolved > 0 && (
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold justify-center sm:justify-start">
+                    <Target size={12} aria-hidden="true" />
+                    <span>
+                      Točnost predikcija: {predictionStats.accuracy}% ({predictionStats.correct}/
+                      {predictionStats.resolved})
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </ScrollAnimationWrapper>

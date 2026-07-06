@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth-utils";
+import {
+  getSession,
+  requireSession,
+  requireAdmin,
+  authErrorResponse,
+  isAdmin,
+} from "@/lib/auth-utils";
 import { PostType, PublishStatus, Prisma } from "@prisma/client";
+import { revalidatePostPaths } from "@/lib/revalidate";
+import { computePredictionCorrectness } from "@/lib/predictions";
 
 // Get all posts for CMS management
 export async function GET(req: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   const { searchParams } = new URL(req.url);
@@ -45,8 +55,12 @@ export async function GET(req: NextRequest) {
 
 // Create a new post
 export async function POST(req: NextRequest) {
-  const session = await getSession();
-  if (!session) {
+  let session;
+  try {
+    session = requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
     return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
   }
 
@@ -61,9 +75,16 @@ export async function POST(req: NextRequest) {
       type = "NEWS",
       status = "DRAFT",
       categoryId,
-      tagNames = [], // Array of tag names string e.g. ["UFC", "Stipe Miocic"]
+      tagNames = [],
       prediction,
     } = body;
+
+    if (status === "PUBLISHED" && !isAdmin(session.user.role)) {
+      return NextResponse.json(
+        { error: "Samo administrator može objaviti članak" },
+        { status: 403 }
+      );
+    }
 
     if (!title || !slug || !content) {
       return NextResponse.json(
@@ -143,6 +164,7 @@ export async function POST(req: NextRequest) {
             fighterB: prediction.fighterB || "",
             fighterAId: fA?.id || null,
             fighterBId: fB?.id || null,
+            eventId: prediction.eventId || null,
             winner: prediction.winner || "",
             method: prediction.method || "",
             predictedRound: prediction.predictedRound || null,
@@ -154,6 +176,8 @@ export async function POST(req: NextRequest) {
 
       return post;
     });
+
+    revalidatePostPaths(newPost.slug, newPost.type);
 
     return NextResponse.json(newPost);
   } catch (error) {

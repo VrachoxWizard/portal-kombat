@@ -12,6 +12,11 @@ interface PredictionProps {
   predictedRound?: string | null;
   confidenceScore: number;
   keyReasoning: string;
+  actualWinner?: string | null;
+  actualMethod?: string | null;
+  actualRound?: string | null;
+  isCorrect?: boolean | null;
+  resolvedAt?: Date | string | null;
 }
 
 export const PredictionWidget: React.FC<PredictionProps> = ({
@@ -22,6 +27,11 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
   predictedRound,
   confidenceScore,
   keyReasoning,
+  actualWinner,
+  actualMethod,
+  actualRound,
+  isCorrect,
+  resolvedAt,
 }) => {
   const prefersReducedMotion = useReducedMotion();
 
@@ -98,6 +108,27 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
           &ldquo;{keyReasoning}&rdquo;
         </p>
       </div>
+
+      {resolvedAt && actualWinner && (
+        <div
+          className={`mt-6 rounded-xl border p-4 ${
+            isCorrect
+              ? "border-emerald-500/30 bg-emerald-500/10"
+              : "border-red-500/30 bg-red-500/10"
+          }`}
+        >
+          <p className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400 mb-2">
+            Stvarni ishod
+          </p>
+          <p className={`font-extrabold text-lg ${isCorrect ? "text-emerald-400" : "text-red-400"}`}>
+            {actualWinner} — {actualMethod}
+            {actualRound ? ` (${actualRound})` : ""}
+          </p>
+          <p className="text-xs text-slate-400 mt-1">
+            {isCorrect ? "✓ Točna prognoza" : "✗ Netočna prognoza"}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

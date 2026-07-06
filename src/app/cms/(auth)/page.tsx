@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getPredictionStats } from "@/lib/predictions";
 import {
   FileText,
   Users,
@@ -9,6 +10,7 @@ import {
   Plus,
   ArrowUpRight,
   ShieldAlert,
+  Target,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +31,10 @@ export default async function CmsDashboardPage() {
     publishedAt: Date | null;
   }> = [];
 
+  let predictionAccuracy: number | null = null;
+
   try {
-    const [postsCount, predictionsCount, eventsCount, subscribersCount, posts] =
+    const [postsCount, predictionsCount, eventsCount, subscribersCount, posts, predStats] =
       await Promise.all([
         prisma.post.count(),
         prisma.post.count({ where: { type: "PREDICTION" } }),
@@ -41,10 +45,12 @@ export default async function CmsDashboardPage() {
           take: 5,
           select: { id: true, title: true, type: true, status: true, publishedAt: true },
         }),
+        getPredictionStats(),
       ]);
 
     stats = { postsCount, predictionsCount, eventsCount, subscribersCount };
     recentPosts = posts;
+    predictionAccuracy = predStats.accuracy;
   } catch (error) {
     console.error("Dashboard database query error:", error);
   }
@@ -111,6 +117,20 @@ export default async function CmsDashboardPage() {
           </div>
         ))}
       </div>
+
+      {predictionAccuracy != null && (
+        <div className="surface-card p-5 flex items-center gap-4 border-emerald-500/20">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <Target className="text-emerald-400" size={22} />
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+              Točnost predikcija (sve riješene)
+            </p>
+            <p className="text-2xl font-extrabold text-white font-display">{predictionAccuracy}%</p>
+          </div>
+        </div>
+      )}
 
       {/* Main section: Recent articles and quick actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

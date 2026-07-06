@@ -1,23 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth-utils";
+import {
+  getSession,
+  requireSession,
+  requireAdmin,
+  authErrorResponse,
+} from "@/lib/auth-utils";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireAdmin(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   const { id } = await params;
 
   try {
-    await prisma.event.delete({
-      where: { id },
-    });
+    await prisma.event.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("CMS DELETE event API error:", error);

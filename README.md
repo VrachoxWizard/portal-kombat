@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CombatPortal HR
 
-## Getting Started
+Hrvatski portal za borilačke sportove (MMA, boks, kickboks) s blogom, predikcijama, profilima boraca i ugrađenim CMS-om.
 
-First, run the development server:
+## Tech stack
+
+- **Next.js 16** (App Router) + React 19
+- **PostgreSQL** + Prisma 7
+- **Tailwind CSS v4**
+- Hrvatski jezik (`lang="hr"`), bez i18n biblioteke
+
+## Lokalni razvoj
+
+### Preduvjeti
+
+- Node.js 20+
+- pnpm
+- PostgreSQL baza (lokalno ili Neon)
+
+### Postavljanje
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env   # postavite DATABASE_URL i ostale varijable
+pnpm prisma generate
+pnpm prisma db push    # ili: pnpm prisma migrate deploy
+pnpm prisma db seed
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikacija: [http://localhost:3000](http://localhost:3000)  
+CMS: [http://localhost:3000/cms/login](http://localhost:3000/cms/login)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Okolišne varijable
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Varijabla | Opis |
+|-----------|------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `SYNC_SECRET` | Opcionalno — zaštita `/api/sync` |
+| `PREVIEW_SECRET` | Tajna za potpisane URL-ove pregleda nacrta |
+| `RESEND_API_KEY` | Za slanje kontakt forme e-poštom |
+| `CONTACT_EMAIL` | Primatelj kontakt poruka (default: info@combatportal.hr) |
+| `NEXT_PUBLIC_SITE_URL` | Javni URL (default: https://combatportal.hr) |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Plausible analytics domena (opcionalno) |
+| `USE_MOCK_DATA` | `true` za mock podatke u produkciji (ne preporučuje se) |
 
-## Learn More
+## CMS uloge
 
-To learn more about Next.js, take a look at the following resources:
+- **ADMIN** — može objavljivati, brisati članke/događaje/pretplatnike
+- **EDITOR** — može kreirati i uređivati skice; objavljivanje zahtijeva ADMIN
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Ključne rute
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Javno | CMS |
+|-------|-----|
+| `/` Naslovnica | `/cms` Dashboard |
+| `/novosti` | `/cms/clanci` |
+| `/blog` | `/cms/dogadaji` |
+| `/predikcije` | `/cms/pretplatnici` |
+| `/borci` | |
+| `/clanak/[slug]` | |
+| `/feed.xml` RSS | |
 
-## Deploy on Vercel
+## UFC sync
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pozovite `GET /api/sync` s headerom `Authorization: Bearer $SYNC_SECRET` ili oslonite se na automatski sync s naslovnice (max jednom na sat).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Testovi
+
+```bash
+pnpm test
+```
+
+## Produkcija
+
+```bash
+pnpm build
+pnpm start
+```
+
+Preporučeno: Vercel + Neon PostgreSQL. Postavite sve env varijable u produkcijskom okruženju.

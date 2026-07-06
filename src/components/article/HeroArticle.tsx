@@ -95,11 +95,11 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
           )}
         </div>
 
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold italic tracking-tighter uppercase leading-[0.95] font-display">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold italic tracking-tighter uppercase leading-[0.95] font-display">
           <Link href={`/clanak/${slug}`} className="hover:text-primary transition-premium">
             {title}
           </Link>
-        </h2>
+        </h1>
 
         {excerpt && (
           <p className="text-sm sm:text-base text-slate-300 font-medium max-w-3xl line-clamp-2 leading-relaxed">

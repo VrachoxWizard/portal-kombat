@@ -13,6 +13,7 @@ import { Search } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pretraga",
   description: "Pretražite sve objave, novosti, blogove i predikcije na CombatPortal HR portalu.",
+  robots: { index: false, follow: true },
 };
 
 interface PageProps {

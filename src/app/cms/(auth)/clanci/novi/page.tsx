@@ -7,8 +7,13 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
-  TrendingUp,
 } from "lucide-react";
+import {
+  PredictionFormFields,
+  defaultPredictionFormState,
+  type PredictionFormState,
+} from "@/components/cms/PredictionFormFields";
+import { ImageUploadField } from "@/components/cms/ImageUploadField";
 
 interface Category {
   id: string;
@@ -36,14 +41,9 @@ export default function CmsNewArticlePage() {
   const [categoryId, setCategoryId] = useState("");
   const [tagsInput, setTagsInput] = useState(""); // Comma-separated
 
-  // Prediction Fields
-  const [fighterA, setFighterA] = useState("");
-  const [fighterB, setFighterB] = useState("");
-  const [winner, setWinner] = useState("");
-  const [method, setMethod] = useState("");
-  const [predictedRound, setPredictedRound] = useState("");
-  const [confidenceScore, setConfidenceScore] = useState(70);
-  const [keyReasoning, setKeyReasoning] = useState("");
+  const [predictionForm, setPredictionForm] = useState<PredictionFormState>(
+    defaultPredictionFormState
+  );
 
   const fetchCategories = React.useCallback(async () => {
     try {
@@ -111,15 +111,7 @@ export default function CmsNewArticlePage() {
     };
 
     if (type === "PREDICTION") {
-      postPayload.prediction = {
-        fighterA,
-        fighterB,
-        winner,
-        method,
-        predictedRound,
-        confidenceScore,
-        keyReasoning,
-      };
+      postPayload.prediction = { ...predictionForm };
     }
 
     try {
@@ -243,117 +235,11 @@ export default function CmsNewArticlePage() {
             </div>
           </div>
 
-          {/* Prediction sub-form (visible only if type === PREDICTION) */}
           {type === "PREDICTION" && (
-            <div className="surface-card p-6 space-y-4 border border-emerald-500/10">
-              <h2 className="font-display font-bold text-emerald-400 text-base uppercase border-l-4 border-emerald-500 pl-3 mb-2 flex items-center gap-2">
-                <TrendingUp size={18} />
-                Prognoza i Analiza Sraza
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label htmlFor="fighterA" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                    Borac A
-                  </label>
-                  <input
-                    type="text"
-                    id="fighterA"
-                    value={fighterA}
-                    onChange={(e) => setFighterA(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 transition-premium outline-none"
-                    placeholder="npr. Jon Jones"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label htmlFor="fighterB" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                    Borac B
-                  </label>
-                  <input
-                    type="text"
-                    id="fighterB"
-                    value={fighterB}
-                    onChange={(e) => setFighterB(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 transition-premium outline-none"
-                    placeholder="npr. Stipe Miočić"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-1">
-                  <label htmlFor="winner" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                    Predviđeni pobjednik
-                  </label>
-                  <input
-                    type="text"
-                    id="winner"
-                    value={winner}
-                    onChange={(e) => setWinner(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 transition-premium outline-none"
-                    placeholder="npr. Jon Jones"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label htmlFor="method" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                    Metoda pobjede
-                  </label>
-                  <input
-                    type="text"
-                    id="method"
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 transition-premium outline-none"
-                    placeholder="npr. TKO (Ground and Pound)"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label htmlFor="predictedRound" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                    Runda završetka
-                  </label>
-                  <input
-                    type="text"
-                    id="predictedRound"
-                    value={predictedRound}
-                    onChange={(e) => setPredictedRound(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 transition-premium outline-none"
-                    placeholder="npr. 3. runda"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <span>Pouzdanost prognoze</span>
-                  <span className="text-emerald-400 font-extrabold">{confidenceScore}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="100"
-                  value={confidenceScore}
-                  onChange={(e) => setConfidenceScore(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label htmlFor="keyReasoning" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                  Ključno obrazloženje (Key Reasoning)
-                </label>
-                <textarea
-                  id="keyReasoning"
-                  rows={3}
-                  value={keyReasoning}
-                  onChange={(e) => setKeyReasoning(e.target.value)}
-                  className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-sm text-slate-200 placeholder-slate-600 transition-premium outline-none resize-none italic"
-                  placeholder="Kratko sumirajte zašto ste predvidjeli ovakav ishod..."
-                />
-              </div>
-            </div>
+            <PredictionFormFields
+              value={predictionForm}
+              onChange={setPredictionForm}
+            />
           )}
         </div>
 
@@ -404,20 +290,7 @@ export default function CmsNewArticlePage() {
               )}
             </div>
 
-            {/* Image URL selection */}
-            <div className="space-y-1">
-              <label htmlFor="featuredImage" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
-                URL Istaknute slike
-              </label>
-              <input
-                type="url"
-                id="featuredImage"
-                value={featuredImage}
-                onChange={(e) => setFeaturedImage(e.target.value)}
-                className="w-full bg-slate-900/60 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-xs text-slate-200 placeholder-slate-600 transition-premium outline-none"
-                placeholder="https://images.unsplash.com/photo-..."
-              />
-            </div>
+            <ImageUploadField value={featuredImage} onChange={setFeaturedImage} />
 
             {/* Tag Names Input */}
             <div className="space-y-1">
@@ -446,7 +319,9 @@ export default function CmsNewArticlePage() {
                 className="w-full bg-slate-900 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-xs text-slate-300 transition-premium outline-none"
               >
                 <option value="DRAFT">Skica (Draft)</option>
+                <option value="REVIEW">Na pregledu (Review)</option>
                 <option value="PUBLISHED">Objavi odmah (Published)</option>
+                <option value="ARCHIVED">Arhivirano (Archived)</option>
               </select>
             </div>
 

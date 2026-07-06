@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Baza Boraca i Statistike | CombatPortal HR",
+  title: "Baza Boraca i Statistike",
   description:
     "Pregledajte detaljne profile, statistike, omjere i povijest borbi najboljih boraca iz svijeta MMA, boksa i kickboksa.",
 };
@@ -56,7 +56,11 @@ export default async function FightersPage({ searchParams }: PageProps) {
           <ScrollAnimationWrapper delay={0.05}>
             <div className="surface-card p-6 shadow-md border border-white/5">
               <form method="GET" action="/borci" className="relative flex items-center">
+                <label htmlFor="borci-search" className="sr-only">
+                  Pretraži borce
+                </label>
                 <input
+                  id="borci-search"
                   type="text"
                   name="q"
                   defaultValue={q || ""}

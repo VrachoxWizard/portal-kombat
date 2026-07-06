@@ -1,17 +1,75 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth-utils";
+import {
+  getSession,
+  requireSession,
+  requireAdmin,
+  authErrorResponse,
+  isAdmin,
+} from "@/lib/auth-utils";
 import { PostType, PublishStatus } from "@prisma/client";
+import { revalidatePostPaths } from "@/lib/revalidate";
+import { computePredictionCorrectness } from "@/lib/prediction-constants";
+import { createPreviewToken } from "@/lib/preview";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
+function resolvePredictionData(
+  prediction: Record<string, unknown>,
+  existing?: { winner: string; resolvedAt: Date | null } | null
+) {
+  const data = {
+    fighterA: String(prediction.fighterA || ""),
+    fighterB: String(prediction.fighterB || ""),
+    eventId: prediction.eventId ? String(prediction.eventId) : null,
+    winner: String(prediction.winner || ""),
+    method: String(prediction.method || ""),
+    predictedRound: prediction.predictedRound
+      ? String(prediction.predictedRound)
+      : null,
+    confidenceScore: Number(prediction.confidenceScore) || 50,
+    keyReasoning: String(prediction.keyReasoning || ""),
+    actualWinner: null as string | null,
+    actualMethod: null as string | null,
+    actualRound: null as string | null,
+    isCorrect: null as boolean | null,
+    resolvedAt: null as Date | null,
+  };
+
+  if (prediction.resolve === true && prediction.actualWinner) {
+    const actualWinner = String(prediction.actualWinner);
+    data.actualWinner = actualWinner;
+    data.actualMethod = prediction.actualMethod
+      ? String(prediction.actualMethod)
+      : null;
+    data.actualRound = prediction.actualRound
+      ? String(prediction.actualRound)
+      : null;
+    data.isCorrect = computePredictionCorrectness(
+      String(prediction.winner || existing?.winner || ""),
+      actualWinner
+    );
+    data.resolvedAt = new Date();
+  } else if (prediction.clearResolution === true) {
+    data.actualWinner = null;
+    data.actualMethod = null;
+    data.actualRound = null;
+    data.isCorrect = null;
+    data.resolvedAt = null;
+  }
+
+  return data;
+}
+
 // Get details of a single post (for editing)
 export async function GET(req: NextRequest, { params }: RouteParams) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   const { id } = await params;
@@ -30,7 +88,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Članak nije pronađen" }, { status: 404 });
     }
 
-    return NextResponse.json(post);
+    const previewToken = createPreviewToken(post.slug);
+
+    return NextResponse.json({
+      ...post,
+      previewUrl: `/clanak/${post.slug}?preview=${previewToken}`,
+    });
   } catch (error) {
     console.error("CMS GET single post error:", error);
     return NextResponse.json({ error: "Greška na poslužitelju" }, { status: 500 });
@@ -39,8 +102,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 // Update a post
 export async function PUT(req: NextRequest, { params }: RouteParams) {
-  const session = await getSession();
-  if (!session) {
+  let session;
+  try {
+    session = requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
     return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
   }
 
@@ -61,6 +128,13 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       prediction,
     } = body;
 
+    if (status === "PUBLISHED" && !isAdmin(session.user.role)) {
+      return NextResponse.json(
+        { error: "Samo administrator može objaviti članak" },
+        { status: 403 }
+      );
+    }
+
     if (!title || !slug || !content) {
       return NextResponse.json(
         { error: "Naslov, slug i sadržaj su obavezni" },
@@ -68,12 +142,8 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check slug uniqueness (excluding current post)
     const existing = await prisma.post.findFirst({
-      where: {
-        slug,
-        id: { not: id },
-      },
+      where: { slug, id: { not: id } },
     });
     if (existing) {
       return NextResponse.json(
@@ -82,7 +152,6 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Resolve tags (find or create)
     const tagConnectOrCreate = await Promise.all(
       tagNames.map(async (name: string) => {
         const slugified = name
@@ -103,9 +172,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       })
     );
 
-    // Update post transaction
     const updatedPost = await prisma.$transaction(async (tx) => {
-      // Find current post to check if type changed or prediction exists
       const currentPost = await tx.post.findUnique({
         where: { id },
         include: { prediction: true },
@@ -115,7 +182,6 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         throw new Error("Članak ne postoji");
       }
 
-      // Update fields
       const post = await tx.post.update({
         where: { id },
         data: {
@@ -131,96 +197,85 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
             status === "PUBLISHED"
               ? currentPost.publishedAt || new Date()
               : null,
-          // Set new tags connections
           tags: {
-            set: [], // Clear all current connections
+            set: [],
             connect: tagConnectOrCreate.map((t) => ({ id: t.id })),
           },
         },
       });
 
-      // Handle prediction details
       if (type === "PREDICTION" && prediction) {
         const fA = prediction.fighterA
           ? await tx.fighter.findFirst({
-              where: { name: { equals: prediction.fighterA.trim(), mode: "insensitive" } },
+              where: {
+                name: { equals: prediction.fighterA.trim(), mode: "insensitive" },
+              },
             })
           : null;
         const fB = prediction.fighterB
           ? await tx.fighter.findFirst({
-              where: { name: { equals: prediction.fighterB.trim(), mode: "insensitive" } },
+              where: {
+                name: { equals: prediction.fighterB.trim(), mode: "insensitive" },
+              },
             })
           : null;
 
+        const predictionData = {
+          ...resolvePredictionData(prediction, currentPost.prediction),
+          fighterAId: fA?.id || null,
+          fighterBId: fB?.id || null,
+        };
+
         if (currentPost.prediction) {
-          // Update existing prediction
           await tx.prediction.update({
             where: { id: currentPost.prediction.id },
-            data: {
-              fighterA: prediction.fighterA || "",
-              fighterB: prediction.fighterB || "",
-              fighterAId: fA?.id || null,
-              fighterBId: fB?.id || null,
-              winner: prediction.winner || "",
-              method: prediction.method || "",
-              predictedRound: prediction.predictedRound || null,
-              confidenceScore: Number(prediction.confidenceScore) || 50,
-              keyReasoning: prediction.keyReasoning || "",
-            },
+            data: predictionData,
           });
         } else {
-          // Create new prediction
           await tx.prediction.create({
             data: {
               postId: id,
-              fighterA: prediction.fighterA || "",
-              fighterB: prediction.fighterB || "",
-              fighterAId: fA?.id || null,
-              fighterBId: fB?.id || null,
-              winner: prediction.winner || "",
-              method: prediction.method || "",
-              predictedRound: prediction.predictedRound || null,
-              confidenceScore: Number(prediction.confidenceScore) || 50,
-              keyReasoning: prediction.keyReasoning || "",
+              ...predictionData,
             },
           });
         }
-      } else {
-        // If type changed from PREDICTION, or no prediction was provided, delete prediction record
-        if (currentPost.prediction) {
-          await tx.prediction.delete({
-            where: { id: currentPost.prediction.id },
-          });
-        }
+      } else if (currentPost.prediction) {
+        await tx.prediction.delete({
+          where: { id: currentPost.prediction.id },
+        });
       }
 
       return post;
     });
 
+    revalidatePostPaths(updatedPost.slug, updatedPost.type);
+
     return NextResponse.json(updatedPost);
   } catch (error) {
     console.error("CMS PUT update post API error:", error);
     const message = error instanceof Error ? error.message : "Došlo je do pogreške";
-    return NextResponse.json(
-      { error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
 // Delete a post
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireAdmin(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   const { id } = await params;
 
   try {
-    await prisma.post.delete({
-      where: { id },
-    });
+    const post = await prisma.post.findUnique({ where: { id } });
+    await prisma.post.delete({ where: { id } });
+
+    if (post) {
+      revalidatePostPaths(post.slug, post.type);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

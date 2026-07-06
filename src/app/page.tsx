@@ -1,5 +1,6 @@
 import React from "react";
 import { getPostListing, parsePageParam } from "@/lib/posts";
+import type { Metadata } from "next";
 import HeroArticle from "@/components/article/HeroArticle";
 import ArticleCard from "@/components/article/ArticleCard";
 import Sidebar from "@/components/layout/Sidebar";
@@ -20,6 +21,25 @@ interface PageProps {
     tag?: string;
     page?: string;
   }>;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const { q, category, tag } = await searchParams;
+  const isFiltered = !!(q || category || tag);
+
+  return {
+    title: "Naslovnica",
+    description:
+      "Vodeći hrvatski portal za MMA, boks i kickboks. Najnovije vijesti, stručni blogovi i predikcije borbi.",
+    alternates: {
+      canonical: isFiltered ? "/" : undefined,
+    },
+    ...(isFiltered
+      ? { robots: { index: false, follow: true } }
+      : {}),
+  };
 }
 
 export default async function HomePage({ searchParams }: PageProps) {
@@ -84,7 +104,7 @@ export default async function HomePage({ searchParams }: PageProps) {
             <SectionHeading
               title={isFiltered ? "Rezultati pretraživanja" : "Najnovije Objave"}
               icon={Flame}
-              as="h1"
+              as={heroPost ? "h2" : "h1"}
             />
           </ScrollAnimationWrapper>
 

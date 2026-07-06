@@ -9,13 +9,14 @@ import Pagination from "@/components/ui/Pagination";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
 import { Swords } from "lucide-react";
+import PredictionStatsBanner from "@/components/prediction/PredictionStatsBanner";
 
 export const metadata: Metadata = {
-  title: "Predikcije i Prognoze Borbi | CombatPortal HR",
+  title: "Predikcije i Prognoze Borbi",
   description:
     "Stručne analize predstojećih mečeva, predviđanja pobjednika, metode završetka i postotci pouzdanosti — MMA, boks i kickboks predikcije.",
   openGraph: {
-    title: "Predikcije i Prognoze Borbi | CombatPortal HR",
+    title: "Predikcije i Prognoze Borbi",
     description:
       "Stručne analize predstojećih mečeva, predviđanja pobjednika, metode završetka i postotci pouzdanosti.",
   },
@@ -55,6 +56,8 @@ export default async function PredictionsPage({ searchParams }: PageProps) {
             />
           </ScrollAnimationWrapper>
 
+          <PredictionStatsBanner />
+
           <FilterBar
             basePath="/predikcije"
             activeCategory={category}
@@ -89,6 +92,9 @@ export default async function PredictionsPage({ searchParams }: PageProps) {
                               fighterA: post.prediction.fighterA,
                               fighterB: post.prediction.fighterB,
                               winner: post.prediction.winner,
+                              method: post.prediction.method,
+                              confidenceScore: post.prediction.confidenceScore,
+                              isCorrect: post.prediction.isCorrect,
                             }
                           : null
                       }

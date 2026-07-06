@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth-utils";
+import {
+  getSession,
+  requireSession,
+  requireAdmin,
+  authErrorResponse,
+} from "@/lib/auth-utils";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   try {
@@ -20,9 +27,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
+  try {
+    requireSession(await getSession());
+  } catch (error) {
+    const res = authErrorResponse(error);
+    if (res) return NextResponse.json(res.body, { status: res.status });
   }
 
   try {

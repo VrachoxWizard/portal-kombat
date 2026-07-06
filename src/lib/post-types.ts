@@ -18,6 +18,7 @@ export interface ListingPost {
     predictedRound?: string | null;
     confidenceScore?: number;
     keyReasoning?: string;
+    isCorrect?: boolean | null;
   } | null;
   content?: string;
 }

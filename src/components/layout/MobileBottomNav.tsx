@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Newspaper, BookOpen, Swords } from "lucide-react";
+import { Home, Newspaper, BookOpen, Swords, Users } from "lucide-react";
 
 export const MobileBottomNav: React.FC = () => {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ export const MobileBottomNav: React.FC = () => {
     { name: "Novosti", href: "/novosti", icon: Newspaper },
     { name: "Blog", href: "/blog", icon: BookOpen },
     { name: "Predikcije", href: "/predikcije", icon: Swords },
+    { name: "Borci", href: "/borci", icon: Users },
   ];
 
   return (

@@ -11,11 +11,11 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Urednički Blogovi i Kolumne | CombatPortal HR",
+  title: "Urednički Blogovi i Kolumne",
   description:
     "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
   openGraph: {
-    title: "Urednički Blogovi i Kolumne | CombatPortal HR",
+    title: "Urednički Blogovi i Kolumne",
     description:
       "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
   },

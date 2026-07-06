@@ -16,11 +16,11 @@ import { syncUfcEvents } from "@/lib/sync";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Borilačke Novosti | CombatPortal HR",
+  title: "Borilačke Novosti",
   description:
     "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
   openGraph: {
-    title: "Borilačke Novosti | CombatPortal HR",
+    title: "Borilačke Novosti",
     description:
       "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
   },

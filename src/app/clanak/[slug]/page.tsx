@@ -4,7 +4,10 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { getMockArticleBySlug, getMockPosts } from "@/lib/mockData";
+import { getPublicPost } from "@/lib/posts";
+import { shouldUseMockData } from "@/lib/env";
+import { getMockPosts } from "@/lib/mockData";
+import { SITE_URL } from "@/lib/env";
 import PredictionWidget from "@/components/prediction/PredictionWidget";
 import CommentsWidget from "@/components/article/CommentsWidget";
 import Sidebar from "@/components/layout/Sidebar";
@@ -21,28 +24,7 @@ import { Calendar, User, Clock, Hash } from "lucide-react";
 import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
 import { TableOfContents } from "@/components/article/TableOfContents";
 
-async function getArticle(slug: string) {
-  try {
-    const post = await prisma.post.findUnique({
-      where: { slug },
-      include: {
-        author: true,
-        category: true,
-        prediction: true,
-        tags: true,
-      },
-    });
-
-    if (!post) {
-      return getMockArticleBySlug(slug);
-    }
-
-    return post;
-  } catch (error) {
-    console.warn("DB not accessible. Using fallback for slug: ", slug, error);
-    return getMockArticleBySlug(slug);
-  }
-}
+export const revalidate = 3600;
 
 async function getRelatedArticles(
   slug: string,
@@ -50,61 +32,66 @@ async function getRelatedArticles(
   categoryId: string | null
 ) {
   try {
-    let related: ListingPost[] = [];
     if (categoryId) {
-      related = (await prisma.post.findMany({
+      const related = (await prisma.post.findMany({
         where: {
           categoryId,
           slug: { not: slug },
           status: "PUBLISHED",
         },
-        include: {
-          author: true,
-          category: true,
-        },
-        orderBy: {
-          publishedAt: "desc",
-        },
+        include: { author: true, category: true },
+        orderBy: { publishedAt: "desc" },
         take: 2,
       })) as ListingPost[];
-    }
 
-    if (related.length === 0) {
-      const allMock = getMockPosts({ category: categorySlug });
-      return allMock.filter((p) => p.slug !== slug).slice(0, 2) as ListingPost[];
+      if (related.length > 0) return related;
     }
-    return related;
   } catch (error) {
-    console.warn("DB not accessible. Using fallback for related articles:", error);
+    console.warn("Related articles DB error:", error);
+  }
+
+  if (shouldUseMockData()) {
     const allMock = getMockPosts({ category: categorySlug });
     return allMock.filter((p) => p.slug !== slug).slice(0, 2) as ListingPost[];
+  }
+  return [];
+}
+
+function getJsonLdType(type: string): string {
+  switch (type) {
+    case "BLOG":
+      return "BlogPosting";
+    case "PREDICTION":
+      return "AnalysisNewsArticle";
+    default:
+      return "NewsArticle";
   }
 }
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const { preview } = await searchParams;
+  const article = await getPublicPost(slug, { previewToken: preview });
+
   if (!article) {
-    return {
-      title: "Članak nije pronađen",
-    };
+    return { title: "Članak nije pronađen" };
   }
 
-  const tags = "tags" in article && Array.isArray(article.tags)
-    ? article.tags.map((t: { name: string }) => t.name)
-    : [];
+  const tags =
+    "tags" in article && Array.isArray(article.tags)
+      ? article.tags.map((t: { name: string }) => t.name)
+      : [];
 
   return {
     title: article.title,
     description: article.excerpt || "Borilačke vijesti i analize",
     keywords: tags.length > 0 ? tags : undefined,
-    alternates: {
-      canonical: `/clanak/${slug}`,
-    },
+    alternates: { canonical: `/clanak/${slug}` },
     openGraph: {
       title: article.title,
       description: article.excerpt || "Borilačke vijesti i analize",
@@ -112,26 +99,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: article.publishedAt
         ? new Date(article.publishedAt).toISOString()
         : undefined,
+      modifiedTime: article.updatedAt
+        ? new Date(article.updatedAt).toISOString()
+        : undefined,
       section: article.category?.name,
       authors: [article.author.name],
-      images: article.featuredImage ? [article.featuredImage] : [],
+      images: article.featuredImage
+        ? [article.featuredImage]
+        : [`${SITE_URL}/opengraph-image`],
     },
     twitter: {
       card: "summary_large_image",
       title: article.title,
       description: article.excerpt || "Borilačke vijesti i analize",
-      images: article.featuredImage ? [article.featuredImage] : [],
+      images: article.featuredImage
+        ? [article.featuredImage]
+        : [`${SITE_URL}/opengraph-image`],
     },
+    ...(preview ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
-export default async function ArticlePage({ params }: PageProps) {
+export default async function ArticlePage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const { preview } = await searchParams;
+  const article = await getPublicPost(slug, { previewToken: preview });
 
   if (!article) {
     notFound();
   }
+
+  const isPreview = article.status !== "PUBLISHED";
 
   const relatedArticles = await getRelatedArticles(
     slug,
@@ -153,7 +151,6 @@ export default async function ArticlePage({ params }: PageProps) {
   const postType = article.type as PostTypeKey;
   const sectionRoute = TYPE_ROUTES[postType];
   const sectionName = TYPE_SECTION_NAMES[postType];
-
   const tags = "tags" in article && Array.isArray(article.tags) ? article.tags : [];
 
   const breadcrumbItems = [
@@ -164,21 +161,38 @@ export default async function ArticlePage({ params }: PageProps) {
     { label: article.title },
   ];
 
-  const jsonLd = {
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "NewsArticle",
+    "@type": getJsonLdType(article.type),
     headline: article.title,
-    image: article.featuredImage ? [article.featuredImage] : [],
+    description: article.excerpt,
+    image: article.featuredImage ? [article.featuredImage] : [`${SITE_URL}/opengraph-image`],
     datePublished: article.publishedAt
       ? new Date(article.publishedAt).toISOString()
       : new Date().toISOString(),
-    author: [
-      {
-        "@type": "Person",
-        name: article.author.name,
-      },
-    ],
+    dateModified: article.updatedAt
+      ? new Date(article.updatedAt).toISOString()
+      : undefined,
+    url: `${SITE_URL}/clanak/${slug}`,
+    mainEntityOfPage: `${SITE_URL}/clanak/${slug}`,
+    author: [{ "@type": "Person", name: article.author.name }],
+    publisher: {
+      "@type": "Organization",
+      name: "CombatPortal HR",
+      url: SITE_URL,
+    },
   };
+
+  if (article.type === "PREDICTION" && article.prediction) {
+    jsonLd.about = {
+      "@type": "SportsEvent",
+      name: `${article.prediction.fighterA} vs ${article.prediction.fighterB}`,
+      competitor: [
+        { "@type": "Person", name: article.prediction.fighterA },
+        { "@type": "Person", name: article.prediction.fighterB },
+      ],
+    };
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -187,6 +201,13 @@ export default async function ArticlePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {isPreview && (
+        <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-200 font-semibold">
+          Pregled nacrta — ovaj članak nije javno objavljen.
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <article className="lg:col-span-2 space-y-6">
           <Breadcrumbs items={breadcrumbItems} />
@@ -196,9 +217,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <TypeBadge type={postType} />
               {article.category && (
                 <>
-                  <span className="opacity-30" aria-hidden="true">
-                    •
-                  </span>
+                  <span className="opacity-30" aria-hidden="true">•</span>
                   <Link
                     href={`${sectionRoute}?category=${article.category.slug}`}
                     className="text-primary font-extrabold hover:text-red-400 transition-premium"
@@ -207,18 +226,14 @@ export default async function ArticlePage({ params }: PageProps) {
                   </Link>
                 </>
               )}
-              <span className="opacity-30" aria-hidden="true">
-                •
-              </span>
+              <span className="opacity-30" aria-hidden="true">•</span>
               <span className="flex items-center gap-1">
                 <Calendar size={12} aria-hidden="true" />
                 <time dateTime={article.publishedAt ? new Date(article.publishedAt).toISOString() : undefined}>
                   {formattedDate}
                 </time>
               </span>
-              <span className="opacity-30" aria-hidden="true">
-                •
-              </span>
+              <span className="opacity-30" aria-hidden="true">•</span>
               <span className="flex items-center gap-1 text-slate-500">
                 <Clock size={12} aria-hidden="true" />
                 {readingTime} min čitanja
@@ -254,7 +269,9 @@ export default async function ArticlePage({ params }: PageProps) {
               <div>
                 <p className="text-sm font-extrabold text-foreground flex items-center gap-1.5">
                   <User size={14} className="text-primary" aria-hidden="true" />
-                  {article.author.name}
+                  <Link href={`/autor/${article.author.id}`} className="hover:text-primary transition-premium">
+                    {article.author.name}
+                  </Link>
                 </p>
                 {article.author.bio && (
                   <p className="text-xs text-muted-foreground font-medium mt-0.5">{article.author.bio}</p>
@@ -311,6 +328,11 @@ export default async function ArticlePage({ params }: PageProps) {
                 predictedRound={article.prediction.predictedRound}
                 confidenceScore={article.prediction.confidenceScore}
                 keyReasoning={article.prediction.keyReasoning}
+                actualWinner={article.prediction.actualWinner}
+                actualMethod={article.prediction.actualMethod}
+                actualRound={article.prediction.actualRound}
+                isCorrect={article.prediction.isCorrect}
+                resolvedAt={article.prediction.resolvedAt}
               />
             </ScrollAnimationWrapper>
           )}

@@ -1,9 +1,21 @@
-import { Prisma, PostType } from "@prisma/client";
+import { Prisma, PostType, PublishStatus } from "@prisma/client";
 import { prisma } from "./prisma";
-import { getMockPosts } from "./mockData";
+import { getMockPosts, getMockArticleBySlug } from "./mockData";
 import { PAGE_SIZE } from "./constants";
 import type { PostTypeKey } from "./constants";
 import type { ListingPost } from "./post-types";
+import { shouldUseMockData } from "./env";
+
+const publicPostInclude = {
+  author: true,
+  category: true,
+  prediction: true,
+  tags: true,
+} as const;
+
+export type PublicPost = Prisma.PostGetPayload<{
+  include: typeof publicPostInclude;
+}>;
 
 // ─── Query options ──────────────────────────────────────────────
 export interface PostListingOptions {
@@ -26,6 +38,37 @@ export interface PaginatedResult<T> {
   hasPrev: boolean;
 }
 
+// ─── Public article fetch (published only, optional preview) ────
+export async function getPublicPost(
+  slug: string,
+  options?: { previewToken?: string }
+): Promise<PublicPost | null> {
+  const previewSlug =
+    options?.previewToken
+      ? (await import("./preview")).verifyPreviewToken(options.previewToken)
+      : null;
+
+  try {
+    const post = await prisma.post.findUnique({
+      where: { slug },
+      include: publicPostInclude,
+    });
+
+    if (post) {
+      if (post.status === "PUBLISHED") return post;
+      if (previewSlug === slug) return post;
+      return null;
+    }
+  } catch (error) {
+    console.warn("DB not accessible for article:", slug, error);
+  }
+
+  if (!shouldUseMockData()) return null;
+
+  const mock = getMockArticleBySlug(slug);
+  return mock as PublicPost | null;
+}
+
 // ─── Main listing query (server-side pagination) ────────────────
 export async function getPostListing(
   options: PostListingOptions = {}
@@ -42,11 +85,16 @@ export async function getPostListing(
   const resolved = { type, search, category, tag, page, pageSize };
 
   try {
-    const result = await queryDatabase(resolved);
-    return result;
+    return await queryDatabase(resolved);
   } catch (error) {
-    console.warn("Database unavailable, using mock data:", error instanceof Error ? error.message : error);
-    return queryMockData(resolved);
+    console.warn(
+      "Database unavailable:",
+      error instanceof Error ? error.message : error
+    );
+    if (shouldUseMockData()) {
+      return queryMockData(resolved);
+    }
+    return emptyPaginated(resolved);
   }
 }
 
@@ -58,6 +106,18 @@ interface ResolvedOptions {
   tag?: string;
   page: number;
   pageSize: number;
+}
+
+function emptyPaginated(options: ResolvedOptions): PaginatedResult<ListingPost> {
+  return {
+    items: [],
+    total: 0,
+    totalPages: 1,
+    currentPage: 1,
+    pageSize: options.pageSize,
+    hasNext: false,
+    hasPrev: false,
+  };
 }
 
 // ─── Database query with true LIMIT/OFFSET ──────────────────────
@@ -86,10 +146,10 @@ async function queryDatabase(
     whereClause.OR = [
       { title: { contains: search, mode: "insensitive" } },
       { excerpt: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
     ];
   }
 
-  // Run count and data queries in parallel for efficiency
   const [total, posts] = await Promise.all([
     prisma.post.count({ where: whereClause }),
     prisma.post.findMany({
@@ -105,8 +165,7 @@ async function queryDatabase(
     }),
   ]);
 
-  // If DB returned zero results and there's no filter, fall back to mock data
-  if (total === 0 && !search && !category && !tag) {
+  if (total === 0 && !search && !category && !tag && shouldUseMockData()) {
     return queryMockData({ type, search, category, tag, page, pageSize });
   }
 
@@ -158,3 +217,5 @@ export function parsePageParam(page?: string): number {
   const parsed = Number.parseInt(page ?? "1", 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 }
+
+export { PublishStatus };

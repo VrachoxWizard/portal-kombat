@@ -6,6 +6,60 @@ import { cookies as getCookies } from "next/headers";
 
 const SESSION_COOKIE_NAME = "combat_cms_session";
 
+export const ROLES = {
+  ADMIN: "ADMIN",
+  EDITOR: "EDITOR",
+} as const;
+
+export type UserRole = (typeof ROLES)[keyof typeof ROLES];
+
+export type SessionUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatarUrl: string | null;
+  bio: string | null;
+};
+
+export type AuthSession = {
+  id: string;
+  userId: string;
+  user: SessionUser;
+  expiresAt: Date;
+};
+
+export function isAdmin(role: string): boolean {
+  return role === ROLES.ADMIN;
+}
+
+export function requireSession(session: AuthSession | null): AuthSession {
+  if (!session) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return session;
+}
+
+export function requireAdmin(session: AuthSession | null): AuthSession {
+  const s = requireSession(session);
+  if (!isAdmin(s.user.role)) {
+    throw new Error("FORBIDDEN");
+  }
+  return s;
+}
+
+export function authErrorResponse(error: unknown) {
+  if (error instanceof Error) {
+    if (error.message === "UNAUTHORIZED") {
+      return { body: { error: "Niste prijavljeni" }, status: 401 as const };
+    }
+    if (error.message === "FORBIDDEN") {
+      return { body: { error: "Nemate ovlasti za ovu radnju" }, status: 403 as const };
+    }
+  }
+  return null;
+}
+
 // Hash password using PBKDF2
 export function hashPassword(password: string, salt: string): string {
   // 10000 iterations, 64 bytes key length, sha512 digest

@@ -30,6 +30,9 @@ interface ArticleCardProps {
     fighterA: string;
     fighterB: string;
     winner: string;
+    method?: string;
+    confidenceScore?: number;
+    isCorrect?: boolean | null;
   } | null;
 }
 
@@ -109,7 +112,20 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <span className="text-white/70">{predictionTeaser.fighterB}</span>
               <span className="block mt-1 text-emerald-400 normal-case tracking-normal text-xs">
                 Prognoza: {predictionTeaser.winner}
+                {predictionTeaser.method ? ` (${predictionTeaser.method})` : ""}
+                {predictionTeaser.confidenceScore != null
+                  ? ` · ${predictionTeaser.confidenceScore}%`
+                  : ""}
               </span>
+              {predictionTeaser.isCorrect != null && (
+                <span
+                  className={`block mt-0.5 text-xs normal-case ${
+                    predictionTeaser.isCorrect ? "text-emerald-400" : "text-red-400"
+                  }`}
+                >
+                  {predictionTeaser.isCorrect ? "✓ Točno" : "✗ Netočno"}
+                </span>
+              )}
             </div>
           )}
 
