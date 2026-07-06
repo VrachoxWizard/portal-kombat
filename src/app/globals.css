@@ -86,6 +86,15 @@
   --color-destructive: var(--destructive);
   --color-ring: var(--ring);
 
+  --color-bg-canvas: var(--bg-canvas);
+  --color-bg-canvas-raised: var(--bg-canvas-raised);
+  --color-surface-card: var(--surface-card);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-focus: var(--border-focus);
+
   --font-sans: var(--font-plus-jakarta-sans), system-ui, -apple-system, sans-serif;
   --font-display: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
 

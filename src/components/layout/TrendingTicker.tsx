@@ -44,7 +44,7 @@ export const TrendingTicker = async () => {
 
   return (
     <div
-      className="relative w-full overflow-hidden border-b border-white/5 bg-[var(--bg-canvas-raised)]/90 backdrop-blur-sm"
+      className="relative w-full overflow-hidden border-b border-white/5 bg-bg-canvas-raised/90 backdrop-blur-sm"
       role="region"
       aria-label="Trending vijesti"
     >

@@ -39,7 +39,7 @@ export default function CmsLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-canvas)] px-4 py-12 relative overflow-hidden font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-bg-canvas px-4 py-12 relative overflow-hidden font-sans">
       {/* Decorative Arena Glows */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute top-[20%] left-[20%] w-[35vw] h-[35vw] rounded-full arena-glow-red blur-[120px] opacity-80" />

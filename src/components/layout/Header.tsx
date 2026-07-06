@@ -32,12 +32,15 @@ export const Header: React.FC = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       closeButtonRef.current?.focus();
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -58,7 +61,8 @@ export const Header: React.FC = () => {
     pathname === href || (href !== "/" && pathname.startsWith(href + "/"));
 
   return (
-    <header
+    <>
+      <header
       className={`sticky top-0 z-50 w-full border-b transition-premium ${
         scrolled
           ? "border-white/8 bg-background/90 backdrop-blur-xl shadow-[var(--shadow-card)]"
@@ -142,6 +146,7 @@ export const Header: React.FC = () => {
           ))}
         </nav>
       </div>
+      </header>
 
       <AnimatePresence>
         {isOpen && (
@@ -154,7 +159,7 @@ export const Header: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: duration.drawer, ease: EASE_OUT }}
-            className="fixed inset-0 z-[100] bg-[var(--surface-overlay)] backdrop-blur-2xl flex flex-col justify-between p-8 md:hidden"
+            className="fixed inset-0 z-[100] bg-surface-overlay backdrop-blur-2xl flex flex-col justify-between p-8 md:hidden"
           >
             <div className="flex items-center justify-between">
               <span className="text-2xl font-extrabold italic tracking-tighter font-display">
@@ -225,7 +230,7 @@ export const Header: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 

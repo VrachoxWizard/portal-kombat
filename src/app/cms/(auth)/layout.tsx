@@ -39,9 +39,9 @@ export default async function CmsLayout({ children }: CmsLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-canvas)] flex flex-col md:flex-row text-slate-300 font-sans">
+    <div className="min-h-screen bg-bg-canvas flex flex-col md:flex-row text-slate-300 font-sans">
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-[var(--surface-card)] border-b md:border-b-0 md:border-r border-white/5 flex flex-col justify-between shrink-0 relative z-20">
+      <aside className="w-full md:w-64 bg-surface-card border-b md:border-b-0 md:border-r border-white/5 flex flex-col justify-between shrink-0 relative z-20">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">

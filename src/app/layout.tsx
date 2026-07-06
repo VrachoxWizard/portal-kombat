@@ -74,9 +74,9 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ScrollToTop />
+          <MobileBottomNav />
         </div>
-        <ScrollToTop />
-        <MobileBottomNav />
       </body>
     </html>
   );

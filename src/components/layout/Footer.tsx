@@ -12,7 +12,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="relative bg-[var(--bg-canvas)] text-slate-300">
+    <footer className="relative bg-bg-canvas text-slate-300">
       <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" aria-hidden="true" />
 
       <div className="border-b border-white/5">

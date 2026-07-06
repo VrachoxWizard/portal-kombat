@@ -120,7 +120,7 @@ export default function CmsArticlesPage() {
       )}
 
       {/* Filter and search bar */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-5 bg-[var(--surface-elevated)] rounded-xl border border-white/5">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-5 bg-surface-elevated rounded-xl border border-white/5">
         <div className="relative w-full md:max-w-xs">
           <Search className="absolute inset-y-0 left-3 my-auto text-slate-500" size={16} />
           <input
