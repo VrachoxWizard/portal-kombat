@@ -11,6 +11,9 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { fetchExternalNews } from "@/lib/externalNews";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
 import { Newspaper } from "lucide-react";
+import { after } from "next/server";
+import { syncUfcEvents } from "@/lib/sync";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Borilačke Novosti | CombatPortal HR",
@@ -36,6 +39,22 @@ export default async function NewsPage({ searchParams }: PageProps) {
   const { q, category, tag, page } = await searchParams;
   const currentPage = parsePageParam(page);
   const isFiltered = !!(q || category || tag);
+
+  // Background sync triggered asynchronously after sending the response to the user
+  after(async () => {
+    try {
+      const lastEvent = await prisma.event.findFirst({
+        orderBy: { createdAt: "desc" },
+      });
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      if (!lastEvent || lastEvent.createdAt < oneHourAgo) {
+        console.log("Auto-triggering background UFC events sync from news page...");
+        await syncUfcEvents();
+      }
+    } catch (err) {
+      console.error("Background sync error on news page:", err);
+    }
+  });
 
   const [paginated, externalArticles] = await Promise.all([
     getPostListing({

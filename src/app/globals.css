@@ -121,24 +121,28 @@ h6 {
 
 /* ── Surface utilities ── */
 .surface-card {
-  background: color-mix(in srgb, var(--surface-card) 45%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
+  background: rgba(12, 15, 28, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-card);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
 }
 
 .surface-elevated {
-  background: var(--surface-elevated);
-  border: 1px solid var(--border-subtle);
+  background: rgba(17, 20, 37, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-card);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
 }
 
 .glass {
-  background: color-mix(in srgb, var(--surface-card) 45%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
+  background: rgba(12, 15, 28, 0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .transition-premium {
@@ -148,7 +152,8 @@ h6 {
     background-color var(--motion-hover) var(--ease-out-premium),
     border-color var(--motion-hover) var(--ease-out-premium),
     box-shadow var(--motion-hover) var(--ease-out-premium),
-    color var(--motion-hover) var(--ease-out-premium);
+    color var(--motion-hover) var(--ease-out-premium),
+    text-shadow var(--motion-hover) var(--ease-out-premium);
 }
 
 /* ── Card hover glow ── */
@@ -161,10 +166,10 @@ h6 {
 }
 
 .hover-glow:hover {
-  box-shadow: var(--shadow-glow-md);
-  border-color: var(--border-strong);
-  background-color: color-mix(in srgb, var(--surface-card) 65%, transparent);
-  transform: translateY(-3px);
+  box-shadow: 0 12px 40px -10px rgba(244, 63, 94, 0.28), 0 0 1px 1px rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.35);
+  background-color: rgba(12, 15, 28, 0.7);
+  transform: translateY(-4px);
 }
 
 /* ── Type badges ── */
@@ -308,11 +313,11 @@ h6 {
 }
 
 .text-glow-red {
-  text-shadow: 0 0 15px rgba(244, 63, 94, 0.35);
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.45), 0 0 4px rgba(244, 63, 94, 0.2);
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 15px rgba(251, 191, 36, 0.35);
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.45), 0 0 4px rgba(251, 191, 36, 0.2);
 }
 
 .bg-carbon {
@@ -323,11 +328,11 @@ h6 {
 
 /* ── Arena ambient lighting ── */
 .arena-glow-red {
-  background: radial-gradient(ellipse at center, rgba(220, 38, 38, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.03) 50%, transparent 80%);
 }
 
 .arena-glow-indigo {
-  background: radial-gradient(ellipse at center, rgba(49, 46, 129, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, rgba(49, 46, 129, 0.02) 50%, transparent 85%);
 }
 
 /* ── Ken Burns hero animation ── */
@@ -370,9 +375,10 @@ h6 {
 
 /* ── Focus ring ── */
 *:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.25);
+  border-radius: 6px;
 }
 
 /* ── Reading progress ── */

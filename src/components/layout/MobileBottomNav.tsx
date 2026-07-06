@@ -31,7 +31,7 @@ export const MobileBottomNav: React.FC = () => {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex flex-col items-center justify-center flex-1 h-full py-1 gap-1 transition-premium ${
+              className={`flex flex-col items-center justify-center flex-1 h-full py-1 gap-1 transition-premium cursor-pointer ${
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
               aria-current={isActive ? "page" : undefined}

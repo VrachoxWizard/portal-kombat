@@ -94,7 +94,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
           {/* Back Button */}
           <Link
             href="/borci"
-            className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-slate-400 hover:text-primary transition-premium"
+            className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-slate-400 hover:text-primary transition-premium cursor-pointer"
           >
             <ArrowLeft size={14} />
             Povratak na bazu boraca

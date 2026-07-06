@@ -101,7 +101,7 @@ export default async function FightersPage({ searchParams }: PageProps) {
                 <StaggerItem key={fighter.id}>
                   <Link
                     href={`/borci/${fighter.slug}`}
-                    className="group flex flex-col h-full rounded-[var(--radius-card)] bg-surface-card hover:bg-black/60 border border-white/5 hover:border-primary/20 transition-all duration-300 overflow-hidden shadow-lg relative"
+                    className="group flex flex-col h-full rounded-[var(--radius-card)] bg-surface-card hover:bg-black/60 border border-white/5 hover:border-primary/20 transition-all duration-300 overflow-hidden shadow-lg relative cursor-pointer"
                   >
                     {/* Glow effect on hover */}
                     <div className="absolute -inset-px bg-gradient-to-r from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/10 group-hover:via-red-500/5 group-hover:to-rose-500/10 rounded-[var(--radius-card)] opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />

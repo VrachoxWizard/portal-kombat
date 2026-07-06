@@ -100,8 +100,8 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-xs font-bold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center ${
-                    active ? "text-primary text-glow-red" : "text-muted-foreground"
+                  className={`text-xs font-bold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
+                    active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
                   }`}
                   aria-current={active ? "page" : undefined}
                 >
@@ -140,7 +140,7 @@ export const Header: React.FC = () => {
             <Link
               key={cat.slug}
               href={`/?category=${cat.slug}`}
-              className="shrink-0 rounded-full px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-widest text-muted-foreground border border-white/5 bg-white/[0.03] hover:border-primary/25 hover:text-primary transition-premium"
+              className="shrink-0 rounded-full px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-muted-foreground border border-white/5 bg-white/[0.03] hover:border-primary/25 hover:text-primary transition-premium cursor-pointer"
             >
               {cat.name}
             </Link>
