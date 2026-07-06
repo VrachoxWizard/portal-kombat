@@ -33,11 +33,7 @@ export default function CmsArticlesPage() {
   const [typeFilter, setTypeFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
+  const fetchPosts = React.useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -45,12 +41,20 @@ export default function CmsArticlesPage() {
       if (!res.ok) throw new Error("Neuspjelo dohvaćanje članaka");
       const data = await res.json();
       setPosts(data);
-    } catch (err: any) {
-      setError(err.message || "Pogreška pri učitavanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Pogreška pri učitavanju";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchPosts();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchPosts]);
 
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Jeste li sigurni da želite obrisati članak: "${title}"?`)) {
@@ -70,8 +74,9 @@ export default function CmsArticlesPage() {
       setSuccess("Članak uspješno obrisan!");
       setPosts(posts.filter((p) => p.id !== id));
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Greška pri brisanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri brisanju";
+      setError(message);
       setTimeout(() => setError(""), 4000);
     }
   };

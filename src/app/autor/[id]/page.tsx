@@ -1,7 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getMockPosts, MOCK_AUTHORS } from "@/lib/mockData";
@@ -72,7 +71,6 @@ async function getAuthorPosts(
       ]);
 
       const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      const currentPage = Math.min(Math.max(1, page), totalPages);
 
       if (total > 0) {
         return {
@@ -87,8 +85,8 @@ async function getAuthorPosts(
     const mockPosts = getMockPosts().filter((p) => p.authorId === authorId) as ListingPost[];
     const total = mockPosts.length;
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-    const currentPage = Math.min(Math.max(1, page), totalPages);
-    const start = (currentPage - 1) * PAGE_SIZE;
+    const resolvedPage = Math.min(Math.max(1, page), totalPages);
+    const start = (resolvedPage - 1) * PAGE_SIZE;
 
     return {
       items: mockPosts.slice(start, start + PAGE_SIZE),

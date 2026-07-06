@@ -1,5 +1,4 @@
 import React from "react";
-import { SkeletonHero, SkeletonCard } from "@/components/ui/SkeletonCard";
 
 export default function ArticleLoading() {
   return (

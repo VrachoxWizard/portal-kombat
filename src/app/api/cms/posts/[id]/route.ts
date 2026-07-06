@@ -141,6 +141,17 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
       // Handle prediction details
       if (type === "PREDICTION" && prediction) {
+        const fA = prediction.fighterA
+          ? await tx.fighter.findFirst({
+              where: { name: { equals: prediction.fighterA.trim(), mode: "insensitive" } },
+            })
+          : null;
+        const fB = prediction.fighterB
+          ? await tx.fighter.findFirst({
+              where: { name: { equals: prediction.fighterB.trim(), mode: "insensitive" } },
+            })
+          : null;
+
         if (currentPost.prediction) {
           // Update existing prediction
           await tx.prediction.update({
@@ -148,6 +159,8 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
             data: {
               fighterA: prediction.fighterA || "",
               fighterB: prediction.fighterB || "",
+              fighterAId: fA?.id || null,
+              fighterBId: fB?.id || null,
               winner: prediction.winner || "",
               method: prediction.method || "",
               predictedRound: prediction.predictedRound || null,
@@ -162,6 +175,8 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
               postId: id,
               fighterA: prediction.fighterA || "",
               fighterB: prediction.fighterB || "",
+              fighterAId: fA?.id || null,
+              fighterBId: fB?.id || null,
               winner: prediction.winner || "",
               method: prediction.method || "",
               predictedRound: prediction.predictedRound || null,
@@ -183,10 +198,11 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     });
 
     return NextResponse.json(updatedPost);
-  } catch (error: any) {
+  } catch (error) {
     console.error("CMS PUT update post API error:", error);
+    const message = error instanceof Error ? error.message : "Došlo je do pogreške";
     return NextResponse.json(
-      { error: error.message || "Došlo je do pogreške" },
+      { error: message },
       { status: 500 }
     );
   }

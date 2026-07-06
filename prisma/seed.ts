@@ -24,7 +24,7 @@ async function main() {
   console.log('Baza podataka očišćena.');
 
   // 1. Kreiraj autore (Korisnike) s lozinkama
-  const mislav = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: 'Mislav Vukušić',
       email: 'mvukusic67@gmail.com',
@@ -86,7 +86,7 @@ async function main() {
     data: { name: 'Jon Jones', slug: 'jon-jones' },
   });
 
-  const tagFnc = await prisma.tag.create({
+  await prisma.tag.create({
     data: { name: 'FNC', slug: 'fnc' },
   });
 

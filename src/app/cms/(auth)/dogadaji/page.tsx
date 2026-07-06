@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Calendar,
   Plus,
   Trash2,
   Loader2,
@@ -32,11 +31,7 @@ export default function CmsEventsPage() {
   const [eventName, setEventName] = useState("");
   const [date, setDate] = useState("");
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
+  const fetchEvents = React.useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -44,12 +39,20 @@ export default function CmsEventsPage() {
       if (!res.ok) throw new Error("Neuspjelo dohvaćanje borbi");
       const data = await res.json();
       setEvents(data);
-    } catch (err: any) {
-      setError(err.message || "Greška pri učitavanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri učitavanju";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchEvents();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchEvents]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,8 +86,9 @@ export default function CmsEventsPage() {
       setDate("");
 
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Nešto je pošlo po zlu");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Nešto je pošlo po zlu";
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -108,8 +112,9 @@ export default function CmsEventsPage() {
       setSuccess("Borba uspješno obrisana!");
       setEvents(events.filter((e) => e.id !== id));
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Greška pri brisanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri brisanju";
+      setError(message);
       setTimeout(() => setError(""), 4000);
     }
   };

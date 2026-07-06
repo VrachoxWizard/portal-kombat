@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth-utils";
-import { PostType, PublishStatus } from "@prisma/client";
+import { PostType, PublishStatus, Prisma } from "@prisma/client";
 
 // Get all posts for CMS management
 export async function GET(req: NextRequest) {
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get("search");
 
   try {
-    const whereClause: any = {};
+    const whereClause: Prisma.PostWhereInput = {};
 
     if (type) whereClause.type = type as PostType;
     if (status) whereClause.status = status as PublishStatus;
@@ -125,11 +125,24 @@ export async function POST(req: NextRequest) {
       });
 
       if (type === "PREDICTION" && prediction) {
+        const fA = prediction.fighterA
+          ? await tx.fighter.findFirst({
+              where: { name: { equals: prediction.fighterA.trim(), mode: "insensitive" } },
+            })
+          : null;
+        const fB = prediction.fighterB
+          ? await tx.fighter.findFirst({
+              where: { name: { equals: prediction.fighterB.trim(), mode: "insensitive" } },
+            })
+          : null;
+
         await tx.prediction.create({
           data: {
             postId: post.id,
             fighterA: prediction.fighterA || "",
             fighterB: prediction.fighterB || "",
+            fighterAId: fA?.id || null,
+            fighterBId: fB?.id || null,
             winner: prediction.winner || "",
             method: prediction.method || "",
             predictedRound: prediction.predictedRound || null,
@@ -143,10 +156,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newPost);
-  } catch (error: any) {
+  } catch (error) {
     console.error("CMS POST create API error:", error);
+    const message = error instanceof Error ? error.message : "Došlo je do pogreške";
     return NextResponse.json(
-      { error: error.message || "Došlo je do pogreške" },
+      { error: message },
       { status: 500 }
     );
   }

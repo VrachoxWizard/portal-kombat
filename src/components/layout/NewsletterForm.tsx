@@ -43,9 +43,10 @@ export const NewsletterForm: React.FC = () => {
 
       setStatus("success");
       setEmail("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus("error");
-      setErrorMessage(err.message || "Povezivanje nije uspjelo.");
+      const message = err instanceof Error ? err.message : "Povezivanje nije uspjelo.";
+      setErrorMessage(message);
     }
   };
 

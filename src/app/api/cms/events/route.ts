@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth-utils";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
@@ -36,10 +36,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const fA = fighterA
+      ? await prisma.fighter.findFirst({
+          where: { name: { equals: fighterA.trim(), mode: "insensitive" } },
+        })
+      : null;
+    const fB = fighterB
+      ? await prisma.fighter.findFirst({
+          where: { name: { equals: fighterB.trim(), mode: "insensitive" } },
+        })
+      : null;
+
     const newEvent = await prisma.event.create({
       data: {
         fighterA,
         fighterB,
+        fighterAId: fA?.id || null,
+        fighterBId: fB?.id || null,
         event,
         date,
       },

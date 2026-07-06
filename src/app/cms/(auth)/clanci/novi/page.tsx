@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  FileText,
   Save,
   ArrowLeft,
   Loader2,
@@ -46,11 +45,7 @@ export default function CmsNewArticlePage() {
   const [confidenceScore, setConfidenceScore] = useState(70);
   const [keyReasoning, setKeyReasoning] = useState("");
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = React.useCallback(async () => {
     try {
       const res = await fetch("/api/cms/categories");
       if (res.ok) {
@@ -63,7 +58,14 @@ export default function CmsNewArticlePage() {
     } finally {
       setLoadingCats(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchCategories();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchCategories]);
 
   // Helper to slugify Croatian text
   const slugify = (text: string) => {
@@ -96,7 +98,7 @@ export default function CmsNewArticlePage() {
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
 
-    const postPayload: any = {
+    const postPayload: Record<string, unknown> = {
       title,
       slug,
       excerpt,
@@ -135,8 +137,9 @@ export default function CmsNewArticlePage() {
 
       router.push("/cms/clanci");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Nešto je pošlo po zlu");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Nešto je pošlo po zlu";
+      setError(message);
       setSaving(false);
     }
   };

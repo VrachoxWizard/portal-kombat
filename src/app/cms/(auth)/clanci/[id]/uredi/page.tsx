@@ -3,7 +3,6 @@
 import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import {
-  FileText,
   Save,
   ArrowLeft,
   Loader2,
@@ -54,11 +53,7 @@ export default function CmsEditArticlePage({ params }: PageProps) {
   const [confidenceScore, setConfidenceScore] = useState(70);
   const [keyReasoning, setKeyReasoning] = useState("");
 
-  useEffect(() => {
-    fetchInitialData();
-  }, [id]);
-
-  const fetchInitialData = async () => {
+  const fetchInitialData = React.useCallback(async () => {
     setLoading(true);
     setError("");
 
@@ -100,12 +95,20 @@ export default function CmsEditArticlePage({ params }: PageProps) {
         setConfidenceScore(post.prediction.confidenceScore || 70);
         setKeyReasoning(post.prediction.keyReasoning || "");
       }
-    } catch (err: any) {
-      setError(err.message || "Neuspjelo učitavanje podataka");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo učitavanje podataka";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchInitialData();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchInitialData]);
 
   const slugify = (text: string) => {
     return text
@@ -136,7 +139,7 @@ export default function CmsEditArticlePage({ params }: PageProps) {
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
 
-    const postPayload: any = {
+    const postPayload: Record<string, unknown> = {
       title,
       slug,
       excerpt,
@@ -175,8 +178,9 @@ export default function CmsEditArticlePage({ params }: PageProps) {
 
       router.push("/cms/clanci");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Nešto je pošlo po zlu");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Nešto je pošlo po zlu";
+      setError(message);
       setSaving(false);
     }
   };

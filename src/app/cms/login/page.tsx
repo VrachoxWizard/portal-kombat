@@ -32,8 +32,9 @@ export default function CmsLoginPage() {
       // Successful login
       router.push("/cms");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Nešto je pošlo po zlu");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Nešto je pošlo po zlu";
+      setError(message);
       setLoading(false);
     }
   };

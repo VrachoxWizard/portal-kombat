@@ -103,7 +103,7 @@ export async function destroySession() {
   if (token) {
     try {
       await prisma.session.delete({ where: { token } });
-    } catch (e) {
+    } catch {
       // Ignore if session not in DB
     }
   }

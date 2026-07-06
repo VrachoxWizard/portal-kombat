@@ -22,11 +22,7 @@ export default function CmsSubscribersPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  useEffect(() => {
-    fetchSubscribers();
-  }, []);
-
-  const fetchSubscribers = async () => {
+  const fetchSubscribers = React.useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -34,12 +30,20 @@ export default function CmsSubscribersPage() {
       if (!res.ok) throw new Error("Neuspjelo dohvaćanje pretplatnika");
       const data = await res.json();
       setSubscribers(data);
-    } catch (err: any) {
-      setError(err.message || "Greška pri učitavanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri učitavanju";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchSubscribers();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchSubscribers]);
 
   const handleDelete = async (id: string, email: string) => {
     if (!confirm(`Jeste li sigurni da želite ukloniti pretplatnika: "${email}"?`)) {
@@ -59,8 +63,9 @@ export default function CmsSubscribersPage() {
       setSuccess("Pretplatnik uspješno uklonjen!");
       setSubscribers(subscribers.filter((s) => s.id !== id));
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Greška pri brisanju");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri brisanju";
+      setError(message);
       setTimeout(() => setError(""), 4000);
     }
   };

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MessageSquare, Send, Loader2, AlertCircle, CheckCircle2, User } from "lucide-react";
+import { MessageSquare, Send, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { duration, EASE_OUT } from "@/lib/motion";
+import { EASE_OUT } from "@/lib/motion";
 
 interface Comment {
   id: string;
@@ -27,11 +27,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
   const [authorName, setAuthorName] = useState("");
   const [content, setContent] = useState("");
 
-  useEffect(() => {
-    fetchComments();
-  }, [postId]);
-
-  const fetchComments = async () => {
+  const fetchComments = React.useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -39,12 +35,20 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
       if (!res.ok) throw new Error("Neuspjelo učitavanje komentara");
       const data = await res.json();
       setComments(data);
-    } catch (err: any) {
-      setError(err.message || "Greška pri učitavanju komentara");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Greška pri učitavanju komentara";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [postId]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchComments();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchComments]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,8 +75,9 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
       setContent(""); // keep authorName for convenience
 
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Nešto je pošlo po zlu");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Nešto je pošlo po zlu";
+      setError(message);
     } finally {
       setSubmitting(false);
     }
@@ -178,7 +183,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
         ) : (
           <div className="space-y-6">
             <AnimatePresence initial={false}>
-              {comments.map((comment, index) => (
+              {comments.map((comment) => (
                 <motion.div
                   key={comment.id}
                   initial={{ opacity: 0, y: 12 }}

@@ -7,7 +7,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import ArticleCard from "@/components/article/ArticleCard";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { Shield, MapPin, Award, Activity, Calendar, ArrowLeft, Swords } from "lucide-react";
+import { Shield, MapPin, Award, Calendar, ArrowLeft, Swords } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 

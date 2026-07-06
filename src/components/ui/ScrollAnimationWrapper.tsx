@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { EASE_OUT } from "@/lib/motion";
 

@@ -127,16 +127,12 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
 
 // Simple regex parser for bold, italics, links
 function parseInlineMarkdown(text: string): React.ReactNode[] {
-  let parts: React.ReactNode[] = [];
-  let currentText = text;
-  let index = 0;
-
   // Regexes for inline styles
   // Bold: **text**
   // Italic: *text*
   // Link: [label](url)
   const inlineRegex = /(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
-  const matches = currentText.split(inlineRegex);
+  const matches = text.split(inlineRegex);
 
   return matches.map((part, partIdx) => {
     // Bold matching

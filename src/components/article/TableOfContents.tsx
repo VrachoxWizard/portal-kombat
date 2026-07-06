@@ -23,9 +23,13 @@ export const TableOfContents: React.FC = () => {
         level: el.tagName.toLowerCase() === "h2" ? 2 : 3,
       }));
 
-    setHeadings(elements);
+    const timer = setTimeout(() => {
+      setHeadings(elements);
+    }, 0);
 
-    if (elements.length === 0) return;
+    if (elements.length === 0) {
+      return () => clearTimeout(timer);
+    }
 
     // Use IntersectionObserver to track active heading
     const callback = (entries: IntersectionObserverEntry[]) => {
@@ -46,7 +50,10 @@ export const TableOfContents: React.FC = () => {
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, []);
 
   if (headings.length === 0) return null;
