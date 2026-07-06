@@ -20,14 +20,16 @@ enum PublishStatus {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  role      String   @default("EDITOR")
-  avatarUrl String?
-  bio       String?
-  posts     Post[]
-  createdAt DateTime @default(now())
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  role         String    @default("EDITOR")
+  avatarUrl    String?
+  bio          String?
+  posts        Post[]
+  passwordHash String    @default("")
+  sessions     Session[]
+  createdAt    DateTime  @default(now())
 }
 
 model Category {
@@ -85,3 +87,28 @@ model Prediction {
   confidenceScore  Int
   keyReasoning     String @db.Text
 }
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  fighterA  String
+  fighterB  String
+  event     String
+  date      String
+  createdAt DateTime @default(now())
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+

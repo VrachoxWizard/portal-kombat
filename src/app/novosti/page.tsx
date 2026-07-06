@@ -1,7 +1,6 @@
 import React from "react";
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { getMockPosts } from "@/lib/mockData";
+import type { Metadata } from "next";
+import { getPostListing, parsePageParam } from "@/lib/posts";
 import ArticleCard from "@/components/article/ArticleCard";
 import ExternalArticleCard from "@/components/article/ExternalArticleCard";
 import Sidebar from "@/components/layout/Sidebar";
@@ -11,9 +10,18 @@ import Pagination from "@/components/ui/Pagination";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { fetchExternalNews } from "@/lib/externalNews";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { paginate, parsePageParam } from "@/lib/pagination";
-import type { ListingPost } from "@/lib/post-types";
 import { Newspaper } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Borilačke Novosti | CombatPortal HR",
+  description:
+    "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
+  openGraph: {
+    title: "Borilačke Novosti | CombatPortal HR",
+    description:
+      "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
+  },
+};
 
 interface PageProps {
   searchParams: Promise<{
@@ -24,66 +32,21 @@ interface PageProps {
   }>;
 }
 
-async function getNews(filters: { search?: string; category?: string; tag?: string }): Promise<ListingPost[]> {
-  try {
-    const whereClause: Prisma.PostWhereInput = {
-      type: "NEWS",
-      status: "PUBLISHED",
-    };
-
-    if (filters.category) {
-      whereClause.category = { slug: filters.category };
-    }
-
-    if (filters.tag) {
-      whereClause.tags = { some: { slug: filters.tag } };
-    }
-
-    if (filters.search) {
-      whereClause.OR = [
-        { title: { contains: filters.search, mode: "insensitive" } },
-        { excerpt: { contains: filters.search, mode: "insensitive" } },
-      ];
-    }
-
-    const news = await prisma.post.findMany({
-      where: whereClause,
-      include: {
-        author: true,
-        category: true,
-      },
-      orderBy: {
-        publishedAt: "desc",
-      },
-    });
-
-    if (news.length === 0) {
-      return getMockPosts({
-        type: "NEWS",
-        search: filters.search,
-        category: filters.category,
-        tag: filters.tag,
-      }) as ListingPost[];
-    }
-
-    return news as ListingPost[];
-  } catch (error) {
-    console.warn("Using fallback news due to DB availability:", error);
-    return getMockPosts({
-      type: "NEWS",
-      search: filters.search,
-      category: filters.category,
-      tag: filters.tag,
-    }) as ListingPost[];
-  }
-}
-
 export default async function NewsPage({ searchParams }: PageProps) {
   const { q, category, tag, page } = await searchParams;
-  const allNews = await getNews({ search: q, category, tag });
-  const externalArticles = await fetchExternalNews();
+  const currentPage = parsePageParam(page);
   const isFiltered = !!(q || category || tag);
-  const paginated = paginate(allNews, parsePageParam(page));
+
+  const [paginated, externalArticles] = await Promise.all([
+    getPostListing({
+      type: "NEWS",
+      search: q,
+      category,
+      tag,
+      page: currentPage,
+    }),
+    fetchExternalNews(),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

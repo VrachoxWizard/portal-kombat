@@ -12,7 +12,7 @@ export const NewsletterForm: React.FC = () => {
   const inputId = "newsletter-email";
   const errorId = "newsletter-error";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
@@ -26,10 +26,27 @@ export const NewsletterForm: React.FC = () => {
     setStatus("loading");
     setErrorMessage("");
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Došlo je do pogreške. Pokušajte ponovno.");
+      }
+
       setStatus("success");
       setEmail("");
-    }, 1500);
+    } catch (err: any) {
+      setStatus("error");
+      setErrorMessage(err.message || "Povezivanje nije uspjelo.");
+    }
   };
 
   return (

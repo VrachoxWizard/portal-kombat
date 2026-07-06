@@ -20,9 +20,27 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "CombatPortal HR - Borilačke Vijesti, Analize i Predikcije",
+  metadataBase: new URL("https://combatportal.hr"),
+  title: {
+    default: "CombatPortal HR - Borilačke Vijesti, Analize i Predikcije",
+    template: "%s | CombatPortal HR",
+  },
   description:
     "Vodeći regionalni portal za MMA, boks i kickboks. Najnovije vijesti, stručni blogovi i predikcije borbi.",
+  openGraph: {
+    type: "website",
+    locale: "hr_HR",
+    siteName: "CombatPortal HR",
+    title: "CombatPortal HR - Borilačke Vijesti, Analize i Predikcije",
+    description:
+      "Vodeći regionalni portal za MMA, boks i kickboks. Najnovije vijesti, stručni blogovi i predikcije borbi.",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

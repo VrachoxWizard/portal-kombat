@@ -130,8 +130,11 @@ export const Footer: React.FC = () => {
             © {new Date().getFullYear()} CombatPortal HR. Sva prava pridržana.
           </p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4 md:mt-0">
-            <Link href="/novosti" className="hover:text-slate-400 transition-premium">
+            <Link href="/kontakt" className="hover:text-slate-400 transition-premium">
               Kontakt
+            </Link>
+            <Link href="/o-nama" className="hover:text-slate-400 transition-premium">
+              O nama
             </Link>
           </div>
         </div>

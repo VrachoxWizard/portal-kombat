@@ -1,7 +1,5 @@
 import React from "react";
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { getMockPosts } from "@/lib/mockData";
+import { getPostListing, parsePageParam } from "@/lib/posts";
 import HeroArticle from "@/components/article/HeroArticle";
 import ArticleCard from "@/components/article/ArticleCard";
 import Sidebar from "@/components/layout/Sidebar";
@@ -10,8 +8,6 @@ import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { paginate, parsePageParam } from "@/lib/pagination";
-import type { ListingPost } from "@/lib/post-types";
 import { Flame } from "lucide-react";
 
 interface PageProps {
@@ -23,71 +19,31 @@ interface PageProps {
   }>;
 }
 
-async function getPosts(filters: { search?: string; category?: string; tag?: string }): Promise<ListingPost[]> {
-  try {
-    const whereClause: Prisma.PostWhereInput = {
-      status: "PUBLISHED",
-    };
-
-    if (filters.category) {
-      whereClause.category = { slug: filters.category };
-    }
-
-    if (filters.tag) {
-      whereClause.tags = { some: { slug: filters.tag } };
-    }
-
-    if (filters.search) {
-      whereClause.OR = [
-        { title: { contains: filters.search, mode: "insensitive" } },
-        { excerpt: { contains: filters.search, mode: "insensitive" } },
-      ];
-    }
-
-    const posts = await prisma.post.findMany({
-      where: whereClause,
-      include: {
-        author: true,
-        category: true,
-        prediction: true,
-      },
-      orderBy: {
-        publishedAt: "desc",
-      },
-    });
-
-    if (posts.length === 0) {
-      return getMockPosts({
-        search: filters.search,
-        category: filters.category,
-        tag: filters.tag,
-      }) as ListingPost[];
-    }
-
-    return posts as ListingPost[];
-  } catch (error) {
-    console.warn("Baza podataka nije dostupna, koriste se mock podaci:", error);
-    return getMockPosts({
-      search: filters.search,
-      category: filters.category,
-      tag: filters.tag,
-    }) as ListingPost[];
-  }
-}
-
 export default async function HomePage({ searchParams }: PageProps) {
   const { q, category, tag, page } = await searchParams;
-  const allPosts = await getPosts({ search: q, category, tag });
   const currentPage = parsePageParam(page);
-
   const isFiltered = !!(q || category || tag);
-  const heroPost = !isFiltered && currentPage === 1 ? allPosts[0] : null;
-  const listSource = isFiltered ? allPosts : allPosts.slice(1);
-  const paginated = paginate(listSource, currentPage);
+
+  // For the hero, we need an extra item on page 1 when unfiltered
+  const pageSize = !isFiltered && currentPage === 1 ? 13 : 12;
+
+  const paginated = await getPostListing({
+    search: q,
+    category,
+    tag,
+    page: currentPage,
+    pageSize,
+  });
+
+  const heroPost = !isFiltered && currentPage === 1 && paginated.items.length > 0
+    ? paginated.items[0]
+    : null;
+
+  const listItems = heroPost ? paginated.items.slice(1) : paginated.items;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {!isFiltered && heroPost && currentPage === 1 && (
+      {heroPost && (
         <ScrollAnimationWrapper className="mb-12">
           <HeroArticle
             title={heroPost.title}
@@ -121,7 +77,7 @@ export default async function HomePage({ searchParams }: PageProps) {
             resultCount={paginated.total}
           />
 
-          {paginated.items.length === 0 ? (
+          {listItems.length === 0 ? (
             <EmptyState
               message="Nisu pronađene objave koje odgovaraju vašim kriterijima."
               basePath="/"
@@ -129,7 +85,7 @@ export default async function HomePage({ searchParams }: PageProps) {
           ) : (
             <>
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {paginated.items.map((post, index) => (
+                {listItems.map((post, index) => (
                   <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
                     <ArticleCard
                       title={post.title}

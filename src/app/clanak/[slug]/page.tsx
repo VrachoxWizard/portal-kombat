@@ -17,6 +17,8 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { TYPE_ROUTES, TYPE_SECTION_NAMES, PostTypeKey } from "@/lib/constants";
 import type { ListingPost } from "@/lib/post-types";
 import { Calendar, User, Clock, Hash } from "lucide-react";
+import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
+import { TableOfContents } from "@/components/article/TableOfContents";
 
 async function getArticle(slug: string) {
   try {
@@ -87,16 +89,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = await getArticle(slug);
   if (!article) {
     return {
-      title: "Članak nije pronađen | CombatPortal HR",
+      title: "Članak nije pronađen",
     };
   }
+
+  const tags = "tags" in article && Array.isArray(article.tags)
+    ? article.tags.map((t: { name: string }) => t.name)
+    : [];
+
   return {
-    title: `${article.title} | CombatPortal HR`,
+    title: article.title,
     description: article.excerpt || "Borilačke vijesti i analize",
+    keywords: tags.length > 0 ? tags : undefined,
+    alternates: {
+      canonical: `/clanak/${slug}`,
+    },
     openGraph: {
       title: article.title,
       description: article.excerpt || "Borilačke vijesti i analize",
       type: "article",
+      publishedTime: article.publishedAt
+        ? new Date(article.publishedAt).toISOString()
+        : undefined,
+      section: article.category?.name,
+      authors: [article.author.name],
+      images: article.featuredImage ? [article.featuredImage] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt || "Borilačke vijesti i analize",
       images: article.featuredImage ? [article.featuredImage] : [],
     },
   };
@@ -258,9 +280,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <ShareButtons title={article.title} />
 
           <ScrollAnimationWrapper delay={0.1}>
-            <div className="prose-custom text-base sm:text-lg leading-relaxed whitespace-pre-line">
-              {article.content}
-            </div>
+            <MarkdownRenderer content={article.content} />
           </ScrollAnimationWrapper>
 
           {tags.length > 0 && (
@@ -317,7 +337,8 @@ export default async function ArticlePage({ params }: PageProps) {
           )}
         </article>
 
-        <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
+        <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1 space-y-8">
+          <TableOfContents />
           <Sidebar />
         </ScrollAnimationWrapper>
       </div>

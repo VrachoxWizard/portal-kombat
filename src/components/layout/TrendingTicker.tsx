@@ -1,15 +1,14 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { Zap } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
 interface TrendingItem {
   label: string;
   href: string;
 }
 
-const trendingItems: TrendingItem[] = [
+const fallbackItems: TrendingItem[] = [
   { label: "UFC 330: Makhachev vs. Garry — 15. kolovoza", href: "/novosti" },
   { label: "Filip Hrgović spreman za napad na titulu", href: "/novosti" },
   { label: "#StipeMiočić povratak u oktagonu?", href: "/tag/stipe-miocic" },
@@ -17,8 +16,31 @@ const trendingItems: TrendingItem[] = [
   { label: "Boks: Riyadh Season najave", href: "/novosti" },
 ];
 
-export const TrendingTicker: React.FC = () => {
-  const items = [...trendingItems, ...trendingItems];
+async function getTrendingItems(): Promise<TrendingItem[]> {
+  try {
+    const latestPosts = await prisma.post.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { publishedAt: "desc" },
+      take: 5,
+      select: { title: true, slug: true },
+    });
+
+    if (latestPosts.length > 0) {
+      return latestPosts.map((post) => ({
+        label: post.title,
+        href: `/clanak/${post.slug}`,
+      }));
+    }
+  } catch (error) {
+    console.warn("DB not accessible. Using fallback for trending ticker:", error);
+  }
+  return fallbackItems;
+}
+
+export const TrendingTicker = async () => {
+  const itemsList = await getTrendingItems();
+  // Duplicate list to ensure seamless marquee looping
+  const items = [...itemsList, ...itemsList];
 
   return (
     <div
@@ -57,7 +79,7 @@ export const TrendingTicker: React.FC = () => {
       </div>
 
       <div className="sr-only">
-        {trendingItems.map((item) => (
+        {itemsList.map((item) => (
           <Link key={item.label} href={item.href}>
             {item.label}
           </Link>

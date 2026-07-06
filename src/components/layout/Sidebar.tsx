@@ -32,7 +32,26 @@ async function getSidebarData() {
     popularTags = getMockPopularTags();
   }
 
-  const upcomingFights = getMockUpcomingFights();
+  let upcomingFights: Array<{ id: string; fighterA: string; fighterB: string; event: string; date: string }> = [];
+  try {
+    const eventsFromDb = await prisma.event.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    });
+    upcomingFights = eventsFromDb.map((e) => ({
+      id: e.id,
+      fighterA: e.fighterA,
+      fighterB: e.fighterB,
+      event: e.event,
+      date: e.date,
+    }));
+  } catch (error) {
+    console.warn("DB not accessible. Using fallback for upcoming fights:", error);
+  }
+
+  if (upcomingFights.length === 0) {
+    upcomingFights = getMockUpcomingFights();
+  }
 
   return { popularTags, upcomingFights };
 }

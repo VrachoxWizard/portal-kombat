@@ -8,17 +8,11 @@ import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { BookOpen } from "lucide-react";
+import { Search } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Urednički Blogovi i Kolumne | CombatPortal HR",
-  description:
-    "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
-  openGraph: {
-    title: "Urednički Blogovi i Kolumne | CombatPortal HR",
-    description:
-      "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
-  },
+  title: "Pretraga",
+  description: "Pretražite sve objave, novosti, blogove i predikcije na CombatPortal HR portalu.",
 };
 
 interface PageProps {
@@ -30,13 +24,13 @@ interface PageProps {
   }>;
 }
 
-export default async function BlogPage({ searchParams }: PageProps) {
+export default async function SearchPage({ searchParams }: PageProps) {
   const { q, category, tag, page } = await searchParams;
   const currentPage = parsePageParam(page);
+  const searchQuery = q || "";
 
   const paginated = await getPostListing({
-    type: "BLOG",
-    search: q,
+    search: searchQuery,
     category,
     tag,
     page: currentPage,
@@ -48,31 +42,39 @@ export default async function BlogPage({ searchParams }: PageProps) {
         <div className="lg:col-span-2 space-y-6">
           <ScrollAnimationWrapper>
             <SectionHeading
-              title="Urednički Blogovi i Kolumne"
-              description="Pročitajte stručna mišljenja, dubinske rasprave i analize povijesti borilačkih sportova."
-              icon={BookOpen}
+              title="Pretraživanje Portala"
+              description={
+                searchQuery
+                  ? `Rezultati za pojam pretrage: "${searchQuery}"`
+                  : "Unesite pojam za pretragu kako biste pretražili objave."
+              }
+              icon={Search}
               as="h1"
             />
           </ScrollAnimationWrapper>
 
           <FilterBar
-            basePath="/blog"
+            basePath="/pretraga"
             activeCategory={category}
             activeTag={tag}
-            activeQuery={q}
+            activeQuery={searchQuery}
             resultCount={paginated.total}
           />
 
           {paginated.items.length === 0 ? (
             <EmptyState
-              message="Nisu pronađeni blogovi koji odgovaraju vašim kriterijima."
-              basePath="/blog"
+              message={
+                searchQuery
+                  ? "Nismo pronašli niti jednu objavu koja odgovara vašem pojmu."
+                  : "Upišite pojam za pretraživanje u tražilicu gore desno."
+              }
+              basePath="/pretraga"
             />
           ) : (
             <>
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {paginated.items.map((post, index) => (
-                  <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                {paginated.items.map((post) => (
+                  <StaggerItem key={post.id}>
                     <ArticleCard
                       title={post.title}
                       slug={post.slug}
@@ -82,17 +84,25 @@ export default async function BlogPage({ searchParams }: PageProps) {
                       publishedAt={post.publishedAt}
                       category={post.category}
                       author={post.author}
-                      variant={index === 0 ? "horizontal" : "vertical"}
+                      predictionTeaser={
+                        post.type === "PREDICTION" && post.prediction
+                          ? {
+                              fighterA: post.prediction.fighterA,
+                              fighterB: post.prediction.fighterB,
+                              winner: post.prediction.winner,
+                            }
+                          : null
+                      }
                     />
                   </StaggerItem>
                 ))}
               </StaggerContainer>
 
               <Pagination
-                basePath="/blog"
+                basePath="/pretraga"
                 currentPage={paginated.currentPage}
                 totalPages={paginated.totalPages}
-                params={{ q, category, tag }}
+                params={{ q: searchQuery, category, tag }}
               />
             </>
           )}

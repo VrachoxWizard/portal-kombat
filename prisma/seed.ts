@@ -1,18 +1,38 @@
 import 'dotenv/config';
 import { PostType, PublishStatus } from '@prisma/client';
-import prisma from '../src/lib/prisma';
+import prisma, { prisma as prismaClient } from '../src/lib/prisma';
+import { saltAndHashPassword } from '../src/lib/auth-utils';
 
 async function main() {
+  const db = prismaClient || prisma;
+  if (!db) {
+    throw new Error("Prisma client not found in default or named exports");
+  }
+  const prismaInstance = db;
+
   // Očisti bazu podataka prije seadanja
+  await prismaInstance.session.deleteMany({});
   await prisma.prediction.deleteMany({});
   await prisma.post.deleteMany({});
   await prisma.tag.deleteMany({});
   await prisma.category.deleteMany({});
+  await prisma.event.deleteMany({});
+  await prisma.subscriber.deleteMany({});
   await prisma.user.deleteMany({});
 
   console.log('Baza podataka očišćena.');
 
-  // 1. Kreiraj autore (Korisnike)
+  // 1. Kreiraj autore (Korisnike) s lozinkama
+  const mislav = await prisma.user.create({
+    data: {
+      name: 'Mislav Vukušić',
+      email: 'mvukusic67@gmail.com',
+      role: 'ADMIN',
+      bio: 'Glavni administrator i osnivač CombatPortal HR portala.',
+      passwordHash: saltAndHashPassword('Passwod2026!'),
+    },
+  });
+
   const marko = await prisma.user.create({
     data: {
       name: 'Marko Horvat',
@@ -20,6 +40,7 @@ async function main() {
       role: 'ADMIN',
       bio: 'Dugogodišnji borilački novinar i analitičar, bivši amaterski kickboksač. Specijaliziran za MMA i UFC analize.',
       avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80',
+      passwordHash: saltAndHashPassword('marko1234'),
     },
   });
 
@@ -30,6 +51,7 @@ async function main() {
       role: 'EDITOR',
       bio: 'Stručnjak za boks i povijest plemenite vještine. Piše kolumne i tjedne preglede zbivanja u teškoj kategoriji.',
       avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=150&h=150&q=80',
+      passwordHash: saltAndHashPassword('ivan1234'),
     },
   });
 
@@ -199,8 +221,25 @@ async function main() {
       keyReasoning: 'Hari će krenuti iznimno eksplozivno u prve dvije runde, no Rico će preživjeti početni pritisak te zahvaljujući konstantnom ritmu i "low kickovima" dominirati u kasnijim rundama za sigurnu sudačku odluku.',
     },
   });
-
   console.log('Predikcije kreirane.');
+
+  // 7. Kreiraj Nadolazeće Borbe (EVENTS)
+  await prisma.event.createMany({
+    data: [
+      { fighterA: "Anthony Joshua", fighterB: "Kristian Prenga", event: "Boks: Riyadh Season", date: "25. srpnja" },
+      { fighterA: "Islam Makhachev", fighterB: "Ian Garry", event: "UFC 330", date: "15. kolovoza" },
+      { fighterA: "Filip Hrgović", fighterB: "Moses Itauma", event: "Boks: London", date: "29. kolovoza" },
+      { fighterA: "Ivan Vitasović", fighterB: "TBA", event: "FNC 33: Zagreb", date: "12. rujna" },
+    ]
+  });
+  console.log('Nadolazeće borbe kreirane.');
+
+  // 8. Kreiraj testne pretplatnike (SUBSCRIBERS)
+  await prisma.subscriber.create({
+    data: { email: "test.pretplatnik@combatportal.hr" }
+  });
+  console.log('Pretplatnici kreirani.');
+
   console.log('Uspješno obavljeno seadanje baze podataka!');
 }
 
