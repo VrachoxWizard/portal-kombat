@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ExternalLink, Calendar } from "lucide-react";
 
 interface ExternalArticleCardProps {
@@ -31,12 +32,17 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
       })
     : "";
 
+  const interstitialHref = `/novosti/vanjska?url=${encodeURIComponent(link)}` +
+    `&title=${encodeURIComponent(title)}` +
+    `&excerpt=${encodeURIComponent(excerpt)}` +
+    `&image=${encodeURIComponent(featuredImage)}` +
+    `&source=${encodeURIComponent(source)}` +
+    `&date=${encodeURIComponent(publishedAt)}`;
+
   return (
     <article className="group flex flex-col overflow-hidden surface-card hover-glow h-full">
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={interstitialHref}
         className="flex flex-col h-full"
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
@@ -86,7 +92,7 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
             </time>
           </div>
         </div>
-      </a>
+      </Link>
     </article>
   );
 };
