@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Baza Boraca i Statistike",
+  title: "Baza boraca i statistike",
   description:
     "Pregledajte detaljne profile, statistike, omjere i povijest borbi najboljih boraca iz svijeta MMA, boksa i kickboksa.",
 };
@@ -45,7 +45,7 @@ export default async function FightersPage({ searchParams }: PageProps) {
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
             <SectionHeading
-              title="Baza Boraca"
+              title="Baza boraca"
               description="Pregledajte detaljne profile boraca, njihove omjere pobjeda i poraza te povijesne statistike u ringu i kavezu."
               icon={Users}
               as="h1"

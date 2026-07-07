@@ -11,11 +11,11 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Urednički Blogovi i Kolumne",
+  title: "Urednički blogovi i kolumne",
   description:
     "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
   openGraph: {
-    title: "Urednički Blogovi i Kolumne",
+    title: "Urednički blogovi i kolumne",
     description:
       "Pročitajte stručna mišljenja, dubinske rasprave i analize borilačkih sportova — MMA, boks, kickboks kolumne naših urednika.",
   },
@@ -48,7 +48,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
         <div className="lg:col-span-2 space-y-6">
           <ScrollAnimationWrapper>
             <SectionHeading
-              title="Urednički Blogovi i Kolumne"
+              title="Urednički blogovi i kolumne"
               description="Pročitajte stručna mišljenja, dubinske rasprave i analize povijesti borilačkih sportova."
               icon={BookOpen}
               as="h1"

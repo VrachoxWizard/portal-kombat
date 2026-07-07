@@ -40,7 +40,7 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
     `&date=${encodeURIComponent(publishedAt)}`;
 
   return (
-    <article className="group flex flex-col overflow-hidden surface-card hover-glow h-full">
+    <article className="group flex flex-col overflow-hidden surface-card hover-glow h-full cursor-pointer">
       <Link
         href={interstitialHref}
         className="flex flex-col h-full"
@@ -82,7 +82,7 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
           </div>
 
           <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3 text-[10px] text-slate-500">
-            <span className="font-bold uppercase tracking-wider text-primary">Live feed</span>
+            <span className="font-bold uppercase tracking-wider text-primary">Vijesti uživo</span>
             <time
               dateTime={publishedAt}
               className="flex items-center gap-1 font-medium"

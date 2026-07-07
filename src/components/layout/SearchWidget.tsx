@@ -57,7 +57,7 @@ export const SearchWidget: React.FC = () => {
   return (
     <div className="surface-card p-6 shadow-sm">
       <h3 className="text-sm font-extrabold tracking-widest text-white/90 uppercase border-l-4 border-primary pl-3 mb-1">
-        Pretraži Portal
+        Pretraži portal
       </h3>
       <p className="text-[10px] text-muted-foreground mb-4 pl-4 font-medium">
         Pretraživanje u: <span className="text-foreground">{scopeLabel}</span>

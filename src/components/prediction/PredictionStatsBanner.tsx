@@ -20,7 +20,7 @@ export default async function PredictionStatsBanner() {
       </div>
       <div>
         <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
-          Naš rezultat u {year}.
+          Naš učinak u {year}. godini
         </p>
         <p className="text-2xl font-extrabold text-white font-display">
           {stats.accuracy}% točnost

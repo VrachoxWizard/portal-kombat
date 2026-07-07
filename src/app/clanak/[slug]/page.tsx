@@ -343,7 +343,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
 
           {relatedArticles.length > 0 && (
             <div className="border-t border-white/5 pt-8 mt-12 space-y-6">
-              <SectionHeading title="Povezani Članci" as="h2" />
+              <SectionHeading title="Povezani članci" as="h2" />
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {relatedArticles.map((item) => (
                   <StaggerItem key={item.id}>

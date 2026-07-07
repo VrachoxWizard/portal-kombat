@@ -16,11 +16,11 @@ import { syncUfcEvents } from "@/lib/sync";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Borilačke Novosti",
+  title: "Borilačke novosti",
   description:
     "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
   openGraph: {
-    title: "Borilačke Novosti",
+    title: "Borilačke novosti",
     description:
       "Pratite najnovija zbivanja u borilačkim sportovima — vijesti iz UFC-a, boksa, kickboksa, najave turnira i rezultati borbi.",
   },
@@ -74,7 +74,7 @@ export default async function NewsPage({ searchParams }: PageProps) {
           <div className="space-y-6">
             <ScrollAnimationWrapper>
               <SectionHeading
-                title="Borilačke Novosti"
+                title="Borilačke novosti"
                 description="Pratite najnovija zbivanja, najave turnira i vijesti iz ringa i oktogona."
                 icon={Newspaper}
                 as="h1"
@@ -128,7 +128,7 @@ export default async function NewsPage({ searchParams }: PageProps) {
             <div className="pt-8 border-t border-white/5 space-y-6">
               <ScrollAnimationWrapper>
                 <SectionHeading
-                  title="Vijesti iz Svijeta (Uživo)"
+                  title="Vijesti iz svijeta (uživo)"
                   description="Najnoviji članci preneseni u realnom vremenu s vodećih stranih borilačkih portala."
                 />
               </ScrollAnimationWrapper>

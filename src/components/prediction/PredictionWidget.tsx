@@ -45,7 +45,7 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
       <div className="text-center mb-8">
         <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-extrabold mb-4 surface-elevated px-3 py-1.5 rounded-full">
           <Swords size={12} className="text-primary" aria-hidden="true" />
-          Službena Prognoza Portala
+          Službena prognoza portala
         </span>
 
         <div className="flex flex-row justify-center items-center gap-3 sm:gap-8 max-w-xl mx-auto">
@@ -102,7 +102,7 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
       <div className="border-t border-white/5 pt-6">
         <h4 className="text-xs uppercase tracking-widest text-slate-400 font-extrabold mb-2.5 flex items-center gap-1.5">
           <Lightbulb size={12} className="text-amber-400" aria-hidden="true" />
-          Ključna Analiza
+          Ključna analiza
         </h4>
         <p className="text-slate-300 italic text-sm leading-relaxed border-l-2 border-primary/40 pl-3">
           &ldquo;{keyReasoning}&rdquo;

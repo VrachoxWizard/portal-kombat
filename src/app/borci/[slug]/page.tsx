@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${data.fighter.name} - Statistike i Profil Borca | CombatPortal HR`,
+    title: `${data.fighter.name} - Statistike i profil borca | CombatPortal HR`,
     description: `Statistike, profesionalni omjer borbi (${data.fighter.record}), biografija i najnovije vijesti za borca ${data.fighter.name}.`,
   };
 }
@@ -141,7 +141,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                   <div className="grid grid-cols-2 gap-3 max-w-md mx-auto sm:mx-0">
                     <div className="bg-black/45 border border-white/5 rounded-lg p-3 text-center sm:text-left">
                       <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider mb-1">
-                        Profesionalni Omjer
+                        Profesionalni omjer
                       </p>
                       <p className="text-sm font-black text-glow-red text-primary">
                         {fighter.record}
@@ -150,7 +150,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                     {fighter.stance && (
                       <div className="bg-black/45 border border-white/5 rounded-lg p-3 text-center sm:text-left">
                         <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider mb-1">
-                          Stav Borca
+                          Stav borca
                         </p>
                         <p className="text-xs font-bold text-white uppercase">
                           {fighter.stance}
@@ -182,7 +182,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
               <div className="surface-card p-6 sm:p-8 space-y-4">
                 <h2 className="font-display font-black text-base uppercase text-white border-l-4 border-primary pl-3 flex items-center gap-2">
                   <Award size={18} className="text-primary" />
-                  Biografija i Pozadina
+                  Biografija i karijera
                 </h2>
                 <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line font-medium">
                   {fighter.bio}
@@ -195,7 +195,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
           <div className="space-y-6">
             <ScrollAnimationWrapper>
               <SectionHeading
-                title="Prognoze i Analize"
+                title="Prognoze i analize"
                 description={`Najnovije stručne analize i predikcije borbi u kojima sudjeluje ${fighter.name}.`}
                 icon={Swords}
                 as="h2"
@@ -235,7 +235,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
           <div className="space-y-6">
             <ScrollAnimationWrapper>
               <SectionHeading
-                title="Nadolazeće Borbe"
+                title="Nadolazeće borbe"
                 description={`Raspored zakazanih mečeva za borca ${fighter.name}.`}
                 icon={Calendar}
                 as="h2"

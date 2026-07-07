@@ -7,7 +7,7 @@ import { Info, Swords, Users, Target, ShieldCheck } from "lucide-react";
 import { ScrollAnimationWrapper } from "@/components/ui/ScrollAnimationWrapper";
 
 export const metadata: Metadata = {
-  title: "O Nama",
+  title: "O nama",
   description:
     "Saznajte više o CombatPortal HR timu, našoj viziji, novinarima i standardima kojima se vodimo.",
 };
@@ -40,7 +40,7 @@ export default function AboutPage() {
         <div className="lg:col-span-2 space-y-10">
           <ScrollAnimationWrapper>
             <SectionHeading
-              title="O Nama"
+              title="O nama"
               description="Saznajte tko stoji iza najbrže rastućeg borilačkog medija u regiji."
               icon={Info}
               as="h1"

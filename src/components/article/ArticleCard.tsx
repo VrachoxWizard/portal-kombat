@@ -60,7 +60,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
   return (
     <article
-      className={`group flex overflow-hidden surface-card hover-glow h-full ${
+      className={`group flex overflow-hidden surface-card hover-glow h-full cursor-pointer ${
         isHorizontal ? "flex-col sm:flex-row" : "flex-col"
       }`}
     >

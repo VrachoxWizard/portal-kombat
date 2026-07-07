@@ -102,7 +102,7 @@ export default async function HomePage({ searchParams }: PageProps) {
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
             <SectionHeading
-              title={isFiltered ? "Rezultati pretraživanja" : "Najnovije Objave"}
+              title={isFiltered ? "Rezultati pretraživanja" : "Najnovije objave"}
               icon={Flame}
               as={heroPost ? "h2" : "h1"}
             />

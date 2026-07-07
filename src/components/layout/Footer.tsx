@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
                 Pridruži se borilačkoj zajednici
               </h3>
               <p className="text-sm text-slate-400 font-medium max-w-md">
-                Prijavite se na naš tjedni newsletter i budite u toku sa svim zbivanjima u oktogonu i ringu.
+                Prijavite se na naš tjedni newsletter i budite u tijeku sa svim zbivanjima u oktogonu i ringu.
               </p>
             </div>
             <div className="w-full md:w-auto md:min-w-[320px]">
@@ -54,14 +54,14 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
               <div className="w-1 h-4 bg-primary rounded-full" aria-hidden="true" />
-              Brzi Linkovi
+              Brzi linkovi
             </h3>
             <ul className="space-y-3 text-sm">
               {[
                 { href: "/", label: "Naslovnica", icon: Home },
                 { href: "/novosti", label: "Novosti", icon: Newspaper },
                 { href: "/blog", label: "Blog", icon: BookOpen },
-                { href: "/predikcije", label: "Predikcije Borbi", icon: Target },
+                { href: "/predikcije", label: "Predikcije borbi", icon: Target },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

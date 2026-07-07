@@ -24,7 +24,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://combatportal.hr"),
   title: {
-    default: "CombatPortal HR - Borilačke Vijesti, Analize i Predikcije",
+    default: "CombatPortal HR - Borilačke vijesti, analize i predikcije",
     template: "%s | CombatPortal HR",
   },
   description:
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "hr_HR",
     siteName: "CombatPortal HR",
-    title: "CombatPortal HR - Borilačke Vijesti, Analize i Predikcije",
+    title: "CombatPortal HR - Borilačke vijesti, analize i predikcije",
     description:
       "Vodeći regionalni portal za MMA, boks i kickboks. Najnovije vijesti, stručni blogovi i predikcije borbi.",
   },

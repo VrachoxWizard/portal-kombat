@@ -67,7 +67,7 @@ export const Sidebar: React.FC = async () => {
       <div className="surface-card p-6 shadow-sm">
         <h3 className="text-sm font-extrabold tracking-widest text-white/90 uppercase border-l-4 border-primary pl-3 mb-6 flex items-center gap-2">
           <Trophy size={16} className="text-primary" aria-hidden="true" />
-          Nadolazeće Borbe
+          Nadolazeće borbe
         </h3>
         <div className="space-y-4">
           {upcomingFights.map((fight) => (
@@ -109,7 +109,7 @@ export const Sidebar: React.FC = async () => {
       <div className="surface-card p-6 shadow-sm">
         <h3 className="text-sm font-extrabold tracking-widest text-white/90 uppercase border-l-4 border-primary pl-3 mb-6 flex items-center gap-2">
           <Hash size={16} className="text-primary" aria-hidden="true" />
-          Popularne Oznake
+          Popularne oznake
         </h3>
         <div className="flex flex-wrap gap-2">
           {popularTags.map((tag) => (
@@ -128,7 +128,7 @@ export const Sidebar: React.FC = async () => {
       <div className="bg-carbon relative overflow-hidden rounded-[var(--radius-card)] p-6 text-white shadow-[var(--shadow-glow-sm)]">
         <div className="absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-primary/10 blur-xl" aria-hidden="true" />
         <h4 className="font-extrabold text-lg italic tracking-tight uppercase mb-2 font-display">
-          Pratite nas na mrežama!
+          Pratite nas na društvenim mrežama!
         </h4>
         <p className="text-xs text-slate-400 mb-5 leading-relaxed">
           Budite dio najbrže rastuće borilačke zajednice u regiji. Objave uživo, analize i ekskluzivni intervjui.
