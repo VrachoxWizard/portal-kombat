@@ -3,13 +3,17 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import { slugify } from "@/lib/slugify";
+import { autoLinkFighters, type AutoLinkEntity } from "@/lib/autoLink";
 
 interface MarkdownRendererProps {
   content: string;
+  fighters?: AutoLinkEntity[];
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, fighters = [] }: MarkdownRendererProps) {
   if (!content) return null;
+
+  const processedContent = autoLinkFighters(content, fighters);
 
   return (
     <div className="prose-custom text-slate-300">
@@ -94,7 +98,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </div>
   );

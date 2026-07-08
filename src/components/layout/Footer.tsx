@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
 
       <div className="border-b border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-[var(--radius-card)] bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/10 p-6 sm:p-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-none bg-black/40 border-2 border-white/10 p-6 sm:p-8 shadow-sm">
             <div className="flex-1">
               <h3 className="text-lg font-extrabold italic uppercase tracking-tight text-white font-display mb-1">
                 Pridruži se borilačkoj zajednici
@@ -37,14 +37,14 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 border border-primary/20">
-                <Swords size={14} className="text-primary" aria-hidden="true" />
+              <div className="relative flex items-center justify-center w-7 h-7 rounded-none bg-primary/10 border-2 border-primary/30">
+                <Swords size={14} className="text-primary group-hover:rotate-12 transition-transform duration-300" aria-hidden="true" />
               </div>
               <span className="text-xl font-extrabold tracking-tighter font-display">
                 <span className="text-primary">COMBAT</span>
                 <span className="text-white">PORTAL</span>
               </span>
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">HR</span>
+              <span className="rounded-none bg-primary px-1.5 py-0.5 text-[9px] font-black text-white">HR</span>
             </Link>
             <p className="text-sm text-slate-500 leading-relaxed">
               Vodeći regionalni portal za borilačke sportove. Pratite najnovije vijesti, stručne blogove i predikcije borbi na jednom mjestu.
@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
 
           <div className="space-y-4">
             <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary rounded-full" aria-hidden="true" />
+              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Pratite nas
             </h3>
             <div className="flex gap-3">
@@ -112,7 +112,7 @@ export const Footer: React.FC = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg bg-white/5 border border-white/10 p-3 hover:bg-primary/20 hover:border-primary/30 transition-premium"
+                  className="rounded-none bg-white/5 border-2 border-white/10 p-3 hover:bg-primary hover:border-primary hover:text-white transition-premium"
                   aria-label={social.label}
                 >
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

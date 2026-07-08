@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { EASE_OUT } from "@/lib/motion";
+import { useSafeReducedMotion } from "@/lib/hooks";
 
 interface ScrollAnimationWrapperProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
   delay = 0,
   direction = "up",
 }) => {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const offset = directionOffsets[direction];
 
   if (prefersReducedMotion) {
@@ -58,7 +59,7 @@ export const StaggerContainer: React.FC<StaggerContainerProps> = ({
   className = "",
   staggerDelay = 0.08,
 }) => {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
@@ -87,7 +88,7 @@ export const StaggerItem: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;

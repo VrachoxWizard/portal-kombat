@@ -48,6 +48,22 @@ export default function CmsEditArticlePage({ params }: PageProps) {
   const [status, setStatus] = useState("DRAFT");
   const [categoryId, setCategoryId] = useState("");
   const [tagsInput, setTagsInput] = useState("");
+  const [trustLevel, setTrustLevel] = useState("REPORT");
+  const [citations, setCitations] = useState<{ name: string; url: string }[]>([]);
+
+  const handleAddCitation = () => {
+    setCitations([...citations, { name: "", url: "" }]);
+  };
+
+  const handleCitationChange = (index: number, key: "name" | "url", value: string) => {
+    const updated = [...citations];
+    updated[index][key] = value;
+    setCitations(updated);
+  };
+
+  const handleRemoveCitation = (index: number) => {
+    setCitations(citations.filter((_, i) => i !== index));
+  };
 
   const [previewUrl, setPreviewUrl] = useState("");
   const [predictionForm, setPredictionForm] = useState<PredictionFormState>(
@@ -80,6 +96,12 @@ export default function CmsEditArticlePage({ params }: PageProps) {
       setType(post.type);
       setStatus(post.status);
       setCategoryId(post.categoryId || (cats.length > 0 ? cats[0].id : ""));
+      setTrustLevel(post.trustLevel || "REPORT");
+      if (post.citations && Array.isArray(post.citations)) {
+        setCitations(post.citations);
+      } else {
+        setCitations([]);
+      }
 
       // Format tags array into comma string
       if (post.tags && Array.isArray(post.tags)) {
@@ -159,6 +181,8 @@ export default function CmsEditArticlePage({ params }: PageProps) {
       status,
       categoryId,
       tagNames,
+      trustLevel,
+      citations,
     };
 
     if (type === "PREDICTION") {
@@ -391,6 +415,66 @@ export default function CmsEditArticlePage({ params }: PageProps) {
                 <option value="PUBLISHED">Objavi odmah (Published)</option>
                 <option value="ARCHIVED">Arhivirano (Archived)</option>
               </select>
+            </div>
+
+            {/* Trust level and citations */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <div className="space-y-1">
+                <label htmlFor="trustLevel" className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                  Razina povjerenja (Trust Level)
+                </label>
+                <select
+                  id="trustLevel"
+                  value={trustLevel}
+                  onChange={(e) => setTrustLevel(e.target.value)}
+                  className="w-full bg-slate-900 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-xs text-slate-300 transition-premium outline-none"
+                >
+                  <option value="CONFIRMED">Službeno potvrđeno (Confirmed)</option>
+                  <option value="REPORT">Izvještaj / Provjereno (Report)</option>
+                  <option value="RUMOR">Glasina / Nepotvrđeno (Rumor)</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                    Izvori i citati (Citations)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleAddCitation}
+                    className="text-[10px] text-primary hover:underline font-bold uppercase cursor-pointer"
+                  >
+                    + Dodaj izvor
+                  </button>
+                </div>
+                
+                {citations.map((citation, index) => (
+                  <div key={index} className="flex gap-2 items-center bg-slate-900/60 p-2 rounded-lg border border-white/5">
+                    <input
+                      type="text"
+                      placeholder="Naziv"
+                      value={citation.name}
+                      onChange={(e) => handleCitationChange(index, "name", e.target.value)}
+                      className="w-1/3 bg-slate-950 border border-white/5 rounded px-2 py-1 text-xs text-slate-200 outline-none"
+                    />
+                    <input
+                      type="text"
+                      placeholder="URL"
+                      value={citation.url}
+                      onChange={(e) => handleCitationChange(index, "url", e.target.value)}
+                      className="flex-1 bg-slate-950 border border-white/5 rounded px-2 py-1 text-xs text-slate-200 outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCitation(index)}
+                      className="text-red-400 hover:text-red-300 text-xs px-1 cursor-pointer font-semibold"
+                    >
+                      Ukloni
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Submit Button */}

@@ -3,13 +3,11 @@ import { prisma } from "@/lib/prisma";
 import {
   getSession,
   requireSession,
-  requireAdmin,
   authErrorResponse,
   isAdmin,
 } from "@/lib/auth-utils";
 import { PostType, PublishStatus, Prisma } from "@prisma/client";
 import { revalidatePostPaths } from "@/lib/revalidate";
-import { computePredictionCorrectness } from "@/lib/predictions";
 
 // Get all posts for CMS management
 export async function GET(req: NextRequest) {
@@ -77,13 +75,29 @@ export async function POST(req: NextRequest) {
       categoryId,
       tagNames = [],
       prediction,
+      trustLevel = "REPORT",
+      citations = [],
     } = body;
 
-    if (status === "PUBLISHED" && !isAdmin(session.user.role)) {
+    const isEditorOrAdmin = session.user.role === "ADMIN" || session.user.role === "EDITOR";
+    if (status === "PUBLISHED" && !isEditorOrAdmin) {
       return NextResponse.json(
-        { error: "Samo administrator može objaviti članak" },
+        { error: "Samo urednik ili administrator mogu objaviti članak" },
         { status: 403 }
       );
+    }
+
+    if (trustLevel === "CONFIRMED" && status === "PUBLISHED") {
+      const citationsList = Array.isArray(citations) ? citations : [];
+      const hasValidCitation = citationsList.some(
+        (c: any) => c && typeof c === "object" && typeof c.url === "string" && c.url.trim() !== ""
+      );
+      if (!hasValidCitation) {
+        return NextResponse.json(
+          { error: "Službeno potvrđeni članci moraju sadržavati barem jedan vjerodostojan izvor (URL)." },
+          { status: 400 }
+        );
+      }
     }
 
     if (!title || !slug || !content) {
@@ -136,6 +150,8 @@ export async function POST(req: NextRequest) {
           featuredImage: featuredImage || null,
           type: type as PostType,
           status: status as PublishStatus,
+          trustLevel: trustLevel as any,
+          citations: citations || null,
           authorId: session.user.id,
           categoryId: categoryId || null,
           publishedAt: status === "PUBLISHED" ? new Date() : null,

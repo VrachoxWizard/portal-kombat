@@ -47,6 +47,12 @@ model Tag {
   posts Post[]
 }
 
+enum TrustLevel {
+  CONFIRMED
+  REPORT
+  RUMOR
+}
+
 model Post {
   id            String        @id @default(cuid())
   title         String
@@ -56,6 +62,8 @@ model Post {
   featuredImage String?
   type          PostType      @default(NEWS)
   status        PublishStatus @default(DRAFT)
+  trustLevel    TrustLevel    @default(REPORT)
+  citations     Json?
   
   authorId      String
   author        User          @relation(fields: [authorId], references: [id])

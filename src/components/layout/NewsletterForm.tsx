@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { Send, CheckCircle2, Loader2 } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/hooks";
 
 export const NewsletterForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
   const inputId = "newsletter-email";
   const errorId = "newsletter-error";
 

@@ -84,21 +84,19 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             loading="lazy"
           />
         </Link>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute left-4 top-4 flex flex-wrap gap-2 z-10 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent pointer-events-none" />
+        <div className="absolute left-3.5 top-3.5 flex flex-wrap gap-1.5 z-20">
           <TypeBadge type={type} />
-        </div>
-        {category && (
-          <div className="absolute left-4 top-12 z-20">
+          {category && (
             <CategoryBadge name={category.name} slug={category.slug} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6 justify-between">
         <div className="flex-1">
           <h3
-            className={`font-display font-extrabold italic tracking-tight text-foreground transition-premium group-hover:text-primary leading-snug uppercase ${
+            className={`font-display font-black italic tracking-tight text-white transition-premium group-hover:text-primary leading-snug uppercase ${
               isHorizontal ? "text-xl sm:text-2xl mb-3" : "text-lg mb-2"
             }`}
           >
@@ -106,11 +104,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </h3>
 
           {predictionTeaser && (
-            <div className="mb-3 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
-              <span className="text-white/70">{predictionTeaser.fighterA}</span>
-              <span className="mx-2 text-red-400">VS</span>
-              <span className="text-white/70">{predictionTeaser.fighterB}</span>
-              <span className="block mt-1 text-emerald-400 normal-case tracking-normal text-xs">
+            <div className="mb-3 rounded-none border-2 border-emerald-500/35 bg-emerald-950/45 px-3.5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-300 shadow-[var(--shadow-card)]">
+              <span className="text-white">{predictionTeaser.fighterA}</span>
+              <span className="mx-2 text-red-500">VS</span>
+              <span className="text-white">{predictionTeaser.fighterB}</span>
+              <span className="block mt-1 text-emerald-400 normal-case tracking-normal text-xs font-bold">
                 Prognoza: {predictionTeaser.winner}
                 {predictionTeaser.method ? ` (${predictionTeaser.method})` : ""}
                 {predictionTeaser.confidenceScore != null
@@ -119,8 +117,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               </span>
               {predictionTeaser.isCorrect != null && (
                 <span
-                  className={`block mt-0.5 text-xs normal-case ${
-                    predictionTeaser.isCorrect ? "text-emerald-400" : "text-red-400"
+                  className={`block mt-0.5 text-xs normal-case font-bold ${
+                    predictionTeaser.isCorrect ? "text-emerald-400" : "text-red-500"
                   }`}
                 >
                   {predictionTeaser.isCorrect ? "✓ Točno" : "✗ Netočno"}
@@ -131,7 +129,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
           {excerpt && (
             <p
-              className={`text-slate-400 leading-relaxed ${
+              className={`text-slate-400 leading-relaxed font-semibold ${
                 isHorizontal
                   ? "text-sm sm:text-base line-clamp-4 mb-4"
                   : "text-xs sm:text-sm line-clamp-3 mb-2"
@@ -142,7 +140,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4 text-xs text-muted-foreground">
+        <div className="mt-4 flex items-center justify-between border-t-2 border-white/10 pt-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             {author.avatarUrl ? (
               <Image
@@ -151,21 +149,21 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 width={22}
                 height={22}
                 sizes="22px"
-                className="rounded-full object-cover border border-white/10 shadow-sm"
+                className="rounded-none object-cover border-2 border-white/20 shadow-sm"
               />
             ) : (
               <div
-                className="h-[22px] w-[22px] rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-[10px] text-primary font-extrabold"
+                className="h-[22px] w-[22px] rounded-none bg-primary/20 border-2 border-primary flex items-center justify-center text-[10px] text-primary font-black"
                 aria-hidden="true"
               >
                 {author.name.charAt(0)}
               </div>
             )}
-            <span className="font-bold text-white/90">{author.name}</span>
+            <span className="font-black text-white/90">{author.name}</span>
           </div>
           <time
             dateTime={publishedAt ? new Date(publishedAt).toISOString() : undefined}
-            className="flex items-center gap-1 font-medium text-slate-500"
+            className="flex items-center gap-1 font-bold text-slate-500"
           >
             <Calendar size={12} aria-hidden="true" />
             {formattedDate}

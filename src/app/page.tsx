@@ -11,8 +11,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
 import { Flame } from "lucide-react";
 import { after } from "next/server";
-import { syncUfcEvents } from "@/lib/sync";
-import { prisma } from "@/lib/prisma";
+import { triggerAutoSync } from "@/lib/sync";
 
 interface PageProps {
   searchParams: Promise<{
@@ -44,23 +43,13 @@ export async function generateMetadata({
 
 export default async function HomePage({ searchParams }: PageProps) {
   const { q, category, tag, page } = await searchParams;
+  const abTest = ((await searchParams) as any).abTest || "variantA";
   const currentPage = parsePageParam(page);
   const isFiltered = !!(q || category || tag);
 
   // Background sync triggered asynchronously after sending the response to the user
-  after(async () => {
-    try {
-      const lastEvent = await prisma.event.findFirst({
-        orderBy: { createdAt: "desc" },
-      });
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-      if (!lastEvent || lastEvent.createdAt < oneHourAgo) {
-        console.log("Auto-triggering background UFC events sync...");
-        await syncUfcEvents();
-      }
-    } catch (err) {
-      console.error("Background sync error on homepage:", err);
-    }
+  after(() => {
+    triggerAutoSync("homepage");
   });
 
   // For the hero, we need an extra item on page 1 when unfiltered
@@ -99,6 +88,12 @@ export default async function HomePage({ searchParams }: PageProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {abTest === "variantB" && (
+          <ScrollAnimationWrapper direction="left" delay={0.2} className="lg:col-span-1">
+            <Sidebar />
+          </ScrollAnimationWrapper>
+        )}
+
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
             <SectionHeading
@@ -160,9 +155,11 @@ export default async function HomePage({ searchParams }: PageProps) {
           )}
         </div>
 
-        <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
-          <Sidebar />
-        </ScrollAnimationWrapper>
+        {abTest !== "variantB" && (
+          <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
+            <Sidebar />
+          </ScrollAnimationWrapper>
+        )}
       </div>
     </div>
   );

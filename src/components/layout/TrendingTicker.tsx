@@ -44,32 +44,32 @@ export const TrendingTicker = async () => {
 
   return (
     <div
-      className="relative w-full overflow-hidden border-b border-white/5 bg-bg-canvas-raised/90 backdrop-blur-sm"
+      className="relative w-full overflow-hidden border-b-2 border-black bg-primary"
       role="region"
       aria-label="Trending vijesti"
     >
       <div className="mx-auto max-w-7xl flex items-center">
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 border-r border-white/5">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 border-r-2 border-black bg-black text-white">
           <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="motion-reduce:hidden animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+            <span className="motion-reduce:hidden animate-ping absolute inline-flex h-full w-full rounded-none bg-red-500 opacity-75" />
+            <span className="relative inline-flex rounded-none h-2 w-2 bg-red-500" />
           </span>
-          <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-400 flex items-center gap-1">
-            <Zap size={10} aria-hidden="true" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-1">
+            <Zap size={10} aria-hidden="true" className="text-primary fill-primary" />
             Trending
           </span>
         </div>
 
-        <div className="flex-1 overflow-hidden py-2">
-          <div className="ticker-track gap-8 motion-reduce:transform-none">
+        <div className="flex-1 overflow-hidden py-1">
+          <div className="ticker-track gap-8">
             {items.map((item, i) => (
               <Link
                 key={`${item.label}-${i}`}
                 href={item.href}
-                className="inline-flex items-center gap-2 text-[11px] font-bold text-slate-400 hover:text-primary transition-premium uppercase tracking-wide shrink-0"
+                className="inline-flex items-center gap-2 text-[11px] font-black text-black hover:text-white transition-colors duration-150 uppercase tracking-wider shrink-0"
               >
-                <span className="text-primary/50" aria-hidden="true">
-                  ▸
+                <span className="text-black/60 font-medium" aria-hidden="true">
+                  ✦
                 </span>
                 {item.label}
               </Link>

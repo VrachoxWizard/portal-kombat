@@ -7,6 +7,7 @@ import { Swords, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { springNav, duration, EASE_OUT } from "@/lib/motion";
 import { CATEGORIES } from "@/lib/constants";
+import CommandPalette from "@/components/ui/CommandPalette";
 
 const navigation = [
   { name: "Naslovnica", href: "/" },
@@ -97,20 +98,20 @@ export const Header: React.FC = () => {
   return (
     <>
       <header
-      className={`sticky top-0 z-50 w-full border-b transition-premium ${
+      className={`sticky top-0 z-50 w-full border-b-2 transition-premium ${
         scrolled
-          ? "border-white/8 bg-background/90 backdrop-blur-xl shadow-[var(--shadow-card)]"
-          : "border-white/5 bg-background/70 backdrop-blur-md"
+          ? "border-primary bg-background/95 shadow-md"
+          : "border-white/10 bg-background/90"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/45 transition-premium">
+              <div className="relative flex items-center justify-center w-8 h-8 rounded-none bg-primary/15 border-2 border-primary/40 group-hover:bg-primary group-hover:border-primary transition-premium">
                 <Swords
                   size={18}
-                  className="text-primary group-hover:rotate-12 transition-transform duration-300"
+                  className="text-primary group-hover:text-white group-hover:rotate-12 transition-all duration-300"
                   aria-hidden="true"
                 />
               </div>
@@ -120,7 +121,7 @@ export const Header: React.FC = () => {
                 </span>
                 <span className="text-foreground">PORTAL</span>
               </span>
-              <span className="rounded-md border border-primary/30 bg-primary/15 px-1.5 py-0.5 text-[10px] font-extrabold tracking-widest text-primary">
+              <span className="rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
                 HR
               </span>
             </Link>
@@ -133,7 +134,7 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-xs font-bold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
+                  className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
                     active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
                   }`}
                   aria-current={active ? "page" : undefined}
@@ -142,7 +143,7 @@ export const Header: React.FC = () => {
                   {active && (
                     <motion.div
                       layoutId="activeHeaderNav"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[var(--shadow-glow-sm)]"
+                      className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary"
                       transition={springNav}
                     />
                   )}
@@ -151,29 +152,33 @@ export const Header: React.FC = () => {
             })}
           </nav>
 
-          <div className="flex md:hidden">
-            <button
-              ref={menuButtonRef}
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
-              aria-label={isOpen ? "Zatvori izbornik" : "Otvori izbornik"}
-              aria-expanded={isOpen}
-              aria-controls="mobile-nav-panel"
-            >
-              {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-            </button>
+          <div className="flex items-center gap-3">
+            <CommandPalette />
+            
+            <div className="flex md:hidden">
+              <button
+                ref={menuButtonRef}
+                onClick={() => setIsOpen(!isOpen)}
+                className="inline-flex items-center justify-center rounded-none border-2 border-white/10 p-2 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
+                aria-label={isOpen ? "Zatvori izbornik" : "Otvori izbornik"}
+                aria-expanded={isOpen}
+                aria-controls="mobile-nav-panel"
+              >
+                {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+              </button>
+            </div>
           </div>
         </div>
 
         <nav
-          className="hidden md:flex items-center gap-2 pb-3 -mt-1 overflow-x-auto"
+          className="hidden md:flex items-center gap-2.5 pb-3 -mt-1 overflow-x-auto"
           aria-label="Kategorije sportova"
         >
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.slug}
               href={`/?category=${cat.slug}`}
-              className="shrink-0 rounded-full px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-muted-foreground border border-white/5 bg-white/[0.03] hover:border-primary/25 hover:text-primary transition-premium cursor-pointer"
+              className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border-2 border-white/10 bg-black/40 hover:border-primary hover:text-white transition-premium cursor-pointer"
             >
               {cat.name}
             </Link>

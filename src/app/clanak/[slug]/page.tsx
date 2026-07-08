@@ -23,6 +23,7 @@ import type { ListingPost } from "@/lib/post-types";
 import { Calendar, User, Clock, Hash } from "lucide-react";
 import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
 import { TableOfContents } from "@/components/article/TableOfContents";
+import TrustIndicator from "@/components/article/TrustIndicator";
 
 export const revalidate = 3600;
 
@@ -137,6 +138,15 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
     article.categoryId
   );
 
+  let fighters: { name: string; slug: string }[] = [];
+  try {
+    fighters = await prisma.fighter.findMany({
+      select: { name: true, slug: true },
+    });
+  } catch (error) {
+    console.warn("Fighters DB fetch error:", error);
+  }
+
   const formattedDate = article.publishedAt
     ? new Date(article.publishedAt).toLocaleDateString("hr-HR", {
         day: "numeric",
@@ -248,46 +258,53 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           </ScrollAnimationWrapper>
 
           <ScrollAnimationWrapper delay={0.1}>
-            <div className="flex items-center gap-3 border-y border-white/5 py-4">
+            <div className="flex items-center gap-4 border-y-2 border-white/10 py-4">
               {article.author.avatarUrl ? (
                 <Image
-                  src={article.author.avatarUrl}
-                  alt={article.author.name}
-                  width={40}
-                  height={40}
-                  sizes="40px"
-                  className="rounded-full object-cover border border-white/10 shadow-sm"
+                   src={article.author.avatarUrl}
+                   alt={article.author.name}
+                   width={40}
+                   height={40}
+                   sizes="40px"
+                   className="rounded-none object-cover border-2 border-white/20 shadow-sm"
                 />
               ) : (
                 <div
-                  className="h-10 w-10 rounded-full bg-primary/20 border border-primary/45 flex items-center justify-center text-white font-extrabold"
-                  aria-hidden="true"
+                   className="h-10 w-10 rounded-none bg-primary/20 border-2 border-primary flex items-center justify-center text-white font-black"
+                   aria-hidden="true"
                 >
                   {article.author.name.charAt(0)}
                 </div>
               )}
               <div>
-                <p className="text-sm font-extrabold text-foreground flex items-center gap-1.5">
+                <p className="text-sm font-black text-white flex items-center gap-1.5 uppercase">
                   <User size={14} className="text-primary" aria-hidden="true" />
                   <Link href={`/autor/${article.author.id}`} className="hover:text-primary transition-premium">
                     {article.author.name}
                   </Link>
                 </p>
                 {article.author.bio && (
-                  <p className="text-xs text-muted-foreground font-medium mt-0.5">{article.author.bio}</p>
+                  <p className="text-xs text-slate-400 font-bold mt-0.5">{article.author.bio}</p>
                 )}
               </div>
             </div>
           </ScrollAnimationWrapper>
 
+          <ScrollAnimationWrapper delay={0.12}>
+            <TrustIndicator
+              trustLevel={(article.trustLevel as any) || "REPORT"}
+              citations={article.citations}
+            />
+          </ScrollAnimationWrapper>
+
           {article.featuredImage && (
             <ScrollAnimationWrapper delay={0.15}>
-              <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)] bg-slate-900 shadow-[var(--shadow-card)] border border-white/5">
+              <div className="relative aspect-video w-full overflow-hidden rounded-none bg-slate-900 shadow-[var(--shadow-brutalist)] border-2 border-white/10">
                 <Image
                   src={article.featuredImage}
                   alt={article.title}
                   fill
-                  priority
+                  preload={true}
                   sizes="(max-width: 1200px) 100vw, 800px"
                   className="object-cover"
                 />
@@ -298,7 +315,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           <ShareButtons title={article.title} />
 
           <ScrollAnimationWrapper delay={0.1}>
-            <MarkdownRenderer content={article.content} />
+            <MarkdownRenderer content={article.content} fighters={fighters} />
           </ScrollAnimationWrapper>
 
           {tags.length > 0 && (
@@ -309,7 +326,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
                   <Link
                     key={tag.slug}
                     href={`/tag/${tag.slug}`}
-                    className="rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-white/5 border border-white/10 text-muted-foreground hover:border-primary/30 hover:text-primary transition-premium"
+                    className="rounded-none px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-white/5 border-2 border-white/10 text-slate-300 hover:border-primary hover:text-primary transition-premium"
                   >
                     #{tag.name}
                   </Link>
@@ -342,7 +359,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           </ScrollAnimationWrapper>
 
           {relatedArticles.length > 0 && (
-            <div className="border-t border-white/5 pt-8 mt-12 space-y-6">
+            <div className="border-t-2 border-white/10 pt-8 mt-12 space-y-6">
               <SectionHeading title="Povezani članci" as="h2" />
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {relatedArticles.map((item) => (

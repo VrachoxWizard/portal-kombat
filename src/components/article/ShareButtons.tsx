@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Share2, Link2, Check } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSafeReducedMotion } from "@/lib/hooks";
 
 interface ShareButtonsProps {
   title: string;
@@ -11,7 +12,7 @@ interface ShareButtonsProps {
 export const ShareButtons: React.FC<ShareButtonsProps> = ({ title }) => {
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSafeReducedMotion();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,11 +34,11 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ title }) => {
   const encodedTitle = encodeURIComponent(title);
 
   const buttonClass =
-    "flex items-center gap-1.5 rounded-lg surface-elevated hover:border-primary/25 text-xs text-slate-300 px-3.5 py-2 hover:text-white transition-premium cursor-pointer";
+    "flex items-center gap-1.5 rounded-none border-2 border-white/10 surface-elevated hover:border-primary/45 text-xs text-slate-300 px-3.5 py-2 hover:text-white transition-premium cursor-pointer hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(225,29,72,0.25)]";
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-y border-border py-4 my-8 gap-4">
-      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-y-2 border-white/10 py-4 my-8 gap-4">
+      <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase">
         <Share2 size={14} className="text-primary" aria-hidden="true" />
         Podijeli ovaj članak
       </div>
@@ -90,7 +91,7 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ title }) => {
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: -35, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute left-1/2 -translate-x-1/2 bg-slate-950 border border-slate-800 text-[10px] text-green-400 font-extrabold px-2.5 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none"
+                className="absolute left-1/2 -translate-x-1/2 bg-slate-950 border-2 border-slate-800 text-[10px] text-green-400 font-extrabold px-2.5 py-1 rounded-none shadow-xl whitespace-nowrap z-50 pointer-events-none"
                 role="status"
               >
                 Poveznica spremljena u međuspremnik!

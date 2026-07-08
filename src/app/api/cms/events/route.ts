@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import {
   getSession,
   requireSession,
-  requireAdmin,
   authErrorResponse,
 } from "@/lib/auth-utils";
 

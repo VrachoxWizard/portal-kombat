@@ -276,3 +276,19 @@ async function ensureFighterExists(name: string, weightClass: string) {
 
   return fighter;
 }
+
+export async function triggerAutoSync(label: string = "default") {
+  try {
+    const lastEvent = await prisma.event.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    if (!lastEvent || lastEvent.createdAt < oneHourAgo) {
+      console.log(`Auto-triggering background UFC events sync from ${label}...`);
+      await syncUfcEvents();
+    }
+  } catch (err) {
+    console.error(`Background sync error from ${label}:`, err);
+  }
+}
+

@@ -7,9 +7,9 @@
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  --primary: #dc2626;
+  --primary: #e11d48; /* Vibrant Rose-Red */
   --primary-foreground: #f8fafc;
-  --secondary: #475569;
+  --secondary: #334155;
   --secondary-foreground: #f8fafc;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
@@ -17,58 +17,63 @@
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #f8fafc;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #dc2626;
-  --radius: 0.75rem;
+  --border: #cbd5e1;
+  --input: #cbd5e1;
+  --ring: #e11d48;
+  --radius: 0px; /* Brutalist sharp corners */
 
-  /* Cinematic Fight Night semantic tokens */
-  --bg-canvas: #060810;
-  --bg-canvas-raised: #0a0d18;
-  --surface-card: #0c0f1c;
-  --surface-elevated: #111425;
-  --surface-overlay: rgba(6, 8, 16, 0.96);
-  --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-strong: rgba(244, 63, 94, 0.28);
+  /* Gritty Fight Magazine specific variables */
+  --bg-canvas: #04050a; /* Dark Obsidian */
+  --bg-canvas-raised: #080a12;
+  --surface-card: #090b14;
+  --surface-elevated: #0f1220;
+  --surface-overlay: rgba(4, 5, 10, 0.98);
+  --border-subtle: #161c32;
+  --border-strong: #e11d48;
   --border-focus: #f43f5e;
-  --text-body: #cbd5e1;
-  --text-faint: #64748b;
-  --color-primary-hover: #fb3156;
+  --text-body: #94a3b8;
+  --text-faint: #475569;
+  --color-primary-hover: #ff2d55;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --radius-control: 0.5rem;
-  --radius-card: 1rem;
-  --radius-hero: 1.5rem;
+
+  --radius-control: 0px; /* Sharp controls */
+  --radius-card: 0px;    /* Sharp magazine grid */
+  --radius-hero: 0px;    /* Sharp hero blocks */
   --radius-pill: 9999px;
-  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.28);
-  --shadow-glow-sm: 0 0 12px rgba(244, 63, 94, 0.18);
-  --shadow-glow-md: 0 18px 45px rgba(244, 63, 94, 0.16);
-  --motion-hover: 180ms;
-  --motion-entrance: 420ms;
-  --ease-out-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shadow-card: 4px 4px 0px 0px rgba(225, 29, 72, 0.15);
+  --shadow-brutalist: 5px 5px 0px 0px #161c32;
+  --shadow-brutalist-hover: 5px 5px 0px 0px #e11d48;
+  --shadow-glow-sm: 0 0 10px rgba(225, 29, 72, 0.2);
+  --shadow-glow-md: 0 10px 30px rgba(225, 29, 72, 0.15);
+  
+  --motion-hover: 140ms;
+  --motion-entrance: 300ms;
+  --ease-out-premium: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .dark {
-  --background: #060810;
+  --background: #04050a;
   --foreground: #f8fafc;
-  --card: #0c0f1c;
+  --card: #090b14;
   --card-foreground: #f8fafc;
-  --popover: #0c0f1c;
+  --popover: #090b14;
   --popover-foreground: #f8fafc;
-  --primary: #f43f5e;
+  --primary: #e11d48;
   --primary-foreground: #f8fafc;
-  --secondary: #1e293b;
+  --secondary: #0f1220;
   --secondary-foreground: #f8fafc;
-  --muted: #111425;
+  --muted: #080a12;
   --muted-foreground: #94a3b8;
   --accent: #fbbf24;
   --accent-foreground: #000000;
   --destructive: #ef4444;
   --destructive-foreground: #f8fafc;
-  --border: #161a2e;
-  --input: #161a2e;
-  --ring: #f43f5e;
+  --border: #161c32;
+  --input: #161c32;
+  --ring: #e11d48;
 }
 
 @theme inline {
@@ -99,8 +104,8 @@
   --font-display: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
 
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-sm: var(--radius);
 }
 
 body {
@@ -119,30 +124,27 @@ h6 {
   font-family: var(--font-display);
 }
 
-/* ── Surface utilities ── */
+/* ── Editorial Brutalist Card surface ── */
 .surface-card {
-  background: rgba(12, 15, 28, 0.45);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--surface-card);
+  border: 2px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-brutalist);
+  transition: all var(--motion-hover) var(--ease-out-premium);
 }
 
 .surface-elevated {
-  background: rgba(17, 20, 37, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-elevated);
+  border: 2px solid var(--border-strong);
   border-radius: var(--radius-card);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+  box-shadow: 4px 4px 0px 0px var(--border-strong);
 }
 
 .glass {
-  background: rgba(12, 15, 28, 0.55);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(9, 11, 20, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
 }
 
 .transition-premium {
@@ -156,7 +158,7 @@ h6 {
     text-shadow var(--motion-hover) var(--ease-out-premium);
 }
 
-/* ── Card hover glow ── */
+/* ── Gritty Brutalist Card hover ── */
 .hover-glow {
   transition:
     transform var(--motion-hover) var(--ease-out-premium),
@@ -166,190 +168,215 @@ h6 {
 }
 
 .hover-glow:hover {
-  box-shadow: 0 12px 40px -10px rgba(244, 63, 94, 0.28), 0 0 1px 1px rgba(244, 63, 94, 0.15);
-  border-color: rgba(244, 63, 94, 0.35);
-  background-color: rgba(12, 15, 28, 0.7);
-  transform: translateY(-4px);
+  box-shadow: var(--shadow-brutalist-hover);
+  border-color: var(--primary);
+  background-color: var(--surface-elevated);
+  transform: translate(-3px, -3px);
 }
 
-/* ── Type badges ── */
+/* ── solid magazine badges ── */
 .badge-type {
-  border-radius: var(--radius-control);
-  padding: 0.125rem 0.625rem;
-  font-size: 0.5625rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  border-radius: 0px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  font-family: var(--font-display);
+  border: 1.5px solid currentColor;
 }
 
 .badge-news {
-  background: linear-gradient(to right, #dc2626, #e11d48);
+  background: var(--primary);
   color: #fff;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-color: var(--primary);
 }
 
 .badge-blog {
-  background: linear-gradient(to right, #f59e0b, #ea580c);
+  background: var(--secondary);
   color: #fff;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-color: var(--border);
 }
 
 .badge-prediction {
-  background: linear-gradient(to right, #10b981, #0d9488);
-  color: #fff;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--color-success);
+  color: #000;
+  border-color: var(--color-success);
 }
 
 .badge-featured {
-  background: linear-gradient(to right, #fbbf24, #f59e0b);
+  background: #fbbf24;
   color: #000;
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  font-style: italic;
 }
 
-/* ── Prose / reading ── */
+/* ── Magazine Editorial Prose / reading ── */
 .prose-custom {
   max-width: 72ch;
 }
 
 .prose-custom p {
-  margin-bottom: 1.5rem;
-  line-height: 1.85;
+  margin-bottom: 1.75rem;
+  line-height: 1.9;
   color: var(--text-body);
   font-size: 1.125rem;
 }
 
 .prose-custom p:first-of-type {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--foreground);
   font-weight: 500;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .prose-custom strong {
   color: var(--foreground);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .prose-custom h2 {
   font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
+  font-style: italic;
   color: var(--foreground);
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  border-left: 4px solid var(--primary);
-  padding-left: 1rem;
-  text-shadow: 0 0 20px rgba(244, 63, 94, 0.15);
+  margin-top: 3.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 4px solid var(--primary);
+  padding-bottom: 0.25rem;
+  display: inline-block;
 }
 
 .prose-custom h3 {
   font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--foreground);
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
 }
 
 .prose-custom ul,
 .prose-custom ol {
-  margin: 1.25rem 0 1.5rem;
-  padding-left: 1.5rem;
+  margin: 1.5rem 0 1.75rem;
+  padding-left: 2rem;
   color: var(--text-body);
-  line-height: 1.85;
+  line-height: 1.9;
 }
 
 .prose-custom li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  list-style-type: square;
 }
 
 .prose-custom > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-display);
-  font-size: 3.8em;
-  line-height: 0.8;
-  font-weight: 800;
+  font-size: 4.8em;
+  line-height: 0.75;
+  font-weight: 900;
   color: var(--primary);
-  margin-right: 0.08em;
+  margin-right: 0.1em;
   margin-top: 0.05em;
-  text-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
+  border: 4px solid var(--primary);
+  padding: 0.25rem 0.5rem;
+  background: var(--surface-card);
 }
 
 .prose-custom blockquote {
-  border-left: 4px solid var(--primary);
-  background: rgba(244, 63, 94, 0.04);
-  padding: 2rem 2rem 1.5rem 2.5rem;
+  border: 2px solid var(--border);
+  border-left: 6px solid var(--primary);
+  background: var(--surface-card);
+  padding: 2.5rem;
   font-style: italic;
   color: var(--foreground);
-  font-weight: 600;
-  border-radius: 0 var(--radius-card) var(--radius-card) 0;
-  margin: 2.5rem 0;
-  border: 1px solid rgba(244, 63, 94, 0.08);
-  border-left-width: 4px;
-  position: relative;
+  font-weight: 700;
+  border-radius: 0px;
+  margin: 3rem 0;
+  box-shadow: var(--shadow-brutalist);
 }
 
 .prose-custom blockquote::before {
   content: "\201C";
   position: absolute;
-  top: -0.15em;
-  left: 0.3rem;
+  top: -0.2em;
+  left: 0.4rem;
   font-family: var(--font-display);
-  font-size: 4.5em;
+  font-size: 6em;
   line-height: 1;
   color: var(--primary);
-  opacity: 0.2;
+  opacity: 0.15;
   pointer-events: none;
 }
 
-/* ── Text effects ── */
+/* ── Gritty Text & Stroke effects ── */
 .text-gradient {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.text-stroke-red {
+  -webkit-text-stroke: 1px var(--primary);
+  color: transparent;
+}
+
 .text-glow-red {
-  text-shadow: 0 0 20px rgba(244, 63, 94, 0.45), 0 0 4px rgba(244, 63, 94, 0.2);
+  text-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.45), 0 0 4px rgba(251, 191, 36, 0.2);
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.35);
 }
 
 .bg-carbon {
   background-color: var(--surface-card);
-  background-image: linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, rgba(6, 8, 16, 0.8) 100%);
-  border: 1px solid rgba(244, 63, 94, 0.15);
+  background-image: repeating-linear-gradient(45deg, rgba(225, 29, 72, 0.05) 0px, rgba(225, 29, 72, 0.05) 2px, transparent 2px, transparent 8px);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-brutalist);
 }
 
 /* ── Arena ambient lighting ── */
 .arena-glow-red {
-  background: radial-gradient(circle at center, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.03) 50%, transparent 80%);
+  background: radial-gradient(circle at center, rgba(225, 29, 72, 0.12) 0%, rgba(225, 29, 72, 0.02) 60%, transparent 100%);
 }
 
 .arena-glow-indigo {
-  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, rgba(49, 46, 129, 0.02) 50%, transparent 85%);
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.08) 0%, rgba(49, 46, 129, 0.01) 60%, transparent 100%);
+}
+
+/* ── Subtle scanning lines texture overlay ── */
+.bg-scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.15;
 }
 
 /* ── Ken Burns hero animation ── */
 @keyframes kenburns {
   0% {
-    transform: scale(1) translate(0, 0);
+    transform: scale(1);
   }
   50% {
-    transform: scale(1.05) translate(-1%, -0.5%);
+    transform: scale(1.04);
   }
   100% {
-    transform: scale(1) translate(0, 0);
+    transform: scale(1);
   }
 }
 
 .animate-kenburns {
-  animation: kenburns 14s ease-in-out infinite;
+  animation: kenburns 12s ease-in-out infinite;
 }
 
 /* ── CSS ticker marquee ── */
@@ -365,7 +392,7 @@ h6 {
 .ticker-track {
   display: flex;
   width: max-content;
-  animation: ticker-scroll 35s linear infinite;
+  animation: ticker-scroll 45s linear infinite;
 }
 
 .ticker-track:hover,
@@ -373,17 +400,16 @@ h6 {
   animation-play-state: paused;
 }
 
-/* ── Focus ring ── */
+/* ── Brutalist Focus ring ── */
 *:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.25);
-  border-radius: 6px;
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0px 0px 0px 4px rgba(225, 29, 72, 0.4);
 }
 
 /* ── Reading progress ── */
 .reading-progress {
-  box-shadow: 0 0 12px rgba(244, 63, 94, 0.5), 0 0 4px rgba(244, 63, 94, 0.3);
+  box-shadow: 0 0 10px rgba(225, 29, 72, 0.6);
 }
 
 /* ── Skeleton shimmer ── */
@@ -399,12 +425,13 @@ h6 {
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 75%
+    rgba(255, 255, 255, 0.02) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
+  animation: shimmer 2s ease-in-out infinite;
+  border: 1px solid var(--border);
 }
 
 /* ── Reduced motion ── */
@@ -419,9 +446,12 @@ h6 {
   }
 
   .animate-kenburns,
-  .ticker-track,
   .skeleton-shimmer {
     animation: none !important;
+  }
+
+  .ticker-track {
+    animation: ticker-scroll 45s linear infinite !important;
   }
 
   .hover-glow:hover {
@@ -431,5 +461,5 @@ h6 {
 
 /* Dark mode image tuning */
 .dark img {
-  filter: brightness(0.92) contrast(1.03);
+  filter: brightness(0.9) contrast(1.05);
 }
