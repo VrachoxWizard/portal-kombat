@@ -94,7 +94,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
   };
 
   return (
-    <div className="surface-card p-6 sm:p-8 space-y-8 border border-white/5 shadow-xl rounded-[var(--radius-card)]">
+    <div className="surface-card p-6 sm:p-8 space-y-8 rounded-none">
       <div className="flex items-center gap-2 border-l-4 border-primary pl-3">
         <MessageSquare className="text-primary" size={20} aria-hidden="true" />
         <h3 className="font-display font-black text-base uppercase text-white tracking-wide">
@@ -104,13 +104,13 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
 
       {/* Messages */}
       {success && (
-        <div className="rounded-lg bg-emerald-950/20 border border-emerald-500/20 p-4 text-xs font-semibold text-emerald-400 flex items-center gap-2">
+        <div className="rounded-none bg-emerald-950/20 border-2 border-emerald-500/35 p-4 text-xs font-bold text-emerald-400 flex items-center gap-2 shadow-[var(--shadow-card)]">
           <CheckCircle2 size={16} />
           <span>{success}</span>
         </div>
       )}
       {error && (
-        <div className="rounded-lg bg-red-950/20 border border-red-500/20 p-4 text-xs font-semibold text-red-400 flex items-center gap-2">
+        <div className="rounded-none bg-red-950/20 border-2 border-red-500/35 p-4 text-xs font-bold text-red-400 flex items-center gap-2 shadow-[var(--shadow-card)]">
           <AlertCircle size={16} />
           <span>{error}</span>
         </div>
@@ -129,7 +129,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
               required
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
-              className="w-full bg-black/40 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-xs text-slate-200 transition-premium outline-none font-medium"
+              className="w-full bg-black/60 border-2 border-white/10 focus:border-primary rounded-none p-3 text-xs text-white placeholder-slate-500 transition-premium outline-none font-bold"
               placeholder="npr. BorilačkiFan"
             />
           </div>
@@ -145,7 +145,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
             rows={4}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full bg-black/40 border border-white/5 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 rounded-lg p-3 text-xs text-slate-200 transition-premium outline-none font-medium resize-y"
+            className="w-full bg-black/60 border-2 border-white/10 focus:border-primary rounded-none p-3 text-xs text-white placeholder-slate-500 transition-premium outline-none font-bold resize-y"
             placeholder="Napišite svoje mišljenje ili analizu borbe..."
           />
         </div>
@@ -153,7 +153,7 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-red-600 px-5 py-3 text-xs font-extrabold uppercase tracking-widest text-white border border-red-500/20 shadow-[var(--shadow-glow-sm)] transition-premium cursor-pointer disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 rounded-none bg-primary hover:bg-primary/95 px-5 py-3 text-xs font-black uppercase tracking-widest text-white border-2 border-primary shadow-[var(--shadow-brutalist)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#ffffff] transition-premium cursor-pointer disabled:opacity-50"
         >
           {submitting ? (
             <>
@@ -190,10 +190,10 @@ export const CommentsWidget: React.FC<CommentsWidgetProps> = ({ postId }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.3, ease: EASE_OUT }}
-                  className="flex gap-4 p-4 rounded-xl bg-black/20 border border-white/5 hover:border-white/10 transition-premium"
+                  className="flex gap-4 p-4 rounded-none bg-black/40 border-2 border-white/10 hover:border-primary transition-premium shadow-[var(--shadow-card)]"
                 >
                   {/* Avatar Placeholder */}
-                  <div className="h-10 w-10 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center text-primary font-black shrink-0 shadow-sm">
+                  <div className="h-10 w-10 rounded-none bg-primary/20 border-2 border-primary flex items-center justify-center text-primary font-black shrink-0 shadow-sm">
                     {comment.authorName.charAt(0).toUpperCase()}
                   </div>
 

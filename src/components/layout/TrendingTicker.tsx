@@ -16,7 +16,12 @@ const fallbackItems: TrendingItem[] = [
   { label: "Boks: Riyadh Season najave", href: "/novosti" },
 ];
 
+import { cacheLife, cacheTag } from "next/cache";
+
 async function getTrendingItems(): Promise<TrendingItem[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("sidebar");
   try {
     const latestPosts = await prisma.post.findMany({
       where: { status: "PUBLISHED" },

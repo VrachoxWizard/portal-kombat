@@ -40,10 +40,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div className="flex flex-wrap gap-2" role="group" aria-label="Kategorije">
           <Link
             href={buildHref(basePath, { q: activeQuery, tag: activeTag })}
-            className={`rounded-full px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider border transition-premium ${
+            className={`rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest border-2 transition-premium cursor-pointer ${
               !activeCategory
-                ? "bg-primary/15 text-primary border-primary/30"
-                : "bg-white/5 text-muted-foreground border-white/10 hover:border-primary/20 hover:text-foreground"
+                ? "bg-primary/15 text-primary border-primary/40"
+                : "bg-black/40 text-slate-300 border-white/10 hover:border-primary hover:text-white"
             }`}
             aria-current={!activeCategory ? "true" : undefined}
           >
@@ -57,10 +57,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 q: activeQuery,
                 tag: activeTag,
               })}
-              className={`rounded-full px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider border transition-premium ${
+              className={`rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest border-2 transition-premium cursor-pointer ${
                 activeCategory === cat.slug
-                  ? "bg-primary/15 text-primary border-primary/30"
-                  : "bg-white/5 text-muted-foreground border-white/10 hover:border-primary/20 hover:text-foreground"
+                  ? "bg-primary/15 text-primary border-primary/40"
+                  : "bg-black/40 text-slate-300 border-white/10 hover:border-primary hover:text-white"
               }`}
               aria-current={activeCategory === cat.slug ? "true" : undefined}
             >
@@ -79,23 +79,23 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {isFiltered && (
           <div className="flex flex-wrap items-center gap-2">
             {activeQuery && (
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-muted px-2.5 py-1 rounded-full text-muted-foreground">
+              <span className="text-[9px] font-black uppercase tracking-widest bg-black/60 border-2 border-white/10 px-2.5 py-1 rounded-none text-slate-400">
                 Pretraga: &ldquo;{activeQuery}&rdquo;
               </span>
             )}
             {activeCategory && (
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-muted px-2.5 py-1 rounded-full text-muted-foreground">
+              <span className="text-[9px] font-black uppercase tracking-widest bg-black/60 border-2 border-white/10 px-2.5 py-1 rounded-none text-slate-400">
                 Kategorija: {getCategoryLabel(activeCategory)}
               </span>
             )}
             {activeTag && (
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-muted px-2.5 py-1 rounded-full text-muted-foreground">
+              <span className="text-[9px] font-black uppercase tracking-widest bg-black/60 border-2 border-white/10 px-2.5 py-1 rounded-none text-slate-400">
                 Oznaka: #{activeTag}
               </span>
             )}
             <Link
               href={basePath}
-              className="text-[10px] font-extrabold text-primary hover:text-red-400 flex items-center gap-1 transition-premium uppercase tracking-wider bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20"
+              className="text-[9px] font-black text-primary hover:text-red-400 flex items-center gap-1 transition-premium uppercase tracking-widest bg-primary/10 px-2.5 py-1 rounded-none border-2 border-primary/30"
             >
               <X size={12} aria-hidden="true" />
               Očisti filtere

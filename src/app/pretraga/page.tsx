@@ -54,6 +54,34 @@ export default async function SearchPage({ searchParams }: PageProps) {
             />
           </ScrollAnimationWrapper>
 
+          <ScrollAnimationWrapper delay={0.05}>
+            <div className="surface-card p-6 border-2 border-white/10 rounded-none bg-surface-card shadow-[var(--shadow-brutalist)]">
+              <form method="GET" action="/pretraga" className="relative flex items-center">
+                <label htmlFor="pretraga-search" className="sr-only">
+                  Pretraži portal
+                </label>
+                <input
+                  id="pretraga-search"
+                  type="text"
+                  name="q"
+                  defaultValue={searchQuery}
+                  placeholder="Upišite pojam za pretraživanje (npr. boks, kolumna, borac)..."
+                  className="w-full rounded-none bg-black/60 border-2 border-white/10 pl-10 pr-12 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold"
+                />
+                <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
+                  <Search size={14} />
+                </div>
+                <button
+                  type="submit"
+                  className="absolute right-2 text-slate-400 hover:text-primary transition-premium p-1.5 rounded-none hover:bg-white/5 cursor-pointer"
+                  aria-label="Pretraži"
+                >
+                  <Search size={14} className="text-primary" />
+                </button>
+              </form>
+            </div>
+          </ScrollAnimationWrapper>
+
           <FilterBar
             basePath="/pretraga"
             activeCategory={category}
@@ -67,7 +95,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
               message={
                 searchQuery
                   ? "Nismo pronašli niti jednu objavu koja odgovara vašem pojmu."
-                  : "Upišite pojam za pretraživanje u tražilicu gore desno."
+                  : "Upišite pojam za pretraživanje u tražilicu iznad."
               }
               basePath="/pretraga"
             />

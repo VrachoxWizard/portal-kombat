@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Swords, Home, Newspaper, BookOpen, Target, Trophy, Dumbbell } from "lucide-react";
 import NewsletterForm from "./NewsletterForm";
 import { CATEGORIES } from "@/lib/constants";
+import CopyrightYear from "./CopyrightYear";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   mma: <Trophy size={13} className="text-slate-600" aria-hidden="true" />,
@@ -53,7 +54,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary rounded-full" aria-hidden="true" />
+              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Brzi linkovi
             </h3>
             <ul className="space-y-3 text-sm">
@@ -78,7 +79,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary rounded-full" aria-hidden="true" />
+              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Sportovi
             </h3>
             <ul className="space-y-3 text-sm">
@@ -127,7 +128,7 @@ export const Footer: React.FC = () => {
         <div className="mt-12 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-600">
           <p className="flex items-center gap-1.5">
             <Swords size={12} className="text-primary/40" aria-hidden="true" />
-            © {new Date().getFullYear()} CombatPortal HR. Sva prava pridržana.
+            © <CopyrightYear /> CombatPortal HR. Sva prava pridržana.
           </p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4 md:mt-0">
             <Link href="/kontakt" className="hover:text-slate-400 transition-premium">

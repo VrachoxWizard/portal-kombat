@@ -38,7 +38,7 @@ export default function ContactPage() {
 
                 <div className="space-y-4 pt-2">
                   <div className="flex items-center gap-3 text-sm text-slate-300">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <div className="w-8 h-8 rounded-none bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
                       <Mail size={16} />
                     </div>
                     <div>
@@ -50,7 +50,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-center gap-3 text-sm text-slate-300">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <div className="w-8 h-8 rounded-none bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
                       <MessageSquare size={16} />
                     </div>
                     <div>
@@ -62,7 +62,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-center gap-3 text-sm text-slate-300">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <div className="w-8 h-8 rounded-none bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
                       <MapPin size={16} />
                     </div>
                     <div>
@@ -73,16 +73,16 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="bg-carbon relative overflow-hidden rounded-[var(--radius-card)] p-6 text-white border border-primary/15 shadow-[var(--shadow-glow-sm)]">
-                <h4 className="font-extrabold text-sm uppercase tracking-wider mb-2 font-display">
+              <div className="bg-carbon relative overflow-hidden rounded-none p-6 text-white border-2 border-primary/25 shadow-[var(--shadow-glow-sm)]">
+                <h4 className="font-black text-sm uppercase tracking-widest mb-2 font-display">
                   Ekskluzivne dojave
                 </h4>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                <p className="text-xs text-slate-400 leading-relaxed mb-4 font-bold">
                   Imate povjerljivu informaciju, fotografiju ili video zapis s borilačkog događaja? Naši novinari jamče potpunu anonimnost izvora.
                 </p>
                 <a
                   href="mailto:dojave@combatportal.hr"
-                  className="inline-flex items-center gap-2 rounded bg-primary/95 hover:bg-primary px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-white transition-premium"
+                  className="inline-flex items-center gap-2 rounded-none bg-primary hover:bg-primary/95 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white border-2 border-primary shadow-[var(--shadow-brutalist)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#ffffff] transition-premium cursor-pointer"
                 >
                   Pošalji dojavu
                   <Send size={11} />
@@ -91,8 +91,8 @@ export default function ContactPage() {
             </ScrollAnimationWrapper>
 
             <ScrollAnimationWrapper delay={0.2}>
-              <div className="surface-card p-6">
-                <h2 className="font-display font-bold text-lg text-white uppercase border-l-4 border-primary pl-3 mb-4">
+              <div className="surface-card p-6 rounded-none">
+                <h2 className="font-display font-black italic text-lg text-white uppercase border-l-4 border-primary pl-3 mb-4">
                   Pošaljite poruku
                 </h2>
                 <ContactForm />

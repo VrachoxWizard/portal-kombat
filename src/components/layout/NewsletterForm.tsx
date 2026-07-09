@@ -60,13 +60,13 @@ export const NewsletterForm: React.FC = () => {
             initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="flex items-center gap-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-4 text-emerald-400"
+            className="flex items-center gap-3 bg-emerald-950/20 border-2 border-emerald-500/35 rounded-none p-4 text-emerald-400 shadow-[var(--shadow-card)]"
             role="status"
           >
             <CheckCircle2 className="flex-shrink-0 text-emerald-400" size={20} aria-hidden="true" />
             <div className="text-xs sm:text-sm">
-              <p className="font-bold text-white">Uspješna prijava!</p>
-              <p className="text-emerald-300/80">Hvala vam na pretplati. Vijesti stižu uskoro!</p>
+              <p className="font-black text-white uppercase tracking-wider text-xs">Uspješna prijava!</p>
+              <p className="text-emerald-300/80 font-bold mt-0.5">Hvala vam na pretplati. Vijesti stižu uskoro!</p>
             </div>
           </motion.div>
         ) : (
@@ -95,11 +95,11 @@ export const NewsletterForm: React.FC = () => {
                 disabled={status === "loading"}
                 aria-invalid={status === "error"}
                 aria-describedby={status === "error" ? errorId : undefined}
-                className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50 transition-premium"
+                className="w-full rounded-none bg-black/60 border-2 border-white/10 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary disabled:opacity-50 transition-premium font-bold"
                 required
               />
               {status === "error" && (
-                <p id={errorId} className="mt-1.5 text-[11px] text-red-400 font-semibold" role="alert">
+                <p id={errorId} className="mt-1.5 text-[11px] text-red-400 font-bold" role="alert">
                   {errorMessage}
                 </p>
               )}
@@ -107,7 +107,7 @@ export const NewsletterForm: React.FC = () => {
             <button
               type="submit"
               disabled={status === "loading" || !email}
-              className="rounded-lg bg-primary hover:bg-red-600 disabled:bg-primary/50 text-white font-bold text-sm px-5 py-2.5 flex items-center justify-center gap-2 cursor-pointer transition-premium"
+              className="rounded-none bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-black text-xs uppercase tracking-widest px-5 py-2.5 flex items-center justify-center gap-2 cursor-pointer border-2 border-primary transition-premium shadow-[var(--shadow-brutalist)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#ffffff]"
             >
               {status === "loading" ? (
                 <>

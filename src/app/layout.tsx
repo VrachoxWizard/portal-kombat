@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -101,14 +102,20 @@ export default function RootLayout({
         </div>
 
         <div className="relative z-10 flex flex-col min-h-screen">
-          <Header />
-          <TrendingTicker />
+          <Suspense fallback={<div className="h-16 bg-slate-950 border-b border-white/5" />}>
+            <Header />
+          </Suspense>
+          <Suspense fallback={<div className="h-9 bg-primary/20 animate-pulse border-b-2 border-black" />}>
+            <TrendingTicker />
+          </Suspense>
           <main id="main-content" className="flex-1">
             {children}
           </main>
           <Footer />
           <ScrollToTop />
-          <MobileBottomNav />
+          <Suspense fallback={null}>
+            <MobileBottomNav />
+          </Suspense>
         </div>
       </body>
     </html>

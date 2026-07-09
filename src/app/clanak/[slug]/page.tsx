@@ -8,6 +8,7 @@ import { getPublicPost } from "@/lib/posts";
 import { shouldUseMockData } from "@/lib/env";
 import { getMockPosts } from "@/lib/mockData";
 import { SITE_URL } from "@/lib/env";
+import { cacheLife, cacheTag } from "next/cache";
 import PredictionWidget from "@/components/prediction/PredictionWidget";
 import CommentsWidget from "@/components/article/CommentsWidget";
 import Sidebar from "@/components/layout/Sidebar";
@@ -24,8 +25,6 @@ import { Calendar, User, Clock, Hash } from "lucide-react";
 import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
 import { TableOfContents } from "@/components/article/TableOfContents";
 import TrustIndicator from "@/components/article/TrustIndicator";
-
-export const revalidate = 3600;
 
 async function getRelatedArticles(
   slug: string,
@@ -58,6 +57,39 @@ async function getRelatedArticles(
   return [];
 }
 
+// Cached helper functions for Next.js 16 Cache Components
+async function getCachedPublicPost(slug: string) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(`article-${slug}`);
+  return getPublicPost(slug);
+}
+
+async function getCachedRelatedArticles(
+  slug: string,
+  categorySlug: string | undefined,
+  categoryId: string | null
+) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(`article-${slug}-related`);
+  return getRelatedArticles(slug, categorySlug, categoryId);
+}
+
+async function getCachedFightersList() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("fighters-list");
+  try {
+    return await prisma.fighter.findMany({
+      select: { name: true, slug: true },
+    });
+  } catch (error) {
+    console.warn("Fighters DB fetch error:", error);
+    return [];
+  }
+}
+
 function getJsonLdType(type: string): string {
   switch (type) {
     case "BLOG":
@@ -77,7 +109,9 @@ interface PageProps {
 export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const { preview } = await searchParams;
-  const article = await getPublicPost(slug, { previewToken: preview });
+  const article = preview
+    ? await getPublicPost(slug, { previewToken: preview })
+    : await getCachedPublicPost(slug);
 
   if (!article) {
     return { title: "Članak nije pronađen" };
@@ -124,7 +158,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 export default async function ArticlePage({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const { preview } = await searchParams;
-  const article = await getPublicPost(slug, { previewToken: preview });
+  const article = preview
+    ? await getPublicPost(slug, { previewToken: preview })
+    : await getCachedPublicPost(slug);
 
   if (!article) {
     notFound();
@@ -132,19 +168,21 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
 
   const isPreview = article.status !== "PUBLISHED";
 
-  const relatedArticles = await getRelatedArticles(
-    slug,
-    article.category?.slug,
-    article.categoryId
-  );
+  const relatedArticles = preview
+    ? await getRelatedArticles(slug, article.category?.slug, article.categoryId)
+    : await getCachedRelatedArticles(slug, article.category?.slug, article.categoryId);
 
   let fighters: { name: string; slug: string }[] = [];
-  try {
-    fighters = await prisma.fighter.findMany({
-      select: { name: true, slug: true },
-    });
-  } catch (error) {
-    console.warn("Fighters DB fetch error:", error);
+  if (preview) {
+    try {
+      fighters = await prisma.fighter.findMany({
+        select: { name: true, slug: true },
+      });
+    } catch (error) {
+      console.warn("Fighters DB fetch error:", error);
+    }
+  } else {
+    fighters = await getCachedFightersList();
   }
 
   const formattedDate = article.publishedAt

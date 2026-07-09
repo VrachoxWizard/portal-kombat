@@ -106,7 +106,7 @@ export default function ContactForm() {
           required
           rows={6}
           placeholder="Vaša poruka..."
-          className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-premium resize-y min-h-[120px]"
+          className="w-full rounded-none bg-black/60 border-2 border-white/10 px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold resize-y min-h-[120px]"
         />
       </div>
 

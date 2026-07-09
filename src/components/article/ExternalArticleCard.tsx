@@ -57,7 +57,7 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
           <div className="absolute left-3 top-3 z-10">
             <span
-              className={`rounded px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-widest ${
+              className={`rounded-none border-2 border-white/20 px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-widest ${
                 sourceColors[source] || "bg-primary text-white"
               }`}
             >
@@ -81,7 +81,7 @@ export const ExternalArticleCard: React.FC<ExternalArticleCardProps> = ({
             )}
           </div>
 
-          <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3 text-[10px] text-slate-500">
+          <div className="mt-4 flex items-center justify-between border-t-2 border-white/10 pt-3.5 text-[10px] text-slate-500">
             <span className="font-bold uppercase tracking-wider text-primary">Vijesti uživo</span>
             <time
               dateTime={publishedAt}

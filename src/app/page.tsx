@@ -12,6 +12,8 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { Flame } from "lucide-react";
 import { after } from "next/server";
 import { triggerAutoSync } from "@/lib/sync";
+import { getCachedUpcomingEvents } from "@/lib/cached-data";
+import CombatArena3D from "@/components/ui/CombatArena3DWrapper";
 
 interface PageProps {
   searchParams: Promise<{
@@ -52,6 +54,8 @@ export default async function HomePage({ searchParams }: PageProps) {
     triggerAutoSync("homepage");
   });
 
+  const upcomingEvents = await getCachedUpcomingEvents();
+
   // For the hero, we need an extra item on page 1 when unfiltered
   const pageSize = !isFiltered && currentPage === 1 ? 13 : 12;
 
@@ -71,6 +75,12 @@ export default async function HomePage({ searchParams }: PageProps) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {!isFiltered && currentPage === 1 && (
+        <ScrollAnimationWrapper className="mb-12">
+          <CombatArena3D upcomingEvents={upcomingEvents} />
+        </ScrollAnimationWrapper>
+      )}
+
       {heroPost && (
         <ScrollAnimationWrapper className="mb-12">
           <HeroArticle

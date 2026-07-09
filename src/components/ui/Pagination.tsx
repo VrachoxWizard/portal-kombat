@@ -48,15 +48,15 @@ export const Pagination: React.FC<PaginationProps> = ({
       {currentPage > 1 ? (
         <Link
           href={buildPageHref(basePath, currentPage - 1, params)}
-          className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-muted-foreground hover:border-primary/30 hover:text-primary transition-premium"
+          className="inline-flex items-center gap-1 rounded-none border-2 border-white/10 bg-white/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:border-primary/40 hover:text-primary transition-premium cursor-pointer"
           aria-label="Prethodna stranica"
         >
-          <ChevronLeft size={14} aria-hidden="true" />
+          <ChevronLeft size={13} aria-hidden="true" />
           Prethodna
         </Link>
       ) : (
-        <span className="inline-flex items-center gap-1 rounded-lg border border-white/5 px-3 py-2 text-xs font-bold text-white/20 cursor-not-allowed">
-          <ChevronLeft size={14} aria-hidden="true" />
+        <span className="inline-flex items-center gap-1 rounded-none border-2 border-white/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-white/20 cursor-not-allowed">
+          <ChevronLeft size={13} aria-hidden="true" />
           Prethodna
         </span>
       )}
@@ -75,10 +75,10 @@ export const Pagination: React.FC<PaginationProps> = ({
               )}
               <Link
                 href={buildPageHref(basePath, page, params)}
-                className={`min-w-[2.25rem] text-center rounded-lg px-2.5 py-2 text-xs font-extrabold transition-premium ${
+                className={`min-w-[2.25rem] text-center rounded-none px-2.5 py-2 text-[10px] font-black uppercase tracking-wider transition-premium ${
                   page === currentPage
-                    ? "bg-primary text-white border border-primary/40 shadow-[var(--shadow-glow-sm)]"
-                    : "bg-white/5 text-muted-foreground border border-white/10 hover:border-primary/30 hover:text-primary"
+                    ? "bg-primary text-white border-2 border-primary/40 shadow-[var(--shadow-glow-sm)]"
+                    : "bg-white/5 text-slate-400 border-2 border-white/10 hover:border-primary hover:text-primary cursor-pointer"
                 }`}
                 aria-current={page === currentPage ? "page" : undefined}
               >
@@ -92,16 +92,16 @@ export const Pagination: React.FC<PaginationProps> = ({
       {currentPage < totalPages ? (
         <Link
           href={buildPageHref(basePath, currentPage + 1, params)}
-          className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-muted-foreground hover:border-primary/30 hover:text-primary transition-premium"
+          className="inline-flex items-center gap-1 rounded-none border-2 border-white/10 bg-white/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:border-primary/40 hover:text-primary transition-premium cursor-pointer"
           aria-label="Sljedeća stranica"
         >
           Sljedeća
-          <ChevronRight size={14} aria-hidden="true" />
+          <ChevronRight size={13} aria-hidden="true" />
         </Link>
       ) : (
-        <span className="inline-flex items-center gap-1 rounded-lg border border-white/5 px-3 py-2 text-xs font-bold text-white/20 cursor-not-allowed">
+        <span className="inline-flex items-center gap-1 rounded-none border-2 border-white/5 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-white/20 cursor-not-allowed">
           Sljedeća
-          <ChevronRight size={14} aria-hidden="true" />
+          <ChevronRight size={13} aria-hidden="true" />
         </span>
       )}
     </nav>

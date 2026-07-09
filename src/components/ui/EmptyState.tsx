@@ -12,10 +12,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   basePath = "/",
 }) => {
   return (
-    <div className="surface-card p-12 text-center space-y-6 border-dashed">
+    <div className="surface-card p-12 text-center space-y-6 border-2 border-dashed border-white/20">
       <p className="text-muted-foreground font-medium">{message}</p>
       <div className="space-y-3">
-        <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
+        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
           Pregledajte popularne kategorije
         </p>
         <div className="flex flex-wrap justify-center gap-2">
@@ -23,7 +23,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             <Link
               key={cat.slug}
               href={`${basePath}?category=${cat.slug}`}
-              className="rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider bg-white/5 border border-white/10 text-muted-foreground hover:border-primary/30 hover:text-primary transition-premium"
+              className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border-2 border-white/10 bg-black/40 hover:border-primary hover:text-white transition-premium cursor-pointer"
             >
               {cat.name}
             </Link>

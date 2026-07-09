@@ -48,8 +48,8 @@ export default function AboutPage() {
           </ScrollAnimationWrapper>
 
           <ScrollAnimationWrapper delay={0.1}>
-            <div className="relative overflow-hidden rounded-2xl bg-black border border-white/5 p-8 sm:p-10 shadow-[var(--shadow-card)] transition-premium hover:border-red-500/10">
-              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+            <div className="relative overflow-hidden rounded-none bg-surface-card border-2 border-white/10 p-8 sm:p-10 shadow-[var(--shadow-brutalist)] transition-premium hover:border-primary">
+              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
               <h2 className="font-display font-extrabold italic text-xl sm:text-2xl text-white uppercase tracking-tight mb-4 flex items-center gap-2">
                 <Swords className="text-primary" size={20} />
                 Naša Misija
@@ -63,8 +63,8 @@ export default function AboutPage() {
           </ScrollAnimationWrapper>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <ScrollAnimationWrapper delay={0.15} className="surface-card p-5 space-y-2 text-center md:text-left">
-              <div className="w-10 h-10 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center text-primary mx-auto md:mx-0">
+            <ScrollAnimationWrapper delay={0.15} className="surface-card p-5 space-y-2 text-center md:text-left rounded-none">
+              <div className="w-10 h-10 rounded-none bg-primary/15 border-2 border-primary/25 flex items-center justify-center text-primary mx-auto md:mx-0">
                 <Users size={18} />
               </div>
               <h3 className="font-display font-bold text-white text-sm uppercase">Zajednica</h3>
@@ -73,8 +73,8 @@ export default function AboutPage() {
               </p>
             </ScrollAnimationWrapper>
 
-            <ScrollAnimationWrapper delay={0.2} className="surface-card p-5 space-y-2 text-center md:text-left">
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto md:mx-0">
+            <ScrollAnimationWrapper delay={0.2} className="surface-card p-5 space-y-2 text-center md:text-left rounded-none">
+              <div className="w-10 h-10 rounded-none bg-emerald-500/15 border-2 border-emerald-500/25 flex items-center justify-center text-emerald-400 mx-auto md:mx-0">
                 <Target size={18} />
               </div>
               <h3 className="font-display font-bold text-white text-sm uppercase">Stručnost</h3>
@@ -83,8 +83,8 @@ export default function AboutPage() {
               </p>
             </ScrollAnimationWrapper>
 
-            <ScrollAnimationWrapper delay={0.25} className="surface-card p-5 space-y-2 text-center md:text-left">
-              <div className="w-10 h-10 rounded-lg bg-amber-500/15 border border-amber-500/20 flex items-center justify-center text-amber-400 mx-auto md:mx-0">
+            <ScrollAnimationWrapper delay={0.25} className="surface-card p-5 space-y-2 text-center md:text-left rounded-none">
+              <div className="w-10 h-10 rounded-none bg-amber-500/15 border-2 border-amber-500/25 flex items-center justify-center text-amber-400 mx-auto md:mx-0">
                 <ShieldCheck size={18} />
               </div>
               <h3 className="font-display font-bold text-white text-sm uppercase">Integritet</h3>
@@ -103,9 +103,9 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {team.map((member, i) => (
-                <ScrollAnimationWrapper key={member.name} delay={0.1 * i} className="surface-card p-6 flex flex-col justify-between h-full hover-glow">
+                <ScrollAnimationWrapper key={member.name} delay={0.1 * i} className="surface-card p-6 flex flex-col justify-between h-full hover-glow rounded-none">
                   <div className="space-y-4">
-                    <div className="relative w-20 h-20 rounded-full border-2 border-primary/20 overflow-hidden mx-auto">
+                    <div className="relative w-20 h-20 rounded-none border-2 border-primary/30 shadow-[var(--shadow-card)] overflow-hidden mx-auto bg-slate-900">
                       <Image
                         src={member.avatarUrl}
                         alt={member.name}

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { syncUfcEvents } from "@/lib/sync";
-
-export const dynamic = "force-dynamic";
+import { connection } from "next/server";
 
 export async function GET(req: NextRequest) {
+  await connection();
   try {
     // Basic authorization: optional secret parameter if wanted, e.g. /api/sync?secret=123
     const { searchParams } = new URL(req.url);

@@ -63,12 +63,12 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
   };
 
   return (
-    <div className={`p-4 border rounded-none font-sans space-y-3 transition-premium ${config.colorClass}`}>
+    <div className={`p-4 border-2 rounded-none font-sans space-y-3 transition-premium ${config.colorClass}`}>
       <div className="flex items-start gap-3">
         {config.icon}
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 ${config.badgeColor}`}>
+            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 border-2 border-current rounded-none ${config.badgeColor}`}>
               {config.label}
             </span>
           </div>
@@ -79,7 +79,7 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
       </div>
 
       {parsedCitations.length > 0 && (
-        <div className="border-t border-white/5 pt-2.5 mt-2">
+        <div className="border-t-2 border-white/10 pt-2.5 mt-2">
           <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-1.5">
             Vjerodostojni izvori i reference:
           </span>

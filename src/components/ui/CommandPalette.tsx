@@ -112,7 +112,7 @@ export const CommandPalette: React.FC = () => {
       >
         <Search size={12} />
         <span>Pretraži</span>
-        <kbd className="bg-slate-900 border border-white/20 px-1 py-0.5 rounded text-[9px] font-mono text-slate-500 font-normal">
+        <kbd className="bg-slate-900 border-2 border-white/20 px-1.5 py-0.5 rounded-none text-[9px] font-mono text-slate-500 font-normal">
           Ctrl+K
         </kbd>
       </button>
@@ -163,7 +163,7 @@ export const CommandPalette: React.FC = () => {
               <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
                 {!query.trim() && (
                   <div className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                    Upišite pojam za pretraživanje. Pritisnite <kbd className="bg-slate-900 px-1 py-0.5 rounded">Esc</kbd> za izlaz.
+                    Upišite pojam za pretraživanje. Pritisnite <kbd className="bg-slate-900 px-1.5 py-0.5 border-2 border-white/20 rounded-none">Esc</kbd> za izlaz.
                   </div>
                 )}
 

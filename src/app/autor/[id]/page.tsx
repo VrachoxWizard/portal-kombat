@@ -153,8 +153,8 @@ export default async function AuthorPage({ params, searchParams }: PageProps) {
           <Breadcrumbs items={[{ label: `Autor: ${author.name}` }]} />
 
           <ScrollAnimationWrapper>
-            <div className="surface-card p-6 flex flex-col sm:flex-row items-center sm:items-start gap-5">
-              <div className="relative w-20 h-20 rounded-full border-2 border-primary/20 overflow-hidden shrink-0 bg-slate-900 flex items-center justify-center">
+            <div className="surface-card p-6 flex flex-col sm:flex-row items-center sm:items-start gap-5 rounded-none">
+              <div className="relative w-20 h-20 rounded-none border-2 border-primary/30 shadow-[var(--shadow-card)] overflow-hidden shrink-0 bg-slate-900 flex items-center justify-center">
                 {author.avatarUrl ? (
                   <Image
                     src={author.avatarUrl}
