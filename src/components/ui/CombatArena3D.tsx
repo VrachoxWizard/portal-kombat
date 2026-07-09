@@ -154,6 +154,14 @@ function getFighterStats(name: string) {
   return { striking, grappling, stamina };
 }
 
+// Helper to determine light theme based on fighter division/sport
+function getThemeForEvent(event: DBEvent): ThemeType {
+  const weight = (event.fighterARel?.weightClass || event.fighterBRel?.weightClass || "").toLowerCase();
+  if (weight.includes("boks") || weight.includes("box")) return "neon";
+  if (weight.includes("kickboks") || weight.includes("kickbox")) return "gold";
+  return "obsidian"; // default MMA (Obsidian Red)
+}
+
 export default function CombatArena3D({ upcomingEvents }: CombatArena3DProps) {
   const events = upcomingEvents && upcomingEvents.length > 0 ? upcomingEvents : FALLBACK_EVENTS;
 
@@ -197,6 +205,13 @@ export default function CombatArena3D({ upcomingEvents }: CombatArena3DProps) {
 
   const activeEvent = events[currentEventIndex] || events[0];
   const fighterStats = getFighterStats(selectedCorner === "red" ? activeEvent.fighterA : activeEvent.fighterB);
+
+  // Track previous event ID to adjust theme on matchup change during render, avoiding useEffect setState warning
+  const [prevEventId, setPrevEventId] = useState(activeEvent?.id);
+  if (activeEvent && activeEvent.id !== prevEventId) {
+    setPrevEventId(activeEvent.id);
+    setLightTheme(getThemeForEvent(activeEvent));
+  }
 
   // Deterministic base votes based on activeEvent
   const baseRedVotes = (() => {
@@ -336,9 +351,10 @@ export default function CombatArena3D({ upcomingEvents }: CombatArena3DProps) {
     introPhaseRef.current = 1; // Start intro sweep
 
     // 3. Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const isMobile = typeof navigator !== "undefined" && /iPhone|iPad|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     container.appendChild(renderer.domElement);
@@ -627,7 +643,7 @@ export default function CombatArena3D({ upcomingEvents }: CombatArena3DProps) {
     sparkPointsRef.current = sparkPoints;
 
     // --- H. Atmosphere Floating Particles ---
-    const particleCount = 200;
+    const particleCount = isMobile ? 75 : 200;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
@@ -640,7 +656,7 @@ export default function CombatArena3D({ upcomingEvents }: CombatArena3DProps) {
     particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     
     const particleMat = new THREE.PointsMaterial({
-      size: 0.07,
+      size: isMobile ? 0.12 : 0.07,
       color: 0x94a3b8,
       transparent: true,
       opacity: 0.5,

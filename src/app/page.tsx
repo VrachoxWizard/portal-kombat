@@ -21,6 +21,7 @@ interface PageProps {
     category?: string;
     tag?: string;
     page?: string;
+    abTest?: string;
   }>;
 }
 
@@ -44,8 +45,7 @@ export async function generateMetadata({
 }
 
 export default async function HomePage({ searchParams }: PageProps) {
-  const { q, category, tag, page } = await searchParams;
-  const abTest = ((await searchParams) as any).abTest || "variantA";
+  const { q, category, tag, page, abTest = "variantA" } = await searchParams;
   const currentPage = parsePageParam(page);
   const isFiltered = !!(q || category || tag);
 

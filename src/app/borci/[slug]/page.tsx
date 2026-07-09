@@ -273,7 +273,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
               <div className="space-y-4">
                 {events.map((e) => (
                   <ScrollAnimationWrapper key={e.id}>
-                    <div className="group relative rounded-lg bg-surface-card border border-white/5 p-5 transition-premium hover:bg-black/60 hover:border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="group relative rounded-none bg-surface-card border-2 border-white/10 p-5 hover-glow flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-[var(--shadow-card)]">
                       <div>
                         <span className="font-extrabold text-xs text-primary tracking-widest uppercase mb-1 block">
                           {e.event}
@@ -284,7 +284,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                           <span>{e.fighterB}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-black/45 border border-white/5 px-3 py-2 rounded-lg self-start sm:self-auto shrink-0 shadow-inner">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-400 bg-black/60 border-2 border-white/10 px-3 py-2 rounded-none self-start sm:self-auto shrink-0 shadow-inner">
                         <Calendar size={13} className="text-slate-500" />
                         <span>{e.date}</span>
                       </div>

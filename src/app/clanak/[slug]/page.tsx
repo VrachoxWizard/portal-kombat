@@ -24,7 +24,7 @@ import type { ListingPost } from "@/lib/post-types";
 import { Calendar, User, Clock, Hash } from "lucide-react";
 import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
 import { TableOfContents } from "@/components/article/TableOfContents";
-import TrustIndicator from "@/components/article/TrustIndicator";
+import TrustIndicator, { TrustLevel, Citation } from "@/components/article/TrustIndicator";
 
 async function getRelatedArticles(
   slug: string,
@@ -330,8 +330,8 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
 
           <ScrollAnimationWrapper delay={0.12}>
             <TrustIndicator
-              trustLevel={(article.trustLevel as any) || "REPORT"}
-              citations={article.citations}
+              trustLevel={(article.trustLevel as TrustLevel) || "REPORT"}
+              citations={article.citations as string | Citation[] | null}
             />
           </ScrollAnimationWrapper>
 

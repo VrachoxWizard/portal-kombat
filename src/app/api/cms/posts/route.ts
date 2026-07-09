@@ -6,8 +6,12 @@ import {
   authErrorResponse,
   isAdmin,
 } from "@/lib/auth-utils";
-import { PostType, PublishStatus, Prisma } from "@prisma/client";
+import { PostType, PublishStatus, Prisma, TrustLevel } from "@prisma/client";
 import { revalidatePostPaths } from "@/lib/revalidate";
+
+interface SimpleCitation {
+  url?: string;
+}
 
 // Get all posts for CMS management
 export async function GET(req: NextRequest) {
@@ -88,9 +92,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (trustLevel === "CONFIRMED" && status === "PUBLISHED") {
-      const citationsList = Array.isArray(citations) ? citations : [];
+      const citationsList = Array.isArray(citations) ? (citations as Partial<SimpleCitation>[]) : [];
       const hasValidCitation = citationsList.some(
-        (c: any) => c && typeof c === "object" && typeof c.url === "string" && c.url.trim() !== ""
+        (c) => c && typeof c.url === "string" && c.url.trim() !== ""
       );
       if (!hasValidCitation) {
         return NextResponse.json(
@@ -150,7 +154,7 @@ export async function POST(req: NextRequest) {
           featuredImage: featuredImage || null,
           type: type as PostType,
           status: status as PublishStatus,
-          trustLevel: trustLevel as any,
+          trustLevel: trustLevel as TrustLevel,
           citations: citations || null,
           authorId: session.user.id,
           categoryId: categoryId || null,

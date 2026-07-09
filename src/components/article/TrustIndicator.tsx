@@ -10,7 +10,7 @@ export interface Citation {
 
 interface TrustIndicatorProps {
   trustLevel: TrustLevel;
-  citations?: Citation[] | null | any;
+  citations?: Citation[] | string | null;
 }
 
 export const TrustIndicator: React.FC<TrustIndicatorProps> = ({

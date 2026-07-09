@@ -60,16 +60,20 @@ export const CommandPalette: React.FC = () => {
   // Focus input when opened
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50);
-      setQuery("");
-      setResults({ posts: [], fighters: [], events: [] });
+      setTimeout(() => {
+        inputRef.current?.focus();
+        setQuery("");
+        setResults({ posts: [], fighters: [], events: [] });
+      }, 50);
     }
   }, [isOpen]);
 
   // Fetch results as query changes
   useEffect(() => {
     if (!query.trim()) {
-      setResults({ posts: [], fighters: [], events: [] });
+      setTimeout(() => {
+        setResults({ posts: [], fighters: [], events: [] });
+      }, 0);
       return;
     }
 
@@ -169,7 +173,7 @@ export const CommandPalette: React.FC = () => {
 
                 {query.trim() && !loading && results.posts.length === 0 && results.fighters.length === 0 && results.events.length === 0 && (
                   <div className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                    Nema rezultata za pojam "{query}"
+                    Nema rezultata za pojam &ldquo;{query}&rdquo;
                   </div>
                 )}
 
