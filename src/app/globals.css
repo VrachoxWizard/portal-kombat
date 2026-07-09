@@ -127,17 +127,17 @@ h6 {
 /* ── Editorial Brutalist Card surface ── */
 .surface-card {
   background: var(--surface-card);
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-brutalist);
+  box-shadow: var(--shadow-brutalist), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all var(--motion-hover) var(--ease-out-premium);
 }
 
 .surface-elevated {
   background: var(--surface-elevated);
-  border: 2px solid var(--border-strong);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-card);
-  box-shadow: 4px 4px 0px 0px var(--border-strong);
+  box-shadow: 4px 4px 0px 0px var(--border-strong), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .glass {

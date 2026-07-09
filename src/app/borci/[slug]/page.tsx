@@ -128,7 +128,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
               <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
               <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-red-950/10 blur-3xl pointer-events-none" />
 
-              <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+              <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
                 {/* Image */}
                 <div className="relative h-32 w-32 sm:h-40 sm:w-40 rounded-none overflow-hidden border-2 border-white/20 bg-slate-900 shadow-xl shrink-0">
                   {fighter.imageUrl ? (
@@ -148,7 +148,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                 </div>
 
                 {/* Details */}
-                <div className="flex-1 text-center sm:text-left space-y-4">
+                <div className="flex-1 text-center md:text-left space-y-4">
                   <div>
                     <h1 className="text-2xl sm:text-3.5xl font-black italic uppercase tracking-tight text-white font-display leading-none mb-2">
                       {fighter.name}
@@ -159,8 +159,8 @@ export default async function FighterDetailPage({ params }: PageProps) {
                   </div>
 
                   {/* Badges Grid */}
-                  <div className="grid grid-cols-2 gap-3 max-w-md mx-auto sm:mx-0">
-                    <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 text-center sm:text-left">
+                  <div className="grid grid-cols-2 gap-3 max-w-md mx-auto md:mx-0">
+                    <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 text-center md:text-left">
                       <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest mb-1">
                         Profesionalni omjer
                       </p>
@@ -169,7 +169,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                       </p>
                     </div>
                     {fighter.stance && (
-                      <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 text-center sm:text-left">
+                      <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 text-center md:text-left">
                         <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest mb-1">
                           Stav borca
                         </p>
@@ -179,7 +179,7 @@ export default async function FighterDetailPage({ params }: PageProps) {
                       </div>
                     )}
                     {fighter.team && (
-                      <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 col-span-2 text-center sm:text-left flex items-center gap-2">
+                      <div className="bg-black/60 border-2 border-white/10 rounded-none p-3 col-span-2 text-center md:text-left flex items-center gap-2">
                         <MapPin size={14} className="text-primary shrink-0" />
                         <div>
                           <p className="text-[8px] text-slate-500 font-extrabold uppercase tracking-widest">
@@ -193,6 +193,8 @@ export default async function FighterDetailPage({ params }: PageProps) {
                     )}
                   </div>
                 </div>
+
+
               </div>
             </div>
           </ScrollAnimationWrapper>

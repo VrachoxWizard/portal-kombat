@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { springNav, duration, EASE_OUT } from "@/lib/motion";
 import { CATEGORIES } from "@/lib/constants";
 import CommandPalette from "@/components/ui/CommandPalette";
+import Magnetic from "@/components/ui/Magnetic";
 
 const navigation = [
   { name: "Naslovnica", href: "/" },
@@ -131,23 +132,24 @@ export const Header: React.FC = () => {
             {navigation.map((item) => {
               const active = isActive(item.href);
               return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
-                    active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
-                  }`}
-                  aria-current={active ? "page" : undefined}
-                >
-                  {item.name}
-                  {active && (
-                    <motion.div
-                      layoutId="activeHeaderNav"
-                      className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary"
-                      transition={springNav}
-                    />
-                  )}
-                </Link>
+                <Magnetic key={item.name} strength={0.2}>
+                  <Link
+                    href={item.href}
+                    className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
+                      active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
+                    }`}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {item.name}
+                    {active && (
+                      <motion.div
+                        layoutId="activeHeaderNav"
+                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary"
+                        transition={springNav}
+                      />
+                    )}
+                  </Link>
+                </Magnetic>
               );
             })}
           </nav>

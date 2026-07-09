@@ -5,6 +5,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { Mail, MessageSquare, MapPin, Send } from "lucide-react";
 import { ScrollAnimationWrapper } from "@/components/ui/ScrollAnimationWrapper";
 import ContactForm from "@/components/kontakt/ContactForm";
+import AmbientGrid3DWrapper from "@/components/ui/AmbientGrid3DWrapper";
 
 export const metadata: Metadata = {
   title: "Kontakt",
@@ -14,8 +15,9 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 relative">
+      <AmbientGrid3DWrapper color="#e11d48" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
             <SectionHeading

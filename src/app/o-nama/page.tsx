@@ -5,6 +5,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { Info, Swords, Users, Target, ShieldCheck } from "lucide-react";
 import { ScrollAnimationWrapper } from "@/components/ui/ScrollAnimationWrapper";
+import AmbientGrid3DWrapper from "@/components/ui/AmbientGrid3DWrapper";
 
 export const metadata: Metadata = {
   title: "O nama",
@@ -35,8 +36,9 @@ const team = [
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 relative">
+      <AmbientGrid3DWrapper color="#e11d48" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
         <div className="lg:col-span-2 space-y-10">
           <ScrollAnimationWrapper>
             <SectionHeading
