@@ -3,8 +3,8 @@ import React from "react";
 function SkeletonCard({ isHorizontal = false }: { isHorizontal?: boolean }) {
   return (
     <div className="bezel-outer h-full">
-      <div className={`bezel-inner h-full flex flex-col ${isHorizontal ? "md:flex-row" : ""} overflow-hidden`}>
-        <div className={`relative bg-slate-950 shrink-0 skeleton-shimmer ${isHorizontal ? "aspect-video md:w-[45%] md:min-h-[220px]" : "aspect-video w-full"}`} />
+      <div className={`bezel-inner h-full flex flex-col ${isHorizontal ? "sm:flex-row" : ""} overflow-hidden`}>
+        <div className={`relative bg-slate-950 shrink-0 skeleton-shimmer ${isHorizontal ? "aspect-video sm:w-[45%] sm:min-h-[220px]" : "aspect-video w-full"}`} />
         <div className="flex flex-1 flex-col p-6 space-y-4 justify-between bg-card">
           <div className="space-y-3">
             <div className="h-5 w-3/4 bg-white/5 skeleton-shimmer" />

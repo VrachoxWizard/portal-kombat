@@ -124,7 +124,7 @@ export const Sidebar: React.FC = async () => {
                 className="inline-flex items-center rounded-none bg-white/5 border-2 border-white/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-300 hover:bg-primary hover:text-white hover:border-primary transition-premium"
               >
                 #{tag.name}
-                <span className="ml-1.5 text-[9px] text-slate-500 font-bold">({tag.count})</span>
+                <span className="ml-1.5 text-[9px] text-slate-500 font-mono font-bold">({tag.count})</span>
               </Link>
             ))}
           </div>
