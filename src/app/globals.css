@@ -439,6 +439,11 @@ h6 {
   animation-play-state: paused;
 }
 
+.ticker-track-no-pause:hover,
+.ticker-track-no-pause:focus-within {
+  animation-play-state: running !important;
+}
+
 /* ── Brutalist Focus ring ── */
 *:focus-visible {
   outline: 3px solid var(--primary);
