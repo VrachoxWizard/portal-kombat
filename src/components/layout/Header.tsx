@@ -98,96 +98,119 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header
-      className={`sticky top-0 z-50 w-full border-b-2 transition-premium ${
-        scrolled
-          ? "border-primary bg-background/95 shadow-md"
-          : "border-white/10 bg-background/90"
-      }`}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative flex items-center justify-center w-8 h-8 rounded-none bg-primary/15 border-2 border-primary/40 group-hover:bg-primary group-hover:border-primary transition-premium">
-                <Swords
-                  size={18}
-                  className="text-primary group-hover:text-white group-hover:rotate-12 transition-all duration-300"
-                  aria-hidden="true"
-                />
-              </div>
-              <span className="text-2xl font-extrabold italic tracking-tighter font-display">
-                <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent text-glow-red">
-                  COMBAT
-                </span>
-                <span className="text-foreground">PORTAL</span>
-              </span>
-              <span className="rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
-                HR
-              </span>
-            </Link>
-          </div>
-
-          <nav className="hidden md:flex space-x-8" aria-label="Glavna navigacija">
-            {navigation.map((item) => {
-              const active = isActive(item.href);
-              return (
-                <Magnetic key={item.name} strength={0.2}>
-                  <Link
-                    href={item.href}
-                    className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
-                      active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
-                    }`}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    {item.name}
-                    {active && (
-                      <motion.div
-                        layoutId="activeHeaderNav"
-                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary"
-                        transition={springNav}
-                      />
-                    )}
-                  </Link>
-                </Magnetic>
-              );
-            })}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <CommandPalette />
-            
-            <div className="flex md:hidden">
-              <button
-                ref={menuButtonRef}
-                onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center rounded-none border-2 border-white/10 p-2 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
-                aria-label={isOpen ? "Zatvori izbornik" : "Otvori izbornik"}
-                aria-expanded={isOpen}
-                aria-controls="mobile-nav-panel"
-              >
-                {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <nav
-          className="hidden md:flex items-center gap-2.5 pb-3 -mt-1 overflow-x-auto"
-          aria-label="Kategorije sportova"
+      <motion.header
+        className="fixed left-4 right-4 z-50 pointer-events-none"
+        initial={{ top: 16 }}
+        animate={{
+          top: scrolled ? 12 : 16,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        <motion.div
+          className="bezel-outer max-w-7xl mx-auto pointer-events-auto"
+          animate={{
+            maxWidth: scrolled ? "1200px" : "1280px",
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/?category=${cat.slug}`}
-              className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border-2 border-white/10 bg-black/40 hover:border-primary hover:text-white transition-premium cursor-pointer"
+          <motion.div
+            className="bezel-inner flex items-center justify-between px-6 bg-card/90 backdrop-blur-md transition-all duration-300"
+            animate={{
+              height: scrolled ? 48 : 56,
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <div className="flex-shrink-0">
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="relative flex items-center justify-center w-8 h-8 rounded-none bg-primary/15 border-2 border-primary/40 group-hover:bg-primary group-hover:border-primary transition-premium">
+                  <Swords
+                    size={18}
+                    className="text-primary group-hover:text-white group-hover:rotate-12 transition-all duration-300"
+                    aria-hidden="true"
+                  />
+                </div>
+                <span className="text-2xl font-extrabold italic tracking-tighter font-display">
+                  <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent text-glow-red">
+                    COMBAT
+                  </span>
+                  <span className="text-foreground">PORTAL</span>
+                </span>
+                <span className="rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
+                  HR
+                </span>
+              </Link>
+            </div>
+
+            <nav className="hidden md:flex space-x-8" aria-label="Glavna navigacija">
+              {navigation.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Magnetic key={item.name} strength={0.2}>
+                    <Link
+                      href={item.href}
+                      className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
+                        active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
+                      }`}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.name}
+                      {active && (
+                        <motion.div
+                          layoutId="activeHeaderNav"
+                          className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary shadow-[0_2px_8px_rgba(225,29,72,0.6)]"
+                          transition={springNav}
+                        />
+                      )}
+                    </Link>
+                  </Magnetic>
+                );
+              })}
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <CommandPalette />
+              
+              <div className="flex md:hidden">
+                <button
+                  ref={menuButtonRef}
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="inline-flex items-center justify-center rounded-none border-2 border-white/10 p-2 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
+                  aria-label={isOpen ? "Zatvori izbornik" : "Otvori izbornik"}
+                  aria-expanded={isOpen}
+                  aria-controls="mobile-nav-panel"
+                >
+                  {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Category sub-nav (Desktop only) */}
+        <AnimatePresence>
+          {!scrolled && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="max-w-7xl mx-auto mt-2 hidden md:flex justify-center overflow-hidden pointer-events-auto"
             >
-              {cat.name}
-            </Link>
-          ))}
-        </nav>
-      </div>
-      </header>
+              <nav className="flex items-center gap-2.5 pb-2 overflow-x-auto" aria-label="Kategorije sportova">
+                {CATEGORIES.map((cat) => (
+                  <Link
+                    key={cat.slug}
+                    href={`/?category=${cat.slug}`}
+                    className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border border-white/10 border-l-[3px] border-l-primary bg-black/60 hover:bg-black/80 hover:text-white hover:border-l-primary transition-premium cursor-pointer"
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
 
       <AnimatePresence>
         {isOpen && (
@@ -196,11 +219,11 @@ export const Header: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Mobilni izbornik"
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: duration.drawer, ease: EASE_OUT }}
-            className="fixed inset-0 z-[100] bg-surface-overlay backdrop-blur-2xl flex flex-col justify-between p-8 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+            className="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-3xl flex flex-col justify-between p-8 md:hidden"
           >
             <div className="flex items-center justify-between">
               <span className="text-2xl font-extrabold italic tracking-tighter font-display">
@@ -212,7 +235,7 @@ export const Header: React.FC = () => {
               <button
                 ref={closeButtonRef}
                 onClick={closeMenu}
-                className="rounded-full bg-white/5 border border-white/10 p-2.5 text-slate-400 hover:text-white transition-premium cursor-pointer"
+                className="rounded-none bg-white/5 border-2 border-white/10 p-2 text-slate-400 hover:text-white hover:border-primary/80 transition-premium cursor-pointer"
                 aria-label="Zatvori izbornik"
               >
                 <X size={22} aria-hidden="true" />
@@ -223,28 +246,40 @@ export const Header: React.FC = () => {
               {navigation.map((item, index) => {
                 const active = isActive(item.href);
                 return (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 + 0.1, duration: 0.35, ease: EASE_OUT }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={closeMenu}
-                      className={`font-display text-3xl font-extrabold italic uppercase tracking-wider transition-premium block py-2 ${
-                        active ? "text-primary text-glow-red" : "text-slate-400 hover:text-white"
-                      }`}
-                      aria-current={active ? "page" : undefined}
+                  <div key={item.name} className="overflow-hidden py-1">
+                    <motion.div
+                      initial={{ opacity: 0, y: 48 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 48 }}
+                      transition={{
+                        delay: index * 0.06 + 0.1,
+                        duration: 0.5,
+                        ease: [0.32, 0.72, 0, 1]
+                      }}
                     >
-                      {item.name}
-                    </Link>
-                  </motion.div>
+                      <Link
+                        href={item.href}
+                        onClick={closeMenu}
+                        className={`font-display text-4xl font-extrabold italic uppercase tracking-tighter transition-premium block py-2 ${
+                          active ? "text-primary text-glow-red" : "text-slate-400 hover:text-white"
+                        }`}
+                        aria-current={active ? "page" : undefined}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
+                  </div>
                 );
               })}
             </nav>
 
-            <div className="border-t border-white/5 pt-6 text-center space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ delay: navigation.length * 0.06 + 0.15, duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              className="border-t border-white/5 pt-6 text-center space-y-4"
+            >
               <p className="text-xs text-slate-500 font-medium">Pratite nas na društvenim mrežama</p>
               <div className="flex justify-center gap-4 text-xs font-bold uppercase tracking-wider">
                 <a
@@ -267,7 +302,7 @@ export const Header: React.FC = () => {
                   Facebook
                 </a>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -19,17 +19,19 @@ export const Footer: React.FC = () => {
 
       <div className="border-b border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-none bg-black/40 border-2 border-white/10 p-6 sm:p-8 shadow-sm">
-            <div className="flex-1">
-              <h3 className="text-lg font-extrabold italic uppercase tracking-tight text-white font-display mb-1">
-                Pridruži se borilačkoj zajednici
-              </h3>
-              <p className="text-sm text-slate-400 font-medium max-w-md">
-                Prijavite se na naš tjedni newsletter i budite u tijeku sa svim zbivanjima u oktogonu i ringu.
-              </p>
-            </div>
-            <div className="w-full md:w-auto md:min-w-[320px]">
-              <NewsletterForm />
+          <div className="bezel-outer w-full">
+            <div className="bezel-inner flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 bg-black/40">
+              <div className="flex-1">
+                <h3 className="text-lg font-extrabold italic uppercase tracking-tight text-white font-display mb-1">
+                  Pridruži se borilačkoj zajednici
+                </h3>
+                <p className="text-sm text-slate-400 font-medium max-w-md">
+                  Prijavite se na naš tjedni newsletter i budite u tijeku sa svim zbivanjima u oktogonu i ringu.
+                </p>
+              </div>
+              <div className="w-full md:w-auto md:min-w-[320px]">
+                <NewsletterForm />
+              </div>
             </div>
           </div>
         </div>

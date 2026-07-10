@@ -101,7 +101,7 @@ export default function RootLayout({
           <div className="absolute bottom-[8%] left-[8%] w-[32vw] h-[32vw] rounded-full arena-glow-indigo blur-[90px] opacity-60" />
         </div>
 
-        <div className="relative z-10 flex flex-col min-h-screen">
+        <div className="relative z-10 flex flex-col min-h-screen pt-20 md:pt-28">
           <Suspense fallback={<div className="h-16 bg-slate-950 border-b border-white/5" />}>
             <Header />
           </Suspense>
