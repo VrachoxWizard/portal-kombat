@@ -27,6 +27,39 @@ interface SearchResultEvent {
   date: string;
 }
 
+const containerVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: -20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.2,
+      ease: [0.32, 0.72, 0, 1],
+      when: "beforeChildren",
+      staggerChildren: 0.05,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    y: -20,
+    transition: {
+      duration: 0.15,
+      ease: [0.32, 0.72, 0, 1],
+    },
+  },
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 25 },
+  },
+} as const;
+
 export const CommandPalette: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -134,53 +167,61 @@ export const CommandPalette: React.FC = () => {
         {isOpen && (
           <div
             onClick={handleBackdropClick}
-            className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-md flex items-start justify-center p-4 pt-[10vh]"
+            className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-xl flex items-start justify-center p-4 pt-[10vh]"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              transition={{ duration: 0.2 }}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="w-full max-w-2xl bg-slate-950 border-2 border-primary shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-none overflow-hidden flex flex-col font-sans"
             >
-              {/* Search input bar */}
-              <div className="flex items-center border-b-2 border-white/10 px-4 py-3 bg-black">
-                <Search size={18} className="text-primary mr-3 shrink-0" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Pretraži članke, borce ili događaje... (npr. Stipe)"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-full bg-transparent border-none text-sm text-white placeholder-slate-500 focus:outline-none outline-none"
-                />
-                {loading && <Loader2 size={16} className="animate-spin text-slate-400 mr-2 shrink-0" />}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-slate-400 hover:text-white shrink-0 p-1 cursor-pointer"
-                >
-                  <X size={16} />
-                </button>
+              {/* Search input bar with double-bezel */}
+              <div className="p-[3px] bg-white/[0.02] border-b border-white/[0.06] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="flex items-center bg-black border border-white/[0.03] px-4 py-3">
+                  <Search size={18} className="text-primary mr-3 shrink-0" />
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Pretraži članke, borce ili događaje... (npr. Stipe)"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="w-full bg-transparent border-none text-sm text-white placeholder-slate-500 focus:outline-none outline-none"
+                  />
+                  {loading && <Loader2 size={16} className="animate-spin text-slate-400 mr-2 shrink-0" />}
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-slate-400 hover:text-white shrink-0 p-1 cursor-pointer"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               </div>
 
               {/* Search results body */}
               <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
                 {!query.trim() && (
-                  <div className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <motion.div
+                    variants={itemVariants}
+                    className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider"
+                  >
                     Upišite pojam za pretraživanje. Pritisnite <kbd className="bg-slate-900 px-1.5 py-0.5 border-2 border-white/20 rounded-none">Esc</kbd> za izlaz.
-                  </div>
+                  </motion.div>
                 )}
 
                 {query.trim() && !loading && results.posts.length === 0 && results.fighters.length === 0 && results.events.length === 0 && (
-                  <div className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <motion.div
+                    variants={itemVariants}
+                    className="text-center py-6 text-slate-500 text-xs font-semibold uppercase tracking-wider"
+                  >
                     Nema rezultata za pojam &ldquo;{query}&rdquo;
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* Fighters Results */}
                 {results.fighters.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1">
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1 font-display">
                       Borci ({results.fighters.length})
                     </h4>
                     <div className="grid grid-cols-1 gap-1">
@@ -190,23 +231,23 @@ export const CommandPalette: React.FC = () => {
                           onClick={() => handleNavigate(`/borci/${fighter.slug}`)}
                           className="w-full flex items-center justify-between text-left p-2.5 bg-white/5 hover:bg-primary/10 border border-white/5 hover:border-primary/30 transition-premium cursor-pointer text-sm text-slate-200"
                         >
-                          <span className="font-extrabold flex items-center gap-2">
+                          <span className="font-extrabold flex items-center gap-2 font-display">
                             <User size={14} className="text-primary shrink-0" />
                             {fighter.name}
                           </span>
-                          <span className="text-[10px] text-slate-500 uppercase font-bold">
+                          <span className="text-[10px] text-slate-500 uppercase font-bold font-mono">
                             {fighter.weightClass}
                           </span>
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* Events Results */}
                 {results.events.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1">
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1 font-display">
                       Nadolazeće borbe ({results.events.length})
                     </h4>
                     <div className="grid grid-cols-1 gap-1">
@@ -215,23 +256,23 @@ export const CommandPalette: React.FC = () => {
                           key={event.id}
                           className="w-full flex items-center justify-between text-left p-2.5 bg-white/5 border border-white/5 text-sm text-slate-200"
                         >
-                          <span className="font-extrabold flex items-center gap-2">
+                          <span className="font-extrabold flex items-center gap-2 font-display">
                             <Calendar size={14} className="text-primary shrink-0" />
                             <span>{event.fighterA} vs {event.fighterB}</span>
                           </span>
-                          <span className="text-[10px] text-slate-500 uppercase font-bold shrink-0">
+                          <span className="text-[10px] text-slate-500 uppercase font-bold shrink-0 font-mono">
                             {event.event} • {event.date}
                           </span>
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* Posts Results */}
                 {results.posts.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1">
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5 pb-1 font-display">
                       Članci i Novosti ({results.posts.length})
                     </h4>
                     <div className="grid grid-cols-1 gap-1">
@@ -241,17 +282,17 @@ export const CommandPalette: React.FC = () => {
                           onClick={() => handleNavigate(`/clanak/${post.slug}`)}
                           className="w-full flex items-center justify-between text-left p-2.5 bg-white/5 hover:bg-primary/10 border border-white/5 hover:border-primary/30 transition-premium cursor-pointer text-sm text-slate-200"
                         >
-                          <span className="font-extrabold flex items-center gap-2 truncate pr-4">
+                          <span className="font-extrabold flex items-center gap-2 truncate pr-4 font-display">
                             <FileText size={14} className="text-primary shrink-0" />
                             <span className="truncate">{post.title}</span>
                           </span>
-                          <span className="text-[9px] text-white bg-primary/20 border border-primary/25 px-1.5 py-0.5 uppercase tracking-widest font-black shrink-0">
+                          <span className="text-[9px] text-white bg-primary/20 border border-primary/25 px-1.5 py-0.5 uppercase tracking-widest font-black shrink-0 font-display">
                             {post.type}
                           </span>
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </motion.div>

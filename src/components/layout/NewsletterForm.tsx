@@ -95,7 +95,11 @@ export const NewsletterForm: React.FC = () => {
                 disabled={status === "loading"}
                 aria-invalid={status === "error"}
                 aria-describedby={status === "error" ? errorId : undefined}
-                className="w-full rounded-none bg-black/60 border-2 border-white/10 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary disabled:opacity-50 transition-premium font-bold"
+                className={`w-full rounded-none bg-black/60 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none disabled:opacity-50 transition-premium font-bold border ${
+                  status === "error"
+                    ? "border-destructive shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                    : "border-white/10 focus:border-primary focus:shadow-[0_0_10px_rgba(225,29,72,0.45)]"
+                }`}
                 required
               />
               {status === "error" && (
@@ -107,7 +111,7 @@ export const NewsletterForm: React.FC = () => {
             <button
               type="submit"
               disabled={status === "loading" || !email}
-              className="rounded-none bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-black text-xs uppercase tracking-widest px-5 py-2.5 flex items-center justify-center gap-2 cursor-pointer border-2 border-primary transition-premium shadow-[var(--shadow-brutalist)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#ffffff]"
+              className="group rounded-none bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-black text-xs uppercase tracking-widest px-5 py-2.5 flex items-center justify-center gap-2 cursor-pointer border border-primary transition-premium shadow-[var(--shadow-brutalist)] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3px_3px_0px_0px_#ffffff] active:scale-95 active:translate-x-0 active:translate-y-0 active:shadow-none"
             >
               {status === "loading" ? (
                 <>
@@ -116,7 +120,7 @@ export const NewsletterForm: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Send size={14} aria-hidden="true" />
+                  <Send size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
                   Prijava
                 </>
               )}

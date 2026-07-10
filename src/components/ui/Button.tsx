@@ -1,14 +1,14 @@
 import React from "react";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-none font-black text-xs uppercase tracking-widest transition-premium focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+  "inline-flex items-center justify-center gap-2 rounded-none font-black text-xs uppercase tracking-widest transition-premium focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer btn-press group";
 
 const variants = {
   primary:
-    "bg-primary text-white border-2 border-primary hover:bg-primary/95 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#ffffff] active:scale-[0.97] active:translate-x-0 active:translate-y-0 active:shadow-none px-6 py-3 shadow-[var(--shadow-brutalist)]",
+    "bg-primary text-white border-2 border-primary hover:bg-primary/95 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none px-6 py-3 shadow-[var(--shadow-brutalist)]",
   secondary:
-    "bg-white/5 border-2 border-white/10 text-white hover:border-primary hover:text-primary hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_var(--primary)] active:scale-[0.97] active:translate-x-0 active:translate-y-0 active:shadow-none px-6 py-3 shadow-[var(--shadow-brutalist)]",
-  ghost: "text-muted-foreground hover:text-primary px-3 py-2 hover:bg-white/5 active:scale-[0.97]",
+    "bg-white/5 border-2 border-white/10 text-white hover:border-primary hover:text-primary hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_var(--primary)] active:translate-x-0 active:translate-y-0 active:shadow-none px-6 py-3 shadow-[var(--shadow-brutalist)]",
+  ghost: "text-muted-foreground hover:text-primary px-3 py-2 hover:bg-white/5",
 };
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {

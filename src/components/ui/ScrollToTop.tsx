@@ -11,7 +11,7 @@ export const ScrollToTop: React.FC = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      setVisible(window.scrollY > 400);
+      setVisible(window.scrollY > 200);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -29,12 +29,14 @@ export const ScrollToTop: React.FC = () => {
           initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.8, y: 10 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={prefersReducedMotion ? { duration: 0.1 } : { type: "spring", stiffness: 380, damping: 30 }}
           onClick={scrollToTop}
-          className="fixed bottom-20 md:bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-none bg-primary/20 border-2 border-primary text-white shadow-[var(--shadow-brutalist)] hover:bg-primary hover:text-white transition-premium cursor-pointer hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#ffffff]"
+          className="fixed bottom-20 md:bottom-6 right-6 z-50 p-[3px] bg-white/[0.02] border border-white/[0.06] shadow-[var(--shadow-brutalist)] hover:shadow-[4px_4px_0px_0px_var(--primary)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-premium cursor-pointer text-white"
           aria-label="Povratak na vrh"
         >
-          <ChevronUp size={20} aria-hidden="true" />
+          <div className="flex h-10 w-10 items-center justify-center bg-card border border-white/[0.03]">
+            <ChevronUp size={20} aria-hidden="true" />
+          </div>
         </motion.button>
       )}
     </AnimatePresence>

@@ -528,3 +528,70 @@ h6 {
 .accent-edge-glow {
   box-shadow: inset 3px 0 8px var(--primary-glow);
 }
+
+/* ── Premium Link Underline Hover Interaction ── */
+.prose-custom a:not([class*="button"]),
+.animated-link {
+  position: relative;
+  text-decoration: none !important;
+  display: inline-block;
+}
+
+.prose-custom a:not([class*="button"])::after,
+.animated-link::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -1px;
+  left: 0;
+  background-color: var(--primary);
+  transform: scaleX(0);
+  transform-origin: bottom left;
+  transition: transform var(--motion-hover) var(--ease-out-premium);
+}
+
+.prose-custom a:not([class*="button"]):hover::after,
+.animated-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Badge & CategoryBadge hover glows ── */
+.badge-type,
+a[href*="category="] {
+  transition: box-shadow var(--motion-hover) var(--ease-out-premium), border-color var(--motion-hover) var(--ease-out-premium), color var(--motion-hover) var(--ease-out-premium), transform var(--motion-hover) var(--ease-out-premium) !important;
+}
+
+.badge-type:hover,
+a[href*="category="]:hover {
+  box-shadow: 0 0 10px rgba(225, 29, 72, 0.45);
+}
+
+/* ── Ticker item hover glow ── */
+.ticker-track a {
+  transition: text-shadow var(--motion-hover) var(--ease-out-premium), color var(--motion-hover) var(--ease-out-premium) !important;
+}
+
+.ticker-track a:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+/* ── Button active spring press ── */
+.btn-press {
+  transition: transform var(--motion-hover) var(--ease-out-premium), background-color var(--motion-hover) var(--ease-out-premium), border-color var(--motion-hover) var(--ease-out-premium), box-shadow var(--motion-hover) var(--ease-out-premium), color var(--motion-hover) var(--ease-out-premium) !important;
+}
+
+.btn-press:active {
+  transform: scale(0.98) !important;
+  transition: transform 85ms var(--ease-spring) !important;
+}
+
+/* ── Button hover icon translation ── */
+button:hover svg,
+.btn-press:hover svg {
+  transform: translate(2px, -2px);
+}
+button svg,
+.btn-press svg {
+  transition: transform var(--motion-hover) var(--ease-out-premium);
+}

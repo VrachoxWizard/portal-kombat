@@ -71,7 +71,7 @@ export function MarkdownRenderer({ content, fighters = [] }: MarkdownRendererPro
                 href={href}
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
-                className="text-primary font-bold hover:underline transition-premium"
+                className="text-primary font-bold animated-link transition-premium"
               >
                 {children}
               </a>

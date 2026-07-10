@@ -178,7 +178,7 @@ export default async function FightersPage({ searchParams }: PageProps) {
                               </div>
                               
                               <div className="flex flex-wrap items-center gap-2 pt-1">
-                                <span className="shrink-0 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-300 uppercase tracking-wider">
+                                <span className="shrink-0 text-[9px] font-mono font-bold px-2 py-0.5 rounded-none bg-white/5 border border-white/10 text-slate-300 uppercase tracking-wider">
                                   {fighter.weightClass}
                                 </span>
                                 
