@@ -1,33 +1,53 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #e11d48; /* Vibrant Rose-Red */
+  --background: #030408;
+  --foreground: #f8fafc;
+  --card: #0a0d18;
+  --card-foreground: #f8fafc;
+  --popover: #0a0d18;
+  --popover-foreground: #f8fafc;
+  
+  --primary: #e11d48;
+  --primary-glow: rgba(225, 29, 72, 0.2);
+  --primary-ember: rgba(225, 29, 72, 0.05);
   --primary-foreground: #f8fafc;
-  --secondary: #334155;
+
+  --secondary: #0f1220;
   --secondary-foreground: #f8fafc;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f43f5e;
-  --accent-foreground: #ffffff;
-  --destructive: #dc2626;
+  --muted: #080a12;
+  --muted-foreground: #94a3b8;
+  --accent: #fbbf24;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
   --destructive-foreground: #f8fafc;
-  --border: #cbd5e1;
-  --input: #cbd5e1;
+  --border: #161c32;
+  --input: #161c32;
   --ring: #e11d48;
-  --radius: 0px; /* Brutalist sharp corners */
+  --radius: 0px;
+
+  --accent-gold: #d4a853;
+  --accent-gold-glow: rgba(212, 168, 83, 0.15);
+
+  --fighter-blue: #3b82f6;
+  --fighter-red: #ef4444;
+  
+  --font-sans: var(--font-plus-jakarta-sans), system-ui, sans-serif;
+  --font-display: 'Clash Display', var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* Machined Bezels & Shadows */
+  --shadow-brutalist: 4px 4px 0px 0px rgba(22, 28, 50, 0.8);
+  --shadow-brutalist-hover: 6px 6px 0px 0px #e11d48;
+  --ease-out-premium: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Gritty Fight Magazine specific variables */
-  --bg-canvas: #04050a; /* Dark Obsidian */
+  --bg-canvas: #030408;
   --bg-canvas-raised: #080a12;
-  --surface-card: #090b14;
+  --surface-card: #0a0d18;
   --surface-elevated: #0f1220;
-  --surface-overlay: rgba(4, 5, 10, 0.98);
+  --surface-overlay: rgba(3, 4, 8, 0.98);
   --border-subtle: #161c32;
   --border-strong: #e11d48;
   --border-focus: #f43f5e;
@@ -38,28 +58,25 @@
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 
-  --radius-control: 0px; /* Sharp controls */
-  --radius-card: 0px;    /* Sharp magazine grid */
-  --radius-hero: 0px;    /* Sharp hero blocks */
+  --radius-control: 0px;
+  --radius-card: 0px;
+  --radius-hero: 0px;
   --radius-pill: 9999px;
 
   --shadow-card: 4px 4px 0px 0px rgba(225, 29, 72, 0.15);
-  --shadow-brutalist: 5px 5px 0px 0px #161c32;
-  --shadow-brutalist-hover: 5px 5px 0px 0px #e11d48;
   --shadow-glow-sm: 0 0 10px rgba(225, 29, 72, 0.2);
   --shadow-glow-md: 0 10px 30px rgba(225, 29, 72, 0.15);
   
   --motion-hover: 140ms;
   --motion-entrance: 300ms;
-  --ease-out-premium: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .dark {
-  --background: #04050a;
+  --background: #030408;
   --foreground: #f8fafc;
-  --card: #090b14;
+  --card: #0a0d18;
   --card-foreground: #f8fafc;
-  --popover: #090b14;
+  --popover: #0a0d18;
   --popover-foreground: #f8fafc;
   --primary: #e11d48;
   --primary-foreground: #f8fafc;
@@ -67,7 +84,7 @@
   --secondary-foreground: #f8fafc;
   --muted: #080a12;
   --muted-foreground: #94a3b8;
-  --accent: #fbbf24;
+  --accent: #d4a853;
   --accent-foreground: #000000;
   --destructive: #ef4444;
   --destructive-foreground: #f8fafc;
@@ -91,6 +108,13 @@
   --color-destructive: var(--destructive);
   --color-ring: var(--ring);
 
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-ember: var(--primary-ember);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-glow: var(--accent-gold-glow);
+  --color-fighter-blue: var(--fighter-blue);
+  --color-fighter-red: var(--fighter-red);
+
   --color-bg-canvas: var(--bg-canvas);
   --color-bg-canvas-raised: var(--bg-canvas-raised);
   --color-surface-card: var(--surface-card);
@@ -100,8 +124,9 @@
   --color-border-strong: var(--border-strong);
   --color-border-focus: var(--border-focus);
 
-  --font-sans: var(--font-plus-jakarta-sans), system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 
   --radius-lg: var(--radius);
   --radius-md: var(--radius);
@@ -476,4 +501,18 @@ h6 {
 /* Dark mode image tuning */
 .dark img {
   filter: brightness(0.9) contrast(1.05);
+}
+
+/* Double bezel system */
+.bezel-outer {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 3px;
+  box-shadow: var(--shadow-brutalist);
+  transition: all 180ms var(--ease-out-premium);
+}
+.bezel-inner {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  position: relative;
 }

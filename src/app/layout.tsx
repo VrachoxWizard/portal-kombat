@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -10,16 +10,16 @@ import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import { SITE_URL } from "@/lib/env";
 import Analytics from "@/components/ui/Analytics";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -76,7 +76,7 @@ export default function RootLayout({
   return (
     <html
       lang="hr"
-      className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} h-full antialiased dark`}
+      className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden pb-16 md:pb-0 site-scanlines">
         <script
