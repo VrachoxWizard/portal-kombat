@@ -25,8 +25,8 @@ export const ReadingProgressBar: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] h-1.5 w-full bg-slate-950/50 backdrop-blur-xs pointer-events-none border-b border-white/5">
       <div
-        className="h-full bg-primary shadow-[0_0_10px_var(--primary),_0_0_5px_var(--primary)] transition-[width] duration-75 ease-linear"
-        style={{ width: `${progress}%` }}
+        style={{ transform: `scaleX(${progress / 100})` }}
+        className="h-full w-full bg-primary shadow-[0_0_10px_var(--primary),_0_0_5px_var(--primary)] origin-left transition-transform duration-75 ease-linear"
       />
     </div>
   );

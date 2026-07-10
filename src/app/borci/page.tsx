@@ -54,43 +54,45 @@ export default async function FightersPage({ searchParams }: PageProps) {
 
           {/* Search Box */}
           <ScrollAnimationWrapper delay={0.05}>
-            <div className="surface-card p-6 shadow-[var(--shadow-brutalist)] border-2 border-white/10 rounded-none bg-surface-card">
-              <form method="GET" action="/borci" className="relative flex items-center">
-                <label htmlFor="borci-search" className="sr-only">
-                  Pretraži borce
-                </label>
-                <input
-                  id="borci-search"
-                  type="text"
-                  name="q"
-                  defaultValue={q || ""}
-                  placeholder="Pretraži borce po imenu, timu ili kategoriji..."
-                  className="w-full rounded-none bg-black/60 border-2 border-white/10 pl-10 pr-12 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold"
-                />
-                <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
-                  <Search size={14} />
-                </div>
-                {q && (
-                  <Link
-                    href="/borci"
-                    className="absolute right-12 text-[10px] text-primary hover:text-red-400 font-black uppercase transition-premium"
+            <div className="bezel-outer">
+              <div className="bezel-inner p-6">
+                <form method="GET" action="/borci" className="relative flex items-center">
+                  <label htmlFor="borci-search" className="sr-only">
+                    Pretraži borce
+                  </label>
+                  <input
+                    id="borci-search"
+                    type="text"
+                    name="q"
+                    defaultValue={q || ""}
+                    placeholder="Pretraži borce po imenu, timu ili kategoriji..."
+                    className="w-full rounded-none bg-black/60 border-2 border-white/10 pl-10 pr-12 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold"
+                  />
+                  <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
+                    <Search size={14} />
+                  </div>
+                  {q && (
+                    <Link
+                      href="/borci"
+                      className="absolute right-12 text-[10px] text-primary hover:text-red-400 font-black uppercase transition-premium"
+                    >
+                      Očisti
+                    </Link>
+                  )}
+                  <button
+                    type="submit"
+                    className="absolute right-2 text-slate-400 hover:text-primary transition-premium p-1.5 rounded-none hover:bg-white/5 cursor-pointer"
+                    aria-label="Pretraži"
                   >
-                    Očisti
-                  </Link>
+                    <Search size={14} className="text-primary" />
+                  </button>
+                </form>
+                {q && (
+                  <p className="text-[9px] text-slate-500 mt-3 font-black uppercase tracking-widest">
+                    Rezultati pretrage za: <span className="text-white bg-white/10 px-1.5 py-0.5">&ldquo;{q}&rdquo;</span> ({fighters.length} pronađenih)
+                  </p>
                 )}
-                <button
-                  type="submit"
-                  className="absolute right-2 text-slate-400 hover:text-primary transition-premium p-1.5 rounded-none hover:bg-white/5 cursor-pointer"
-                  aria-label="Pretraži"
-                >
-                  <Search size={14} className="text-primary" />
-                </button>
-              </form>
-              {q && (
-                <p className="text-[9px] text-slate-500 mt-3 font-black uppercase tracking-widest">
-                  Rezultati pretrage za: <span className="text-white bg-white/10 px-1.5 py-0.5">&ldquo;{q}&rdquo;</span> ({fighters.length} pronađenih)
-                </p>
-              )}
+              </div>
             </div>
           </ScrollAnimationWrapper>
 
@@ -139,7 +141,7 @@ export default async function FightersPage({ searchParams }: PageProps) {
                         <div className="bezel-inner flex flex-col h-full bg-card overflow-hidden">
                           {/* Corner strip */}
                           <div
-                            className={`h-1.5 w-full transition-all duration-300 group-hover:h-2 shrink-0 ${
+                            className={`h-1.5 w-full origin-top transition-transform duration-[var(--motion-hover)] ease-out-premium group-hover:scale-y-[1.33] shrink-0 ${
                               isBlueCorner
                                 ? "bg-fighter-blue shadow-[0_0_8px_rgba(59,130,246,0.4)]"
                                 : "bg-fighter-red shadow-[0_0_8px_rgba(239,68,68,0.4)]"

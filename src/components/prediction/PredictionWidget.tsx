@@ -48,10 +48,10 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
     methodLabel = "KO/TKO";
   } else if (methodLower.includes("sub") || methodLower.includes("gušenje") || methodLower.includes("poluga") || methodLower.includes("prisila")) {
     methodColorClass = "bg-blue-500/10 border-blue-500/20 text-blue-400";
-    methodLabel = "SUBMISSION";
+    methodLabel = "PREDAJA";
   } else if (methodLower.includes("dec") || methodLower.includes("odluka") || methodLower.includes("bodov")) {
     methodColorClass = "bg-amber-500/10 border-amber-500/20 text-amber-400";
-    methodLabel = "DECISION";
+    methodLabel = "ODLUKA";
   }
 
   return (
@@ -123,11 +123,12 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
           </div>
           <div className="w-full bg-slate-950 border border-white/10 rounded-none h-4 overflow-hidden p-0.5" role="progressbar" aria-valuenow={confidenceScore} aria-valuemin={0} aria-valuemax={100}>
             <motion.div
-              initial={prefersReducedMotion ? false : { width: 0 }}
-              whileInView={{ width: `${confidenceScore}%` }}
+              initial={prefersReducedMotion ? false : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: prefersReducedMotion ? 0 : 1, ease: "easeOut" }}
-              className={`h-full rounded-none ${barColorClass} ${glowColorClass}`}
+              className={`h-full w-full rounded-none origin-left ${barColorClass} ${glowColorClass}`}
+              style={{ width: `${confidenceScore}%` }}
             />
           </div>
         </div>
