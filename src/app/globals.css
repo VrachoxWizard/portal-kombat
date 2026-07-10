@@ -34,7 +34,7 @@
   --fighter-red: #ef4444;
   
   --font-sans: var(--font-plus-jakarta-sans), system-ui, sans-serif;
-  --font-display: 'Clash Display', var(--font-space-grotesk), system-ui, sans-serif;
+  --font-display: 'Clash Display', system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
   /* Machined Bezels & Shadows */
@@ -44,7 +44,7 @@
 
   /* Gritty Fight Magazine specific variables */
   --bg-canvas: #030408;
-  --bg-canvas-raised: #080a12;
+  --bg-canvas-raised: #070a14;
   --surface-card: #0a0d18;
   --surface-elevated: #0f1220;
   --surface-overlay: rgba(3, 4, 8, 0.98);
@@ -509,7 +509,7 @@ h6 {
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 3px;
   box-shadow: var(--shadow-brutalist);
-  transition: all 180ms var(--ease-out-premium);
+  transition: transform 180ms var(--ease-out-premium), opacity 180ms var(--ease-out-premium);
 }
 .bezel-inner {
   background: var(--card);
