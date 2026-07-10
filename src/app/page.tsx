@@ -36,7 +36,7 @@ export async function generateMetadata({
     description:
       "Vodeći hrvatski portal za MMA, boks i kickboks. Najnovije vijesti, stručni blogovi i predikcije borbi.",
     alternates: {
-      canonical: isFiltered ? "/" : undefined,
+      canonical: "/",
     },
     ...(isFiltered
       ? { robots: { index: false, follow: true } }
@@ -99,12 +99,6 @@ export default async function HomePage({ searchParams }: PageProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {abTest === "variantB" && (
-          <ScrollAnimationWrapper direction="left" delay={0.2} className="lg:col-span-1">
-            <Sidebar />
-          </ScrollAnimationWrapper>
-        )}
-
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
             <SectionHeading
@@ -178,11 +172,13 @@ export default async function HomePage({ searchParams }: PageProps) {
           )}
         </div>
 
-        {abTest !== "variantB" && (
-          <ScrollAnimationWrapper direction="right" delay={0.2} className="lg:col-span-1">
-            <Sidebar />
-          </ScrollAnimationWrapper>
-        )}
+        <ScrollAnimationWrapper
+          direction={abTest === "variantB" ? "left" : "right"}
+          delay={0.2}
+          className={`lg:col-span-1 ${abTest === "variantB" ? "lg:order-first" : "lg:order-last"}`}
+        >
+          <Sidebar />
+        </ScrollAnimationWrapper>
       </div>
     </div>
   );

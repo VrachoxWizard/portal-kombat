@@ -59,7 +59,7 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
-    <article className="bezel-outer w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[500px] flex flex-col">
+    <article className="bezel-outer group w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[500px] flex flex-col">
       <div className="bezel-inner h-full flex-1 flex flex-col md:grid md:grid-cols-12 border-l-2 border-primary accent-edge-glow overflow-hidden">
         {/* Left text column: spans 7 columns on desktop layout */}
         <div className="md:col-span-7 p-8 sm:p-10 md:p-12 flex flex-col justify-between relative z-10 bg-[#080a12] w-full">
