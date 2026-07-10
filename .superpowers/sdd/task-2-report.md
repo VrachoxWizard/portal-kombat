@@ -64,3 +64,21 @@
 ### Verification Run
 - **Unit Tests:** Ran `pnpm test` (All 6 tests passed in 4 test files).
 - **Production Build:** Ran `pnpm build` (Built successfully with zero compilation/reflow errors).
+
+### Review Refinements (Applied July 10, 2026)
+
+#### Refinements Implemented:
+1. **Desktop Navigation Typography (`src/components/layout/Header.tsx`):**
+   - Added the `font-display` class to desktop navigation links to render them in Clash Display.
+   - Added `font-display` to the "HR" badge.
+   - Updated the `Swords` icon container from `transition-all duration-300` to `transition-transform duration-300` to optimize GPU performance.
+2. **Footer Typography (`src/components/layout/Footer.tsx`):**
+   - Added `font-display` to headers ("Brzi linkovi", "Sportovi", "Pratite nas") and footer links so they use Clash Display.
+   - Added `font-display` to the footer's "HR" badge.
+3. **Mobile Bottom Nav Active Indicator & Border Radius (`src/components/layout/MobileBottomNav.tsx`):**
+   - Redesigned active indicator to a small red square dot (`w-1.5 h-1.5 bg-primary rounded-none shadow-[0_0_6px_rgba(225,29,72,0.9)]`) positioned at `bottom-1`.
+   - Changed mobile bottom nav container's border radius from `rounded-full` to `rounded-none` to respect the global 0px border-radius design constraint.
+
+#### Verification Run:
+- **Unit Tests:** Ran `pnpm test` (All 6 tests passed).
+- **Production Build:** Ran `pnpm build` (Built successfully with zero compilation errors).

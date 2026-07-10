@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
                 <span className="text-primary">COMBAT</span>
                 <span className="text-white">PORTAL</span>
               </span>
-              <span className="rounded-none bg-primary px-1.5 py-0.5 text-[9px] font-black text-white">HR</span>
+              <span className="font-display rounded-none bg-primary px-1.5 py-0.5 text-[9px] font-black text-white">HR</span>
             </Link>
             <p className="text-sm text-slate-500 leading-relaxed">
               Vodeći regionalni portal za borilačke sportove. Pratite najnovije vijesti, stručne blogove i predikcije borbi na jednom mjestu.
@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+            <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
               <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Brzi linkovi
             </h3>
@@ -70,7 +70,7 @@ export const Footer: React.FC = () => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex items-center gap-2 text-slate-400 hover:text-primary transition-premium"
+                    className="font-display flex items-center gap-2 text-slate-400 hover:text-primary transition-premium"
                   >
                     <link.icon size={13} className="text-slate-600" aria-hidden="true" />
                     {link.label}
@@ -81,7 +81,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+            <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
               <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Sportovi
             </h3>
@@ -90,7 +90,7 @@ export const Footer: React.FC = () => {
                 <li key={cat.slug}>
                   <Link
                     href={`/?category=${cat.slug}`}
-                    className="flex items-center gap-2 text-slate-400 hover:text-primary transition-premium"
+                    className="font-display flex items-center gap-2 text-slate-400 hover:text-primary transition-premium"
                   >
                     {categoryIcons[cat.slug]}
                     {cat.label}
@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+            <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
               <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
               Pratite nas
             </h3>
@@ -135,10 +135,10 @@ export const Footer: React.FC = () => {
             © <CopyrightYear /> CombatPortal HR. Sva prava pridržana.
           </p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4 md:mt-0">
-            <Link href="/kontakt" className="hover:text-slate-400 transition-premium">
+            <Link href="/kontakt" className="font-display hover:text-slate-400 transition-premium">
               Kontakt
             </Link>
-            <Link href="/o-nama" className="hover:text-slate-400 transition-premium">
+            <Link href="/o-nama" className="font-display hover:text-slate-400 transition-premium">
               O nama
             </Link>
           </div>

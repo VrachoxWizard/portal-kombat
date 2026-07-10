@@ -117,7 +117,7 @@ export const Header: React.FC = () => {
                 <div className="relative flex items-center justify-center w-8 h-8 rounded-none bg-primary/15 border-2 border-primary/40 group-hover:bg-primary group-hover:border-primary transition-premium">
                   <Swords
                     size={18}
-                    className="text-primary group-hover:text-white group-hover:rotate-12 transition-all duration-300"
+                    className="text-primary group-hover:text-white group-hover:rotate-12 transition-transform duration-300"
                     aria-hidden="true"
                   />
                 </div>
@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
                   </span>
                   <span className="text-foreground">PORTAL</span>
                 </span>
-                <span className="rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
+                <span className="font-display rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
                   HR
                 </span>
               </Link>
@@ -140,7 +140,7 @@ export const Header: React.FC = () => {
                   <Magnetic key={item.name} strength={0.2}>
                     <Link
                       href={item.href}
-                      className={`text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
+                      className={`font-display text-xs font-extrabold tracking-widest uppercase transition-premium hover:text-primary relative pb-1 flex items-center cursor-pointer ${
                         active ? "text-primary text-glow-red font-black" : "text-muted-foreground"
                       }`}
                       aria-current={active ? "page" : undefined}

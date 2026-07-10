@@ -44,7 +44,7 @@ export const MobileBottomNav: React.FC = () => {
       }}
       animate={isVisible ? "visible" : "hidden"}
       transition={{ type: "spring", stiffness: 300, damping: 28 }}
-      className="fixed bottom-6 left-1/2 z-40 bg-card/85 backdrop-blur-lg border border-white/10 rounded-full px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex gap-4 sm:gap-6 items-center md:hidden max-w-[95vw]"
+      className="fixed bottom-6 left-1/2 z-40 bg-card/85 backdrop-blur-lg border border-white/10 rounded-none px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex gap-4 sm:gap-6 items-center md:hidden max-w-[95vw]"
       aria-label="Mobilna navigacija"
     >
       {navItems.map((item) => {
@@ -71,7 +71,7 @@ export const MobileBottomNav: React.FC = () => {
             {isActive && (
               <motion.div
                 layoutId="activeMobileBottomNav"
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-primary rounded-none shadow-[0_0_8px_rgba(225,29,72,0.8)]"
+                className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-none shadow-[0_0_6px_rgba(225,29,72,0.9)]"
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
             )}
