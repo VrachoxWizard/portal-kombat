@@ -98,19 +98,48 @@ export default async function HomePage({ searchParams }: PageProps) {
         </ScrollAnimationWrapper>
       )}
 
-      {/* Massive Off-screen Typographic Divider */}
+      {/* Massive Off-screen Typographic Divider (Kinetic Telemetry HUD) */}
       {!isFiltered && (
-        <div className="relative w-screen max-w-[100vw] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none pointer-events-none mb-12 h-24 sm:h-32 md:h-40 flex items-center bg-gradient-to-r from-black/80 via-primary/5 to-black/80 border-y border-white/5">
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2.5 whitespace-nowrap z-20">
-            <span className="text-[9px] font-black font-mono tracking-widest text-primary uppercase border border-primary/30 px-2 py-1 bg-primary/5">PRIJENOS UŽIVO</span>
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-            </span>
+        <div className="relative w-screen max-w-[100vw] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none pointer-events-none mb-12 h-24 sm:h-32 md:h-40 flex items-center bg-gradient-to-r from-black via-primary/[0.03] to-black border-y border-dashed border-white/10">
+          
+          {/* HUD Grid Overlay Marks */}
+          <div className="absolute inset-0 pointer-events-none z-10">
+            {/* Top-left tick corner */}
+            <div className="absolute top-2 left-6 w-3 h-3 border-l border-t border-primary/30" />
+            {/* Bottom-right tick corner */}
+            <div className="absolute bottom-2 right-6 w-3 h-3 border-r border-b border-primary/30" />
+            
+            {/* GPS coordinates telemetry */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden sm:flex flex-col text-[8px] font-mono font-black text-slate-500 tracking-wider text-right">
+              <span>LOC: ZAGREB, CROATIA</span>
+              <span className="text-primary/75">SYS: 45.8153° N, 15.9879° E</span>
+              <span>DEV: MATCH_PORTAL_V2</span>
+            </div>
           </div>
-          <h2 className="text-6xl sm:text-8xl md:text-9xl font-black italic tracking-tighter text-slate-800/20 uppercase font-display select-none pl-[15%] text-stroke-red text-glow-red whitespace-nowrap leading-none">
-            NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA
-          </h2>
+
+          {/* Live Status indicator with fading backdrop mask */}
+          <div className="absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-black via-black/85 to-transparent flex items-center pl-6 z-20 pointer-events-auto">
+            <div className="flex items-center gap-2.5">
+              <span className="text-[9px] font-black font-mono tracking-widest text-primary uppercase border border-primary/30 px-2 py-1 bg-primary/5">
+                PRIJENOS UŽIVO
+              </span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
+            </div>
+          </div>
+
+          {/* Infinite Marquee Text Loop */}
+          <div className="ticker-track ticker-track-no-pause flex gap-8 whitespace-nowrap z-0">
+            <h2 className="text-6xl sm:text-8xl md:text-9xl font-black italic tracking-tighter text-slate-800/15 uppercase font-display select-none text-stroke-red text-glow-red leading-none">
+              NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA • NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA
+            </h2>
+            <h2 className="text-6xl sm:text-8xl md:text-9xl font-black italic tracking-tighter text-slate-800/15 uppercase font-display select-none text-stroke-red text-glow-red leading-none">
+              NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA • NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA
+            </h2>
+          </div>
+
         </div>
       )}
 
