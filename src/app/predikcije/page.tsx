@@ -56,7 +56,9 @@ export default async function PredictionsPage({ searchParams }: PageProps) {
             />
           </ScrollAnimationWrapper>
 
-          <PredictionStatsBanner />
+          <ScrollAnimationWrapper delay={0.1}>
+            <PredictionStatsBanner />
+          </ScrollAnimationWrapper>
 
           <FilterBar
             basePath="/predikcije"

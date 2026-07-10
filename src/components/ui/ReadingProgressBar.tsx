@@ -23,9 +23,9 @@ export const ReadingProgressBar: React.FC = () => {
   if (progress <= 0) return null;
 
   return (
-    <div className="fixed top-0 left-0 z-[60] h-[3px] w-full pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-[60] h-1.5 w-full bg-slate-950/50 backdrop-blur-xs pointer-events-none border-b border-white/5">
       <div
-        className="h-full bg-primary reading-progress transition-[width] duration-75 ease-linear"
+        className="h-full bg-primary shadow-[0_0_10px_var(--primary),_0_0_5px_var(--primary)] transition-[width] duration-75 ease-linear"
         style={{ width: `${progress}%` }}
       />
     </div>

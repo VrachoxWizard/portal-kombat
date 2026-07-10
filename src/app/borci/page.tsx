@@ -101,68 +101,114 @@ export default async function FightersPage({ searchParams }: PageProps) {
             />
           ) : (
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {fighters.map((fighter) => (
-                <StaggerItem key={fighter.id}>
-                  <Link
-                    href={`/borci/${fighter.slug}`}
-                    className="group flex flex-col h-full rounded-none bg-surface-card hover-glow border-2 border-white/10 relative cursor-pointer"
-                  >
-                    <div className="flex gap-4 p-4 items-center relative z-10">
-                      {/* Fighter Image */}
-                      <div className="relative h-20 w-20 rounded-none overflow-hidden border-2 border-white/20 shrink-0 bg-slate-900">
-                        {fighter.imageUrl ? (
-                          <Image
-                            src={fighter.imageUrl}
-                            alt={fighter.name}
-                            fill
-                            sizes="80px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-200"
+              {fighters.map((fighter, index) => {
+                const isBlueCorner = index % 2 === 0;
+                const recordParts = fighter.record.split("-");
+                let formattedRecord = (
+                  <span className="font-mono text-xs font-bold tracking-wider">{fighter.record}</span>
+                );
+                if (recordParts.length >= 3) {
+                  const wins = recordParts[0];
+                  const losses = recordParts[1];
+                  const draws = recordParts[2];
+                  const nc = recordParts.slice(3).join("-");
+                  formattedRecord = (
+                    <span className="font-mono text-xs tracking-wider font-bold">
+                      <span className="text-emerald-400">{wins}</span>
+                      <span className="text-slate-500 font-sans mx-0.5">-</span>
+                      <span className="text-red-400">{losses}</span>
+                      <span className="text-slate-500 font-sans mx-0.5">-</span>
+                      <span className="text-slate-300">{draws}</span>
+                      {nc && (
+                        <>
+                          <span className="text-slate-500 font-sans mx-0.5">-</span>
+                          <span className="text-slate-400">{nc}</span>
+                        </>
+                      )}
+                    </span>
+                  );
+                }
+
+                return (
+                  <StaggerItem key={fighter.id}>
+                    <Link
+                      href={`/borci/${fighter.slug}`}
+                      className="group block h-full cursor-pointer transition-all duration-300"
+                    >
+                      <div className="bezel-outer h-full hover:shadow-[0_0_15px_rgba(225,29,72,0.15)] transition-all duration-300">
+                        <div className="bezel-inner flex flex-col h-full bg-card overflow-hidden">
+                          {/* Corner strip */}
+                          <div
+                            className={`h-1.5 w-full transition-all duration-300 group-hover:h-2 shrink-0 ${
+                              isBlueCorner
+                                ? "bg-fighter-blue shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+                                : "bg-fighter-red shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+                            }`}
                           />
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center bg-primary/15 text-primary">
-                            <Shield size={28} />
-                          </div>
-                        )}
-                      </div>
+                          
+                          <div className="flex gap-4 p-4 items-center flex-1">
+                            {/* Fighter Image */}
+                            <div className="relative h-20 w-20 rounded-none overflow-hidden border border-white/10 shrink-0 bg-slate-950">
+                              {fighter.imageUrl ? (
+                                <Image
+                                  src={fighter.imageUrl}
+                                  alt={fighter.name}
+                                  fill
+                                  sizes="80px"
+                                  className="object-cover group-hover:scale-105 transition-transform duration-300 ease-out-premium"
+                                />
+                              ) : (
+                                <div className="absolute inset-0 flex items-center justify-center bg-primary/10 text-primary">
+                                  <Shield size={28} />
+                                </div>
+                              )}
+                            </div>
 
-                      {/* Fighter Meta */}
-                      <div className="min-w-0 flex-1 space-y-1">
-                        <div className="flex items-start justify-between gap-2">
-                          <h2 className="font-display font-black text-sm uppercase text-white group-hover:text-primary transition-premium truncate leading-tight">
-                            {fighter.name}
-                          </h2>
-                          <span className="shrink-0 text-[10px] font-black px-2.5 py-0.5 rounded-none bg-primary text-white border-2 border-primary shadow-sm uppercase tracking-wide">
-                            {fighter.record}
-                          </span>
+                            {/* Fighter Meta */}
+                            <div className="min-w-0 flex-1 space-y-1">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+                                <h2 className="font-display font-bold italic text-base uppercase text-white group-hover:text-primary transition-colors duration-200 truncate leading-tight tracking-tight">
+                                  {fighter.name}
+                                </h2>
+                                <div className="shrink-0 flex items-center">
+                                  {formattedRecord}
+                                </div>
+                              </div>
+                              
+                              <div className="flex flex-wrap items-center gap-2 pt-1">
+                                <span className="shrink-0 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-300 uppercase tracking-wider">
+                                  {fighter.weightClass}
+                                </span>
+                                
+                                {fighter.stance && (
+                                  <span className="text-[9px] text-slate-400 font-mono font-semibold uppercase tracking-wider">
+                                    Stav: {fighter.stance}
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {fighter.team && (
+                                <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold truncate uppercase tracking-wider pt-1">
+                                  <MapPin size={11} className="text-slate-500 shrink-0" />
+                                  <span className="truncate">{fighter.team}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Bottom visual decoration */}
+                          <div className="mt-auto border-t border-white/5 px-4 py-2 bg-black/40 flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors duration-200">
+                            <span>Pogledaj profil</span>
+                            <span className="transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300">
+                              &rarr;
+                            </span>
+                          </div>
                         </div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">
-                          {fighter.weightClass}
-                        </p>
-                        {fighter.team && (
-                          <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold truncate uppercase tracking-wide">
-                            <MapPin size={11} className="text-slate-500" />
-                            <span>{fighter.team}</span>
-                          </div>
-                        )}
-                        {fighter.stance && (
-                          <div className="flex items-center gap-1 text-[9px] text-slate-500 font-bold uppercase tracking-wide">
-                            <Activity size={10} className="text-slate-500" />
-                            <span>Stav: <span className="text-slate-400 font-black">{fighter.stance}</span></span>
-                          </div>
-                        )}
                       </div>
-                    </div>
-
-                    {/* Bottom visual decoration */}
-                    <div className="mt-auto border-t-2 border-white/10 px-4 py-2.5 bg-black/40 flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-premium">
-                      <span>Pogledaj profil</span>
-                      <span className="transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300">
-                        &rarr;
-                      </span>
-                    </div>
-                  </Link>
-                </StaggerItem>
-              ))}
+                    </Link>
+                  </StaggerItem>
+                );
+              })}
             </StaggerContainer>
           )}
         </div>

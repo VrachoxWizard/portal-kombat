@@ -54,7 +54,7 @@ export function MarkdownRenderer({ content, fighters = [] }: MarkdownRendererPro
             <p className="mb-4 leading-relaxed text-slate-300 text-lg">{children}</p>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-primary bg-primary/5 pl-6 py-3 my-6 italic text-white rounded-r-lg">
+            <blockquote className="border-l-4 border-primary bg-primary-ember pl-6 pr-4 py-4 my-6 italic text-white rounded-none border-y border-r border-white/5 shadow-[var(--shadow-card)] accent-edge-glow relative">
               {children}
             </blockquote>
           ),
@@ -81,9 +81,11 @@ export function MarkdownRenderer({ content, fighters = [] }: MarkdownRendererPro
             <strong className="text-white font-bold">{children}</strong>
           ),
           img: ({ src, alt }) => (
-            <div className="my-6 overflow-hidden rounded-xl border border-white/5 bg-slate-900 aspect-video relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={alt ?? ""} className="object-cover w-full h-full" />
+            <div className="bezel-outer my-6 overflow-hidden hover:shadow-[0_0_15px_var(--primary-glow)] transition-all duration-300">
+              <div className="bezel-inner overflow-hidden bg-slate-950 aspect-video relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={alt ?? ""} className="object-cover w-full h-full transition-transform duration-500 hover:scale-[1.02]" />
+              </div>
             </div>
           ),
           code: ({ children }) => (

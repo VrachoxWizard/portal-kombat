@@ -337,15 +337,17 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
 
           {article.featuredImage && (
             <ScrollAnimationWrapper delay={0.15}>
-              <div className="relative aspect-video w-full overflow-hidden rounded-none bg-slate-900 shadow-[var(--shadow-brutalist)] border-2 border-white/10">
-                <Image
-                  src={article.featuredImage}
-                  alt={article.title}
-                  fill
-                  preload={true}
-                  sizes="(max-width: 1200px) 100vw, 800px"
-                  className="object-cover"
-                />
+              <div className="bezel-outer overflow-hidden shadow-[var(--shadow-brutalist)] hover:shadow-[0_0_20px_var(--primary-glow)] transition-all duration-300">
+                <div className="bezel-inner relative aspect-video w-full overflow-hidden bg-slate-950">
+                  <Image
+                    src={article.featuredImage}
+                    alt={article.title}
+                    fill
+                    preload={true}
+                    sizes="(max-width: 1200px) 100vw, 800px"
+                    className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+                  />
+                </div>
               </div>
             </ScrollAnimationWrapper>
           )}

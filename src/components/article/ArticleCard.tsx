@@ -107,24 +107,72 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </h3>
 
             {predictionTeaser && (
-              <div className="mb-3 rounded-none border-2 border-emerald-500/35 bg-emerald-950/45 px-3.5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-300 shadow-[var(--shadow-card)] font-mono">
-                <span className="text-white">{predictionTeaser.fighterA}</span>
-                <span className="mx-2 text-red-500">VS</span>
-                <span className="text-white">{predictionTeaser.fighterB}</span>
-                <span className="block mt-1 text-emerald-400 normal-case tracking-normal text-xs font-bold">
-                  Prognoza: {predictionTeaser.winner}
-                  {predictionTeaser.method ? ` (${predictionTeaser.method})` : ""}
-                  {predictionTeaser.confidenceScore != null
-                    ? ` · ${predictionTeaser.confidenceScore}%`
-                    : ""}
-                </span>
-                {predictionTeaser.isCorrect != null && (
-                  <span
-                    className="block mt-0.5 text-xs normal-case font-bold"
-                  >
-                    {predictionTeaser.isCorrect ? "✓ Točno" : "✗ Netočno"}
-                  </span>
-                )}
+              <div className="mb-4 bezel-outer overflow-hidden">
+                <div className="bezel-inner grid grid-cols-12 gap-0 relative bg-black/40 text-[10px] uppercase font-mono font-bold tracking-wider">
+                  {/* Fighter A (Left, blue tint) */}
+                  <div className={`col-span-5 bg-fighter-blue/10 p-2.5 text-left border-r border-white/5 flex flex-col justify-between min-h-[50px] ${predictionTeaser.winner === predictionTeaser.fighterA ? 'ring-1 ring-inset ring-emerald-500/20' : ''}`}>
+                    <span className="text-white truncate font-display font-semibold italic text-xs block leading-tight">{predictionTeaser.fighterA}</span>
+                    <span className="text-fighter-blue/70 text-[8px] mt-1 block">PLAVI KUT</span>
+                  </div>
+                  
+                  {/* VS Badge */}
+                  <div className="col-span-2 flex items-center justify-center font-display font-black text-[10px] text-primary bg-background border-r border-white/5 py-2 shrink-0 italic select-none">
+                    VS
+                  </div>
+                  
+                  {/* Fighter B (Right, red tint) */}
+                  <div className={`col-span-5 bg-fighter-red/10 p-2.5 text-right flex flex-col justify-between min-h-[50px] ${predictionTeaser.winner === predictionTeaser.fighterB ? 'ring-1 ring-inset ring-emerald-500/20' : ''}`}>
+                    <span className="text-white truncate font-display font-semibold italic text-xs block leading-tight">{predictionTeaser.fighterB}</span>
+                    <span className="text-fighter-red/70 text-[8px] mt-1 block">CRVENI KUT</span>
+                  </div>
+                </div>
+
+                {/* Info and confidence bar */}
+                <div className="bg-black/60 border-t border-white/5 p-2.5 space-y-2 text-[10px] font-mono">
+                  <div className="flex flex-wrap items-center justify-between gap-1">
+                    <span className="text-slate-400">
+                      PROGNOZA: <span className="text-emerald-400 font-bold">{predictionTeaser.winner}</span>
+                    </span>
+                    {predictionTeaser.method && (
+                      <span className="px-1.5 py-0.5 rounded-none border border-white/10 bg-white/5 text-[8px] text-slate-300">
+                        {predictionTeaser.method}
+                      </span>
+                    )}
+                  </div>
+
+                  {predictionTeaser.confidenceScore != null && (
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[8px] text-slate-400 uppercase tracking-wider">
+                        <span>Pouzdanost</span>
+                        <span className="text-white font-bold">{predictionTeaser.confidenceScore}%</span>
+                      </div>
+                      <div className="w-full bg-slate-950 border border-white/10 h-1.5 overflow-hidden p-0.5">
+                        <div
+                          className={`h-full transition-all duration-500 ${
+                            predictionTeaser.winner === predictionTeaser.fighterA
+                              ? "bg-fighter-blue"
+                              : "bg-fighter-red"
+                          }`}
+                          style={{ width: `${predictionTeaser.confidenceScore}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {predictionTeaser.isCorrect != null && (
+                    <div className={`text-[8px] font-black tracking-wider uppercase flex items-center gap-1 mt-1`}>
+                      {predictionTeaser.isCorrect ? (
+                        <span className="inline-block bg-emerald-500/10 px-1.5 py-0.5 border border-emerald-500/20 text-emerald-400">
+                          ✓ TOČNA PROGNOZA
+                        </span>
+                      ) : (
+                        <span className="inline-block bg-red-500/10 px-1.5 py-0.5 border border-red-500/20 text-red-400">
+                          ✗ NETOČNA PROGNOZA
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

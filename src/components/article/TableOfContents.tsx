@@ -59,38 +59,40 @@ export const TableOfContents: React.FC = () => {
   if (headings.length === 0) return null;
 
   return (
-    <div className="surface-card p-6 shadow-sm sticky top-24 hidden lg:block max-h-[70vh] overflow-y-auto">
-      <h3 className="text-sm font-extrabold tracking-widest text-white/95 uppercase border-l-4 border-primary pl-3 mb-6 flex items-center gap-2">
-        <Link2 size={16} className="text-primary" aria-hidden="true" />
-        Sadržaj članka
-      </h3>
-      <nav className="space-y-1.5" aria-label="Sadržaj članka">
-        {headings.map((heading) => (
-          <a
-            key={heading.id}
-            href={`#${heading.id}`}
-            onClick={(e) => {
-              e.preventDefault();
-              const reducedMotion = window.matchMedia(
-                "(prefers-reduced-motion: reduce)"
-              ).matches;
-              document.getElementById(heading.id)?.scrollIntoView({
-                behavior: reducedMotion ? "auto" : "smooth",
-              });
-              setActiveId(heading.id);
-            }}
-            className={`block text-xs font-semibold tracking-wide uppercase transition-premium py-1 relative border-l-2 pl-3 hover:text-primary ${
-              heading.level === 3 ? "ml-4 border-slate-800 text-slate-400 hover:border-primary/50" : "border-slate-700 text-slate-300 hover:border-primary"
-            } ${
-              activeId === heading.id
-                ? "text-primary border-primary font-extrabold text-glow-red"
-                : "border-transparent"
-            }`}
-          >
-            {heading.text}
-          </a>
-        ))}
-      </nav>
+    <div className="bezel-outer sticky top-24 hidden lg:block max-h-[70vh] overflow-hidden">
+      <div className="bezel-inner p-6 bg-card overflow-y-auto max-h-[calc(70vh-8px)]">
+        <h3 className="text-sm font-extrabold tracking-widest text-white/95 uppercase border-l-4 border-primary pl-3 mb-6 flex items-center gap-2">
+          <Link2 size={16} className="text-primary" aria-hidden="true" />
+          Sadržaj članka
+        </h3>
+        <nav className="space-y-1.5" aria-label="Sadržaj članka">
+          {headings.map((heading) => (
+            <a
+              key={heading.id}
+              href={`#${heading.id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const reducedMotion = window.matchMedia(
+                  "(prefers-reduced-motion: reduce)"
+                ).matches;
+                document.getElementById(heading.id)?.scrollIntoView({
+                  behavior: reducedMotion ? "auto" : "smooth",
+                });
+                setActiveId(heading.id);
+              }}
+              className={`block text-xs font-semibold tracking-wide uppercase transition-premium py-1 relative border-l-2 pl-3 hover:text-primary ${
+                heading.level === 3 ? "ml-4 border-slate-800 text-slate-400 hover:border-primary/50" : "border-slate-700 text-slate-300 hover:border-primary"
+              } ${
+                activeId === heading.id
+                  ? "text-primary border-primary font-extrabold"
+                  : "border-transparent"
+              }`}
+            >
+              {heading.text}
+            </a>
+          ))}
+        </nav>
+      </div>
     </div>
   );
 };
