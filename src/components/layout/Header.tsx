@@ -99,26 +99,18 @@ export const Header: React.FC = () => {
   return (
     <>
       <motion.header
-        className="fixed left-4 right-4 z-50 pointer-events-none"
-        initial={{ top: 16 }}
-        animate={{
-          top: scrolled ? 12 : 16,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed top-4 left-4 right-4 z-50 pointer-events-none"
       >
         <motion.div
           className="bezel-outer max-w-7xl mx-auto pointer-events-auto"
           animate={{
-            maxWidth: scrolled ? "1200px" : "1280px",
+            y: scrolled ? -2 : 0,
+            scale: scrolled ? 0.985 : 1,
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          <motion.div
-            className="bezel-inner flex items-center justify-between px-6 bg-card/90 backdrop-blur-md transition-all duration-300"
-            animate={{
-              height: scrolled ? 48 : 56,
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          <div
+            className="bezel-inner flex h-14 items-center justify-between px-6 bg-card/90 backdrop-blur-md"
           >
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center gap-2 group">
@@ -183,33 +175,32 @@ export const Header: React.FC = () => {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Category sub-nav (Desktop only) */}
-        <AnimatePresence>
-          {!scrolled && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -10, height: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="max-w-7xl mx-auto mt-2 hidden md:flex justify-center overflow-hidden pointer-events-auto"
-            >
-              <nav className="flex items-center gap-2.5 pb-2 overflow-x-auto" aria-label="Kategorije sportova">
-                {CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    href={`/?category=${cat.slug}`}
-                    className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border border-white/10 border-l-[3px] border-l-primary bg-black/60 hover:bg-black/80 hover:text-white hover:border-l-primary transition-premium cursor-pointer"
-                  >
-                    {cat.name}
-                  </Link>
-                ))}
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          animate={{
+            opacity: scrolled ? 0 : 1,
+            y: scrolled ? -8 : 0,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className={`max-w-7xl mx-auto mt-2 hidden md:flex justify-center overflow-hidden ${
+            scrolled ? "pointer-events-none" : "pointer-events-auto"
+          }`}
+        >
+          <nav className="flex items-center gap-2.5 pb-2 overflow-x-auto" aria-label="Kategorije sportova">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={`/?category=${cat.slug}`}
+                className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border border-white/10 border-l-[3px] border-l-primary bg-black/60 hover:bg-black/80 hover:text-white hover:border-l-primary transition-premium cursor-pointer"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </nav>
+        </motion.div>
       </motion.header>
 
       <AnimatePresence>

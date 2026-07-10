@@ -71,7 +71,7 @@ export const MobileBottomNav: React.FC = () => {
             {isActive && (
               <motion.div
                 layoutId="activeMobileBottomNav"
-                className="absolute bottom-0 w-6 h-[2px] bg-primary rounded-none shadow-[0_0_8px_rgba(225,29,72,0.8)]"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-primary rounded-none shadow-[0_0_8px_rgba(225,29,72,0.8)]"
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
             )}
