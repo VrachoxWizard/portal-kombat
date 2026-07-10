@@ -80,7 +80,7 @@ export const Sidebar: React.FC = async () => {
               >
                 <div className="flex items-center justify-between text-[9px] text-slate-500 mb-2">
                   <span className="font-black text-primary tracking-widest uppercase">{fight.event}</span>
-                  <span className="flex items-center gap-1 font-bold">
+                  <span className="flex items-center gap-1 font-bold font-mono">
                     <Calendar size={11} className="text-slate-500" aria-hidden="true" />
                     {fight.date}
                   </span>

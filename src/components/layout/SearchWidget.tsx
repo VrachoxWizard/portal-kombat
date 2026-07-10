@@ -73,7 +73,7 @@ export const SearchWidget: React.FC = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Unesite pojam za pretragu..."
-            className="w-full rounded-none bg-black/60 border-2 border-white/10 pl-10 pr-10 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold"
+            className="w-full rounded-none bg-black/60 border-2 border-white/10 pl-10 pr-20 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-premium font-bold"
           />
           <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
             <Search size={14} />

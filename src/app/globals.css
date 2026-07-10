@@ -509,12 +509,21 @@ h6 {
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 3px;
   box-shadow: var(--shadow-brutalist);
-  transition: transform 180ms var(--ease-out-premium), opacity 180ms var(--ease-out-premium);
+  transition: transform var(--motion-hover) var(--ease-out-premium), opacity var(--motion-hover) var(--ease-out-premium);
 }
 .bezel-inner {
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.03);
   position: relative;
+}
+.bezel-inner.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 75%
+  );
+  background-size: 200% 100%;
 }
 .accent-edge-glow {
   box-shadow: inset 3px 0 8px var(--primary-glow);

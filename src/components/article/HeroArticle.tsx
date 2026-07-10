@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { User, Calendar, Clock, ArrowRight } from "lucide-react";
@@ -8,6 +8,7 @@ import TypeBadge from "@/components/ui/TypeBadge";
 import CategoryBadge from "@/components/ui/CategoryBadge";
 import { PostTypeKey } from "@/lib/constants";
 import Magnetic from "@/components/ui/Magnetic";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface Author {
   name: string;
@@ -43,17 +44,8 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
   author,
   featured = true,
 }) => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 40]);
 
   const formattedDate = publishedAt
     ? new Date(publishedAt).toLocaleDateString("hr-HR", {
@@ -100,7 +92,7 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
             </h1>
 
             {excerpt && (
-              <p className="text-xs sm:text-sm text-slate-400 font-semibold max-w-2xl leading-relaxed first-letter:font-display first-letter:text-4xl sm:first-letter:text-5xl first-letter:font-black first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
+              <p className="text-xs sm:text-sm text-slate-400 font-semibold max-w-2xl leading-relaxed first-letter:font-display first-letter:text-4xl sm:first-letter:text-5xl first-letter:font-black first-letter:italic first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
                 {excerpt}
               </p>
             )}
@@ -152,11 +144,9 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
 
         {/* Right photo column: spans 5 columns on desktop layout */}
         <div className="md:col-span-5 relative min-h-[250px] md:min-h-full overflow-hidden bg-slate-950 w-full">
-          <div
-            className="absolute inset-0 w-full h-[120%] -top-[10%] transition-transform duration-100 ease-out"
-            style={{
-              transform: `translateY(${scrollY * 0.08}px)`,
-            }}
+          <motion.div
+            className="absolute inset-0 w-full h-[120%] -top-[10%]"
+            style={{ y }}
           >
             <Image
               src={
@@ -169,7 +159,7 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
               sizes="(max-width: 1200px) 100vw, 500px"
               className="object-cover opacity-85 group-hover:scale-[1.03] transition-transform duration-[6s] ease-out animate-kenburns"
             />
-          </div>
+          </motion.div>
           {/* Asymmetric gradient overlays: fade out to dark background on the left */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#080a12] via-slate-950/20 to-transparent md:hidden pointer-events-none z-10" />
           <div className="hidden md:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#080a12] to-transparent pointer-events-none z-10" />

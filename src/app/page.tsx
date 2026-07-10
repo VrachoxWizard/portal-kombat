@@ -56,8 +56,9 @@ export default async function HomePage({ searchParams }: PageProps) {
 
   const upcomingEvents = await getCachedUpcomingEvents();
 
-  // For the hero, we need an extra item on page 1 when unfiltered
-  const pageSize = !isFiltered && currentPage === 1 ? 13 : 12;
+  // For the hero and bento grid, we need 15 items on page 1 when unfiltered
+  const isBento = !isFiltered && currentPage === 1;
+  const pageSize = isBento ? 15 : 12;
 
   const paginated = await getPostListing({
     search: q,
@@ -67,7 +68,7 @@ export default async function HomePage({ searchParams }: PageProps) {
     pageSize,
   });
 
-  const heroPost = !isFiltered && currentPage === 1 && paginated.items.length > 0
+  const heroPost = isBento && paginated.items.length > 0
     ? paginated.items[0]
     : null;
 
@@ -129,39 +130,42 @@ export default async function HomePage({ searchParams }: PageProps) {
           ) : (
             <>
               <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {listItems.map((post, index) => (
-                  <StaggerItem
-                    key={post.id}
-                    className={
-                      index === 0
-                        ? "md:col-span-2 md:row-span-2"
-                        : index === 3
-                        ? "md:col-span-1 md:row-span-2"
-                        : ""
-                    }
-                  >
-                    <ArticleCard
-                      title={post.title}
-                      slug={post.slug}
-                      excerpt={post.excerpt}
-                      featuredImage={post.featuredImage}
-                      type={post.type}
-                      publishedAt={post.publishedAt}
-                      category={post.category}
-                      author={post.author}
-                      variant={index === 0 ? "horizontal" : "vertical"}
-                      predictionTeaser={
-                        post.type === "PREDICTION" && post.prediction
-                          ? {
-                              fighterA: post.prediction.fighterA,
-                              fighterB: post.prediction.fighterB,
-                              winner: post.prediction.winner,
-                            }
-                          : null
-                      }
-                    />
-                  </StaggerItem>
-                ))}
+                {listItems.map((post, index) => {
+                  const itemSpanClass = isBento
+                    ? index === 0
+                      ? "md:col-span-2 md:row-span-2"
+                      : index === 3
+                      ? "md:col-span-1 md:row-span-2"
+                      : ""
+                    : "";
+                  return (
+                    <StaggerItem
+                      key={post.id}
+                      className={`h-full ${itemSpanClass}`}
+                    >
+                      <ArticleCard
+                        title={post.title}
+                        slug={post.slug}
+                        excerpt={post.excerpt}
+                        featuredImage={post.featuredImage}
+                        type={post.type}
+                        publishedAt={post.publishedAt}
+                        category={post.category}
+                        author={post.author}
+                        variant={isBento && index === 0 ? "horizontal" : "vertical"}
+                        predictionTeaser={
+                          post.type === "PREDICTION" && post.prediction
+                            ? {
+                                fighterA: post.prediction.fighterA,
+                                fighterB: post.prediction.fighterB,
+                                winner: post.prediction.winner,
+                              }
+                            : null
+                        }
+                      />
+                    </StaggerItem>
+                  );
+                })}
               </StaggerContainer>
 
               <Pagination

@@ -60,7 +60,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
   return (
     <article
-      className="bezel-outer hover:translate-y-[-3px] hover:shadow-[var(--shadow-brutalist-hover)] hover:shadow-brutalist-hover group h-full cursor-pointer transition-premium"
+      className="bezel-outer hover:translate-y-[-3px] hover:shadow-[var(--shadow-brutalist-hover)] group h-full cursor-pointer transition-premium"
     >
       <div
         className={`bezel-inner h-full border-l-2 border-transparent group-hover:border-primary group-hover:shadow-[inset_3px_0_8px_var(--primary-glow)] transition-premium flex overflow-hidden ${
@@ -107,7 +107,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </h3>
 
             {predictionTeaser && (
-              <div className="mb-3 rounded-none border-2 border-emerald-500/35 bg-emerald-950/45 px-3.5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-300 shadow-[var(--shadow-card)]">
+              <div className="mb-3 rounded-none border-2 border-emerald-500/35 bg-emerald-950/45 px-3.5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-300 shadow-[var(--shadow-card)] font-mono">
                 <span className="text-white">{predictionTeaser.fighterA}</span>
                 <span className="mx-2 text-red-500">VS</span>
                 <span className="text-white">{predictionTeaser.fighterB}</span>
@@ -120,9 +120,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                 </span>
                 {predictionTeaser.isCorrect != null && (
                   <span
-                    className={`block mt-0.5 text-xs normal-case font-bold ${
-                      predictionTeaser.isCorrect ? "text-emerald-400" : "text-red-500"
-                    }`}
+                    className="block mt-0.5 text-xs normal-case font-bold"
                   >
                     {predictionTeaser.isCorrect ? "✓ Točno" : "✗ Netočno"}
                   </span>
@@ -166,7 +164,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </div>
             <time
               dateTime={publishedAt ? new Date(publishedAt).toISOString() : undefined}
-              className="flex items-center gap-1 font-bold text-slate-500"
+              className="flex items-center gap-1 font-bold font-mono text-slate-500"
             >
               <Calendar size={12} aria-hidden="true" />
               {formattedDate}
