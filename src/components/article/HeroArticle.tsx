@@ -58,16 +58,23 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
   const wordCount = content ? content.split(/\s+/).length : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const isRecent = publishedAt && (new Date().getTime() - new Date(publishedAt).getTime()) < 48 * 60 * 60 * 1000;
+
   return (
-    <article className="bezel-outer group w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[500px] flex flex-col">
-      <div className="bezel-inner h-full flex-1 flex flex-col md:grid md:grid-cols-12 border-l-2 border-primary accent-edge-glow overflow-hidden">
+    <article className="bezel-outer group w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[500px] flex flex-col transition-premium">
+      <div className="bezel-inner h-full flex-1 flex flex-col md:grid md:grid-cols-12 border-l-[3px] border-primary accent-edge-glow overflow-hidden">
         {/* Left text column: spans 7 columns on desktop layout */}
-        <div className="md:col-span-7 p-8 sm:p-10 md:p-12 flex flex-col justify-between relative z-10 bg-[#080a12] w-full">
-          <div className="space-y-4">
+        <div className="md:col-span-7 p-8 sm:p-10 md:p-12 flex flex-col justify-between relative z-10 bg-[#06080e] w-full">
+          <div className="space-y-6">
             <div className="flex flex-wrap gap-2 items-center">
               {featured && (
                 <span className="badge-type badge-featured text-[9px] px-2.5 py-0.5 border border-amber-400 bg-amber-400/10 text-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.35)] font-display uppercase tracking-widest font-black italic">
                   Izdvojeno
+                </span>
+              )}
+              {isRecent && (
+                <span className="stencil-label font-black text-primary uppercase text-[9px] mr-2">
+                  VRUĆA TEMA
                 </span>
               )}
               <TypeBadge type={type} variant="hero" className="text-[9px] px-2.5 py-0.5" />
@@ -85,20 +92,20 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3.5xl lg:text-5xl font-black italic tracking-tighter uppercase leading-[0.95] font-display text-white">
-              <Link href={`/clanak/${slug}`} className="hover:text-primary transition-premium">
+            <h1 className="text-3xl sm:text-4.5xl lg:text-6xl font-black italic tracking-tighter uppercase leading-[0.9] font-display text-white transition-premium group-hover:text-primary">
+              <Link href={`/clanak/${slug}`} className="transition-premium">
                 {title}
               </Link>
             </h1>
 
             {excerpt && (
-              <p className="text-xs sm:text-sm text-slate-400 font-semibold max-w-2xl leading-relaxed first-letter:font-display first-letter:text-4xl sm:first-letter:text-5xl first-letter:font-black first-letter:italic first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
+              <p className="text-sm sm:text-base text-slate-400 font-semibold max-w-2xl leading-relaxed first-letter:font-display first-letter:text-5xl sm:first-letter:text-6.5xl first-letter:font-black first-letter:italic first-letter:float-left first-letter:mr-3.5 first-letter:mt-1 first-letter:text-primary">
                 {excerpt}
               </p>
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t-2 border-white/10 pt-5 mt-6">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t-2 border-white/10 pt-6 mt-8">
             <div className="flex items-center gap-x-4 gap-y-2 text-xs text-slate-400">
               <span className="flex items-center gap-2 font-black text-white/90">
                 <span className="w-5 h-5 rounded-none bg-primary/20 border border-primary flex items-center justify-center">
@@ -132,7 +139,7 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
               <Magnetic strength={0.25}>
                 <Link
                   href={`/clanak/${slug}`}
-                  className="inline-flex items-center gap-2 rounded-none bg-primary hover:bg-primary/90 px-4 py-2 text-xs font-black uppercase tracking-widest text-white border-2 border-primary shadow-[var(--shadow-brutalist)] hover:shadow-[3px_3px_0px_0px_#ffffff] transition-premium cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-none bg-primary hover:bg-primary/90 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white border-2 border-primary shadow-[var(--shadow-brutalist)] hover:shadow-[4px_4px_0px_0px_#ffffff] transition-premium cursor-pointer"
                 >
                   Pročitaj više
                   <ArrowRight size={12} aria-hidden="true" />
@@ -142,8 +149,8 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
           </div>
         </div>
 
-        {/* Right photo column: spans 5 columns on desktop layout */}
-        <div className="md:col-span-5 relative min-h-[250px] md:min-h-full overflow-hidden bg-slate-950 w-full">
+        {/* Right photo column: spans 5 columns on desktop layout with a diagonal slash overlay */}
+        <div className="md:col-span-5 relative min-h-[280px] md:min-h-full overflow-hidden bg-slate-950 w-full diagonal-slash">
           <motion.div
             className="absolute inset-0 w-full h-[120%] -top-[10%]"
             style={{ y }}
@@ -157,15 +164,15 @@ export const HeroArticle: React.FC<HeroArticleProps> = ({
               fill
               priority
               sizes="(max-width: 1200px) 100vw, 500px"
-              className="object-cover opacity-85 group-hover:scale-[1.03] transition-transform duration-[6s] ease-out animate-kenburns"
+              className="object-cover opacity-85 group-hover:scale-[1.05] transition-transform duration-[6s] ease-out animate-kenburns"
             />
           </motion.div>
           {/* Asymmetric gradient overlays: fade out to dark background on the left */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080a12] via-slate-950/20 to-transparent md:hidden pointer-events-none z-10" />
-          <div className="hidden md:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#080a12] to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06080e] via-slate-950/25 to-transparent md:hidden pointer-events-none z-10" />
+          <div className="hidden md:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#06080e] to-transparent pointer-events-none z-10" />
         </div>
       </div>
-      <div className="h-1 bg-primary w-full" />
+      <div className="h-[5px] bg-primary w-full shadow-[0_-2px_15px_rgba(225,29,72,0.6)] relative z-20" />
     </article>
   );
 };

@@ -68,17 +68,21 @@ export const Sidebar: React.FC = async () => {
 
       <div className="bezel-outer">
         <div className="bezel-inner p-6">
-          <h3 className="text-sm font-black tracking-widest text-white uppercase border-b-2 border-primary pb-1.5 inline-flex items-center gap-2 mb-6 rounded-none">
-            <Trophy size={16} className="text-primary" aria-hidden="true" />
-            Nadolazeće borbe
+          <h3 className="text-xs font-black tracking-widest text-slate-300 uppercase border-b-2 border-primary pb-2 flex items-center gap-2 mb-6 rounded-none">
+            <Trophy size={14} className="text-primary" aria-hidden="true" />
+            <span className="stencil-label text-primary">Nadolazeće borbe</span>
           </h3>
           <div className="space-y-4">
             {upcomingFights.map((fight) => (
               <div
                 key={fight.id}
-                className="group relative rounded-none bg-black/60 border-2 border-white/10 p-4 transition-premium hover:border-primary shadow-[var(--shadow-card)] hover:shadow-[4px_4px_0px_0px_rgba(225,29,72,0.45)] cursor-pointer"
+                className="group relative rounded-none bg-black/65 border-2 border-white/10 p-4 pl-5 pr-5 transition-premium hover:border-primary shadow-[var(--shadow-card)] hover:shadow-[4px_4px_0px_0px_rgba(225,29,72,0.45)] cursor-pointer overflow-hidden"
               >
-                <div className="flex items-center justify-between text-[9px] text-slate-500 mb-2">
+                {/* Visual Blue Corner vs Red Corner edge guides */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-fighter-blue" />
+                <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-fighter-red" />
+
+                <div className="flex items-center justify-between text-[9px] text-slate-500 mb-2 relative z-10">
                   <span className="font-black text-primary tracking-widest uppercase">{fight.event}</span>
                   <span className="flex items-center gap-1 font-bold font-mono">
                     <Calendar size={11} className="text-slate-500" aria-hidden="true" />
@@ -112,19 +116,19 @@ export const Sidebar: React.FC = async () => {
 
       <div className="bezel-outer">
         <div className="bezel-inner p-6">
-          <h3 className="text-sm font-black tracking-widest text-white uppercase border-b-2 border-primary pb-1.5 inline-flex items-center gap-2 mb-6 rounded-none">
-            <Hash size={16} className="text-primary" aria-hidden="true" />
-            Popularne oznake
+          <h3 className="text-xs font-black tracking-widest text-slate-300 uppercase border-b-2 border-primary pb-2 flex items-center gap-2 mb-6 rounded-none">
+            <Hash size={14} className="text-primary" aria-hidden="true" />
+            <span className="stencil-label text-primary">Popularne oznake</span>
           </h3>
           <div className="flex flex-wrap gap-2">
             {popularTags.map((tag) => (
               <Link
                 key={tag.slug}
                 href={`/tag/${tag.slug}`}
-                className="inline-flex items-center rounded-none bg-white/5 border-2 border-white/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-300 hover:bg-primary hover:text-white hover:border-primary transition-premium"
+                className="inline-flex items-center rounded-none bg-black/40 border border-white/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-300 hover:bg-primary/10 hover:text-white hover:border-primary hover:shadow-[0_0_8px_rgba(225,29,72,0.3)] transition-premium"
               >
                 #{tag.name}
-                <span className="ml-1.5 text-[9px] text-slate-500 font-mono font-bold">({tag.count})</span>
+                <span className="ml-2 text-[9px] text-primary font-mono font-bold">({tag.count})</span>
               </Link>
             ))}
           </div>
@@ -132,11 +136,16 @@ export const Sidebar: React.FC = async () => {
       </div>
 
       <div className="bezel-outer">
-        <div className="bezel-inner p-6 bg-bg-canvas relative overflow-hidden text-white">
+        <div className="bezel-inner p-6 bg-slate-950 relative overflow-hidden text-white border-t-[3px] border-primary">
           <div className="absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-primary/10 blur-xl" aria-hidden="true" />
-          <h4 className="font-black text-lg italic tracking-tight uppercase mb-2 font-display">
-            Pratite nas na društvenim mrežama!
-          </h4>
+          
+          <div className="mb-4">
+            <span className="stencil-label text-primary mb-1">Borilačka zajednica</span>
+            <h4 className="font-black text-lg italic tracking-tight uppercase font-display text-white">
+              Pratite nas na mrežama!
+            </h4>
+          </div>
+
           <p className="text-xs text-slate-400 mb-5 leading-relaxed font-bold">
             Budite dio najbrže rastuće borilačke zajednice u regiji. Objave uživo, analize i ekskluzivni intervjui.
           </p>

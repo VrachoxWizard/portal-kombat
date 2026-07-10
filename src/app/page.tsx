@@ -98,6 +98,22 @@ export default async function HomePage({ searchParams }: PageProps) {
         </ScrollAnimationWrapper>
       )}
 
+      {/* Massive Off-screen Typographic Divider */}
+      {!isFiltered && (
+        <div className="relative w-screen max-w-[100vw] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none pointer-events-none mb-12 h-24 sm:h-32 md:h-40 flex items-center bg-gradient-to-r from-black/80 via-primary/5 to-black/80 border-y border-white/5">
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2.5 whitespace-nowrap z-20">
+            <span className="text-[9px] font-black font-mono tracking-widest text-primary uppercase border border-primary/30 px-2 py-1 bg-primary/5">PRIJENOS UŽIVO</span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+            </span>
+          </div>
+          <h2 className="text-6xl sm:text-8xl md:text-9xl font-black italic tracking-tighter text-slate-800/20 uppercase font-display select-none pl-[15%] text-stroke-red text-glow-red whitespace-nowrap leading-none">
+            NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA
+          </h2>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>

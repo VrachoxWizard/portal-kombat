@@ -353,7 +353,7 @@ h6 {
 }
 
 .text-glow-red {
-  text-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
+  text-shadow: 0 0 20px rgba(225, 29, 72, 0.7), 0 0 8px rgba(225, 29, 72, 0.5);
 }
 
 .text-glow-gold {
@@ -369,11 +369,11 @@ h6 {
 
 /* ── Arena ambient lighting ── */
 .arena-glow-red {
-  background: radial-gradient(circle at center, rgba(225, 29, 72, 0.12) 0%, rgba(225, 29, 72, 0.02) 60%, transparent 100%);
+  background: radial-gradient(circle at center, rgba(225, 29, 72, 0.22) 0%, rgba(225, 29, 72, 0.04) 60%, transparent 100%);
 }
 
 .arena-glow-indigo {
-  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.08) 0%, rgba(49, 46, 129, 0.01) 60%, transparent 100%);
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.16) 0%, rgba(49, 46, 129, 0.02) 60%, transparent 100%);
 }
 
 /* ── Subtle scanning lines texture overlay ── */
@@ -382,11 +382,11 @@ h6 {
   display: block;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.08), rgba(0, 255, 0, 0.03), rgba(0, 0, 255, 0.08));
   z-index: 2;
   background-size: 100% 4px, 6px 100%;
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.22;
 }
 
 .site-scanlines::before {
@@ -394,11 +394,11 @@ h6 {
   display: block;
   position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
   z-index: 40;
-  background-size: 100% 4px, 6px 100%;
+  background-size: 100% 6px, 8px 100%;
   pointer-events: none;
-  opacity: 0.08;
+  opacity: 0.12;
 }
 
 /* ── Ken Burns hero animation ── */
@@ -505,28 +505,77 @@ h6 {
 
 /* Double bezel system */
 .bezel-outer {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 3px;
-  box-shadow: var(--shadow-brutalist);
-  transition: transform var(--motion-hover) var(--ease-out-premium), opacity var(--motion-hover) var(--ease-out-premium), box-shadow var(--motion-hover) var(--ease-out-premium);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px;
+  box-shadow: 4px 4px 0px 0px rgba(22, 28, 50, 0.8), 2px 2px 10px rgba(225, 29, 72, 0.05);
+  transition: transform var(--motion-hover) var(--ease-out-premium), opacity var(--motion-hover) var(--ease-out-premium), box-shadow var(--motion-hover) var(--ease-out-premium), border-color var(--motion-hover) var(--ease-out-premium), background-color var(--motion-hover) var(--ease-out-premium);
 }
 .bezel-inner {
   background: var(--card);
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   position: relative;
 }
 .bezel-inner.skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.02) 25%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.02) 75%
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
   );
   background-size: 200% 100%;
 }
 .accent-edge-glow {
-  box-shadow: inset 3px 0 8px var(--primary-glow);
+  box-shadow: inset 4px 0 12px var(--primary-glow);
+}
+
+/* ── Combat Promo Diagonal Slash ── */
+.diagonal-slash {
+  position: relative;
+  overflow: hidden;
+}
+.diagonal-slash::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 45%, rgba(225, 29, 72, 0.15) 50%, transparent 55%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Accent stripe / warning tape ── */
+.accent-stripe {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--primary) 0px,
+    var(--primary) 10px,
+    rgba(3, 4, 8, 0.9) 10px,
+    rgba(3, 4, 8, 0.9) 20px
+  );
+}
+
+/* ── Stencil micro-label ── */
+.stencil-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stencil-label::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background-color: currentColor;
+  display: inline-block;
+  animation: pulse 1.5s infinite;
 }
 
 /* ── Premium Link Underline Hover Interaction ── */

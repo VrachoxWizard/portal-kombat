@@ -110,9 +110,12 @@ export const Header: React.FC = () => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <div
-            className="bezel-inner flex h-14 items-center justify-between px-6 bg-card/90 backdrop-blur-md"
+            className="bezel-inner flex h-14 items-center justify-between px-6 bg-card/95 backdrop-blur-md border-b border-primary/20 relative overflow-hidden"
           >
-            <div className="flex-shrink-0">
+            {/* CNC Machined Red Edge Line */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary shadow-[0_-2px_10px_var(--primary)] z-10" />
+
+            <div className="flex-shrink-0 relative z-20">
               <Link href="/" className="flex items-center gap-2 group">
                 <div className="relative flex items-center justify-center w-8 h-8 rounded-none bg-primary/15 border-2 border-primary/40 group-hover:bg-primary group-hover:border-primary transition-premium">
                   <Swords
@@ -127,13 +130,13 @@ export const Header: React.FC = () => {
                   </span>
                   <span className="text-foreground">PORTAL</span>
                 </span>
-                <span className="font-display rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white">
+                <span className="font-display rounded-none border-2 border-primary bg-primary px-1.5 py-0.5 text-[9px] font-black tracking-widest text-white shadow-[0_0_12px_rgba(225,29,72,0.6)]">
                   HR
                 </span>
               </Link>
             </div>
 
-            <nav className="hidden md:flex space-x-8" aria-label="Glavna navigacija">
+            <nav className="hidden md:flex space-x-8 relative z-20" aria-label="Glavna navigacija">
               {navigation.map((item) => {
                 const active = isActive(item.href);
                 return (
@@ -147,6 +150,9 @@ export const Header: React.FC = () => {
                     >
                       {item.name}
                       {active && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary ml-1.5 animate-pulse shadow-[0_0_6px_var(--primary)]" />
+                      )}
+                      {active && (
                         <motion.div
                           layoutId="activeHeaderNav"
                           className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary shadow-[0_2px_8px_rgba(225,29,72,0.6)]"
@@ -159,7 +165,7 @@ export const Header: React.FC = () => {
               })}
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 relative z-20">
               <CommandPalette />
               
               <div className="flex md:hidden">
@@ -194,7 +200,7 @@ export const Header: React.FC = () => {
               <Link
                 key={cat.slug}
                 href={`/?category=${cat.slug}`}
-                className="shrink-0 rounded-none px-3.5 py-1 text-[9px] font-black uppercase tracking-widest text-slate-300 border border-white/10 border-l-[3px] border-l-primary bg-black/60 hover:bg-black/80 hover:text-white hover:border-l-primary transition-premium cursor-pointer"
+                className="shrink-0 rounded-none px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-200 border-2 border-white/10 border-l-[4px] border-l-primary bg-black/80 hover:bg-primary/10 hover:text-white hover:border-primary hover:border-l-primary hover:shadow-[0_0_10px_rgba(225,29,72,0.2)] transition-premium cursor-pointer"
               >
                 {cat.name}
               </Link>

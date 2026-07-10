@@ -11,19 +11,24 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6 text-center space-y-8">
+    <div className="mx-auto max-w-2xl px-4 py-24 sm:px-6 text-center space-y-8 relative overflow-hidden">
+      <div className="relative select-none pointer-events-none mb-4 flex justify-center">
+        <span className="text-8xl sm:text-9xl font-black italic text-slate-900/30 tracking-tighter uppercase font-display text-stroke-red text-glow-red select-none">
+          GREŠKA TKO
+        </span>
+      </div>
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-none bg-destructive/10 border-2 border-destructive/30 mx-auto shadow-[var(--shadow-card)]">
         <AlertTriangle size={28} className="text-destructive" aria-hidden="true" />
       </div>
-      <div className="space-y-3">
-        <h1 className="text-3xl font-extrabold italic uppercase tracking-tight font-display text-foreground text-glow-red">
+      <div className="space-y-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold italic uppercase tracking-tight font-display text-foreground">
           Nešto je pošlo po zlu
         </h1>
-        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed max-w-md mx-auto font-medium">
-          Došlo je do greške pri učitavanju sadržaja. Pokušajte ponovno ili se vratite na naslovnicu.
+        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md mx-auto font-bold uppercase tracking-wider">
+          Sudac je prekinuo borbu. Došlo je do greške pri učitavanju sadržaja. Pokušajte ponovno.
         </p>
         {process.env.NODE_ENV === "development" && (
-          <p className="text-xs text-red-400/80 font-mono break-all max-w-lg mx-auto bg-black/60 border border-white/5 p-3 rounded-none">
+          <p className="text-xs text-red-400/80 font-mono break-all max-w-lg mx-auto bg-black/80 border-2 border-red-500/20 p-4 rounded-none shadow-[var(--shadow-card)]">
             {error.message}
           </p>
         )}

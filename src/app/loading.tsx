@@ -3,7 +3,7 @@ import React from "react";
 function SkeletonCard({ isHorizontal = false }: { isHorizontal?: boolean }) {
   return (
     <div className="bezel-outer h-full">
-      <div className={`bezel-inner h-full flex flex-col ${isHorizontal ? "sm:flex-row" : ""} overflow-hidden`}>
+      <div className={`bezel-inner h-full border-l-[3px] border-primary/10 flex flex-col ${isHorizontal ? "sm:flex-row" : ""} overflow-hidden`}>
         <div className={`relative bg-slate-950 shrink-0 skeleton-shimmer ${isHorizontal ? "aspect-video sm:w-[45%] sm:min-h-[220px]" : "aspect-video w-full"}`} />
         <div className="flex flex-1 flex-col p-6 space-y-4 justify-between bg-card">
           <div className="space-y-3">
@@ -27,9 +27,9 @@ function SkeletonCard({ isHorizontal = false }: { isHorizontal?: boolean }) {
 function SkeletonHero() {
   return (
     <div className="bezel-outer w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[500px] flex flex-col">
-      <div className="bezel-inner h-full flex-1 flex flex-col md:grid md:grid-cols-12 border-l-2 border-primary accent-edge-glow overflow-hidden">
+      <div className="bezel-inner h-full flex-1 flex flex-col md:grid md:grid-cols-12 border-l-[3px] border-primary/20 accent-edge-glow overflow-hidden">
         {/* Left col */}
-        <div className="md:col-span-7 p-8 sm:p-10 md:p-12 flex flex-col justify-between relative z-10 bg-[#080a12] w-full min-h-[300px]">
+        <div className="md:col-span-7 p-8 sm:p-10 md:p-12 flex flex-col justify-between relative z-10 bg-[#06080e] w-full min-h-[300px]">
           <div className="space-y-4">
             <div className="flex gap-2">
               <div className="h-5 w-16 bg-white/5 skeleton-shimmer" />
@@ -55,6 +55,7 @@ function SkeletonHero() {
         {/* Right col */}
         <div className="md:col-span-5 relative min-h-[250px] md:min-h-full bg-slate-950 w-full skeleton-shimmer" />
       </div>
+      <div className="h-[5px] bg-primary/20 w-full" />
     </div>
   );
 }

@@ -60,15 +60,15 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
   return (
     <article
-      className="bezel-outer hover:translate-y-[-3px] hover:shadow-[var(--shadow-brutalist-hover)] group h-full cursor-pointer transition-premium"
+      className="bezel-outer hover:translate-y-[-4px] hover:shadow-[var(--shadow-brutalist-hover)] group h-full cursor-pointer transition-premium"
     >
       <div
-        className={`bezel-inner h-full border-l-2 border-transparent group-hover:border-primary group-hover:shadow-[inset_3px_0_8px_var(--primary-glow)] transition-premium flex overflow-hidden ${
+        className={`bezel-inner h-full border-l-[3px] border-primary/20 group-hover:border-primary group-hover:shadow-[inset_4px_0_12px_var(--primary-glow)] transition-premium flex overflow-hidden ${
           isHorizontal ? "flex-col sm:flex-row" : "flex-col"
         }`}
       >
         <div
-          className={`relative overflow-hidden bg-slate-950 shrink-0 ${
+          className={`relative overflow-hidden bg-slate-950 shrink-0 diagonal-slash ${
             isHorizontal
               ? "aspect-video sm:aspect-[16/10] w-full sm:w-[45%] sm:min-h-[220px]"
               : "aspect-video w-full"
@@ -83,7 +83,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               alt=""
               fill
               sizes={isHorizontal ? "(max-width: 768px) 100vw, 500px" : "(max-width: 768px) 100vw, 400px"}
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:opacity-90"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06] group-hover:opacity-90"
               loading="lazy"
             />
           </Link>
@@ -116,7 +116,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
                   </div>
                   
                   {/* VS Badge */}
-                  <div className="col-span-2 flex items-center justify-center font-display font-black text-[10px] text-primary bg-background border-r border-white/5 py-2 shrink-0 italic select-none">
+                  <div className="col-span-2 flex items-center justify-center font-display font-black text-[10px] text-primary bg-background border-r border-white/5 py-2 shrink-0 italic select-none shadow-[inset_0_0_6px_rgba(225,29,72,0.4)] animate-pulse">
                     VS
                   </div>
                   

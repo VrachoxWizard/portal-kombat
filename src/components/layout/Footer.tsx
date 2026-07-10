@@ -20,16 +20,18 @@ export const Footer: React.FC = () => {
       <div className="border-b border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="bezel-outer w-full">
-            <div className="bezel-inner flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 bg-black/40">
-              <div className="flex-1">
-                <h3 className="text-lg font-extrabold italic uppercase tracking-tight text-white font-display mb-1">
+            <div className="bezel-inner flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 bg-slate-950 border-t-[3px] border-primary relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+              <div className="flex-1 relative z-10">
+                <span className="stencil-label text-primary mb-1">Newsletter</span>
+                <h3 className="text-xl font-extrabold italic uppercase tracking-tight text-white font-display mb-1">
                   Pridruži se borilačkoj zajednici
                 </h3>
-                <p className="text-sm text-slate-400 font-medium max-w-md">
+                <p className="text-xs sm:text-sm text-slate-400 font-medium max-w-md leading-relaxed">
                   Prijavite se na naš tjedni newsletter i budite u tijeku sa svim zbivanjima u oktogonu i ringu.
                 </p>
               </div>
-              <div className="w-full md:w-auto md:min-w-[320px]">
+              <div className="w-full md:w-auto md:min-w-[320px] relative z-10">
                 <NewsletterForm />
               </div>
             </div>
@@ -57,8 +59,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
-              Brzi linkovi
+              <span className="stencil-label text-primary">Brzi linkovi</span>
             </h3>
             <ul className="space-y-3 text-sm">
               {[
@@ -82,8 +83,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
-              Sportovi
+              <span className="stencil-label text-primary">Sportovi</span>
             </h3>
             <ul className="space-y-3 text-sm">
               {CATEGORIES.map((cat) => (
@@ -102,8 +102,7 @@ export const Footer: React.FC = () => {
 
           <div className="space-y-4">
             <h3 className="font-display text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
-              <div className="w-1.5 h-4 bg-primary" aria-hidden="true" />
-              Pratite nas
+              <span className="stencil-label text-primary">Pratite nas</span>
             </h3>
             <div className="flex gap-3">
               {[

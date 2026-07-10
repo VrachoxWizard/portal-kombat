@@ -13,9 +13,9 @@ interface ScrollAnimationWrapperProps {
 }
 
 const directionOffsets = {
-  up: { x: 0, y: 24 },
-  left: { x: -24, y: 0 },
-  right: { x: 24, y: 0 },
+  up: { x: 0, y: 36, filter: "blur(6px)" },
+  left: { x: -36, y: 0, filter: "blur(6px)" },
+  right: { x: 36, y: 0, filter: "blur(6px)" },
 };
 
 export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
@@ -33,11 +33,11 @@ export const ScrollAnimationWrapper: React.FC<ScrollAnimationWrapperProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, x: offset.x, y: offset.y, filter: offset.filter }}
+      whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.42,
+        duration: 0.55,
         delay,
         ease: EASE_OUT,
       }}
@@ -97,11 +97,12 @@ export const StaggerItem: React.FC<{
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 28, filter: "blur(4px)" },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.4, ease: EASE_OUT },
+          filter: "blur(0px)",
+          transition: { duration: 0.5, ease: EASE_OUT },
         },
       }}
       className={className}

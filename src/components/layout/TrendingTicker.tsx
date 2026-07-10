@@ -50,32 +50,33 @@ export const TrendingTicker = async () => {
   return (
     <div
       className="relative w-full overflow-hidden border-b-2 border-black bg-primary"
+      style={{
+        backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 12px, rgba(0, 0, 0, 0.04) 12px, rgba(0, 0, 0, 0.04) 24px)'
+      }}
       role="region"
       aria-label="Trending vijesti"
     >
       <div className="mx-auto max-w-7xl flex items-center">
-        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 border-r-2 border-black bg-black text-white">
+        <div className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 border-r-2 border-black bg-black text-white relative z-10">
           <span className="relative flex h-2 w-2" aria-hidden="true">
             <span className="motion-reduce:hidden animate-ping absolute inline-flex h-full w-full rounded-none bg-red-500 opacity-75" />
             <span className="relative inline-flex rounded-none h-2 w-2 bg-red-500" />
           </span>
           <span className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-1">
-            <Zap size={10} aria-hidden="true" className="text-primary fill-primary" />
+            <Zap size={10} aria-hidden="true" className="text-primary fill-primary animate-pulse shadow-[0_0_8px_var(--primary)]" />
             Trending
           </span>
         </div>
 
-        <div className="flex-1 overflow-hidden py-1">
+        <div className="flex-1 overflow-hidden py-1 relative z-10">
           <div className="ticker-track gap-8">
             {items.map((item, i) => (
               <Link
                 key={`${item.label}-${i}`}
                 href={item.href}
-                className="inline-flex items-center gap-2 text-[11px] font-black text-black hover:text-white transition-colors duration-150 uppercase tracking-wider shrink-0"
+                className="inline-flex items-center gap-3 text-[11px] font-black text-black hover:text-white transition-colors duration-150 uppercase tracking-wider shrink-0"
               >
-                <span className="text-black/60 font-medium" aria-hidden="true">
-                  ✦
-                </span>
+                <span className="w-1.5 h-1.5 bg-black/40 rounded-none transform rotate-45 shrink-0" aria-hidden="true" />
                 {item.label}
               </Link>
             ))}
