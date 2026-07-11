@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -20,6 +20,12 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+});
+
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
+  subsets: ["latin"],
+  weight: ["700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -76,7 +82,7 @@ export default function RootLayout({
   return (
     <html
       lang="hr"
-      className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased dark`}
+      className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} ${barlowCondensed.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden pb-16 md:pb-0 site-scanlines">
         <script

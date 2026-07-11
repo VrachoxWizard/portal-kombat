@@ -32,10 +32,20 @@
 
   --fighter-blue: #3b82f6;
   --fighter-red: #ef4444;
+
+  /* Broadcast Control Room palette */
+  --broadcast-cyan: #06b6d4;
+  --broadcast-cyan-glow: rgba(6, 182, 212, 0.2);
+  --broadcast-amber: #f59e0b;
+  --broadcast-amber-glow: rgba(245, 158, 11, 0.2);
+  --broadcast-emerald: #10b981;
+  --broadcast-emerald-glow: rgba(16, 185, 129, 0.2);
+  --signal-white: #e2e8f0;
   
   --font-sans: var(--font-plus-jakarta-sans), system-ui, sans-serif;
   --font-display: 'Clash Display', system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-condensed: var(--font-barlow-condensed), 'Barlow Condensed', system-ui, sans-serif;
 
   /* Machined Bezels & Shadows */
   --shadow-brutalist: 4px 4px 0px 0px rgba(22, 28, 50, 0.8);
@@ -115,6 +125,14 @@
   --color-fighter-blue: var(--fighter-blue);
   --color-fighter-red: var(--fighter-red);
 
+  --color-broadcast-cyan: var(--broadcast-cyan);
+  --color-broadcast-cyan-glow: var(--broadcast-cyan-glow);
+  --color-broadcast-amber: var(--broadcast-amber);
+  --color-broadcast-amber-glow: var(--broadcast-amber-glow);
+  --color-broadcast-emerald: var(--broadcast-emerald);
+  --color-broadcast-emerald-glow: var(--broadcast-emerald-glow);
+  --color-signal-white: var(--signal-white);
+
   --color-bg-canvas: var(--bg-canvas);
   --color-bg-canvas-raised: var(--bg-canvas-raised);
   --color-surface-card: var(--surface-card);
@@ -127,6 +145,7 @@
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
+  --font-condensed: var(--font-condensed);
 
   --radius-lg: var(--radius);
   --radius-md: var(--radius);
@@ -648,4 +667,35 @@ button:hover svg,
 button svg,
 .btn-press svg {
   transition: transform var(--motion-hover) var(--ease-out-premium);
+}
+
+/* ── Broadcast Control Room utilities ── */
+.font-condensed {
+  font-family: var(--font-condensed);
+}
+
+.broadcast-glow-cyan {
+  box-shadow: 0 0 12px var(--broadcast-cyan-glow), inset 0 0 6px var(--broadcast-cyan-glow);
+}
+
+.broadcast-glow-amber {
+  box-shadow: 0 0 12px var(--broadcast-amber-glow), inset 0 0 6px var(--broadcast-amber-glow);
+}
+
+@keyframes broadcast-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-broadcast-pulse {
+  animation: broadcast-pulse 2s ease-in-out infinite;
+}
+
+@keyframes signal-sweep {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-signal-sweep {
+  animation: signal-sweep 1.5s ease-in-out;
 }

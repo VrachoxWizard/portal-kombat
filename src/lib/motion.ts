@@ -9,3 +9,13 @@ export const duration = {
   entrance: 0.42,
   drawer: 0.35,
 } as const;
+
+export const springBroadcast = { type: "spring" as const, stiffness: 400, damping: 35 };
+export const springCountdown = { type: "spring" as const, stiffness: 500, damping: 25 };
+
+export const broadcastTransition = {
+  entrance: 0.35,
+  wipe: 0.4,
+  flash: 0.08,
+  statReveal: 0.6,
+} as const;
