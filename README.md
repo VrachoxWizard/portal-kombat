@@ -42,7 +42,17 @@ Aplikacija koristi PostgreSQL s Prismom. Glavne relacije:
 *   **Post**: Članci koji mogu biti tipa `NEWS`, `BLOG` ili `PREDICTION`. Povezani su s autorom (`User`), kategorijom (`Category`) i tagovima (`Tag`).
 *   **Fighter**: Baza boraca s omjerima (npr. "22-6-0") i detaljima.
 *   **Event**: UFC i ostali borilački događaji, sinkronizirani iz ICS kalendara. Povezani s dva borca (`Fighter`).
-*   **Prediction**: Povezane s postovima tipa `PREDICTION`. Sadrže podatke o borbi, prognoziranom pobjedniku i točnosti prognoze.
+*   **Prediction**: Povezane s postovima tipa `PREDICTION`. Sadrže podatke o borbi, prognoziranom pobjedniku, točnosti prognoze te **interaktivne glasove čitatelja (Glas Naroda)**.
+
+---
+
+## ⚡ Glas Naroda (Sustav Glasanja Čitatelja)
+
+Portal sadrži interaktivni sustav glasanja koji omogućuje posjetiteljima da prognoziraju ishod nadolazećih borbi:
+*   **Glasanje na Naslovnici**: Glavni aktivni meč istaknut je u desnom stupcu (Sidebar) unutar widgeta "GLAS NARODA" s brzim gumbima za odabir plavog ili crvenog kuta.
+*   **Glasanje unutar Članka**: Svaka aktivna predikcija sadrži gumbe za glasanje izravno unutar detaljne analize borbe.
+*   **Usporedba s Portalom**: Nakon glasanja, čitateljima se prikazuje postotni omjer glasova zajednice ("Glas Naroda") nasuprot službene stručne analize portala.
+*   **Trajnost**: Odabir se sprema lokalno (`localStorage`) kako bi se spriječilo višestruko glasanje i osigurao trenutni prikaz rezultata pri ponovnom posjetu.
 
 ---
 
