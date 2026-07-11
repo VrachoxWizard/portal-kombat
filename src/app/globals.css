@@ -699,3 +699,111 @@ button svg,
 .animate-signal-sweep {
   animation: signal-sweep 1.5s ease-in-out;
 }
+
+/* ── View Transitions: Broadcast Camera Cuts ── */
+:root {
+  --vt-duration-exit: 150ms;
+  --vt-duration-enter: 250ms;
+}
+
+/* Anchor the header during transitions */
+::view-transition-group(site-header) {
+  animation: none;
+}
+
+/* Forward navigation: content slides left */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    var(--vt-duration-exit) ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 60px;
+  animation:
+    var(--vt-duration-enter) ease-out var(--vt-duration-exit) both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+
+/* Back navigation: content slides right */
+::view-transition-old(.nav-back) {
+  --slide-offset: 60px;
+  animation:
+    var(--vt-duration-exit) ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -60px;
+  animation:
+    var(--vt-duration-enter) ease-out var(--vt-duration-exit) both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+
+/* Default crossfade for untyped transitions */
+::view-transition-old(.broadcast-crossfade) {
+  animation: var(--vt-duration-exit) ease-in both vt-fade reverse;
+}
+::view-transition-new(.broadcast-crossfade) {
+  animation: var(--vt-duration-enter) ease-out var(--vt-duration-exit) both vt-fade;
+}
+
+@keyframes vt-fade {
+  from {
+    filter: blur(2px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+/* Suppress view transitions when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ── Signal Acquisition Loading ── */
+@keyframes signal-acquire {
+  0% {
+    opacity: 0;
+    border-color: transparent;
+    transform: translateY(4px);
+  }
+  30% {
+    opacity: 0.4;
+    border-color: var(--broadcast-cyan);
+  }
+  100% {
+    opacity: 1;
+    border-color: var(--border);
+    transform: translateY(0);
+  }
+}
+
+.skeleton-broadcast {
+  background: linear-gradient(
+    90deg,
+    rgba(6, 182, 212, 0.02) 25%,
+    rgba(6, 182, 212, 0.08) 50%,
+    rgba(6, 182, 212, 0.02) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.signal-acquire {
+  animation: signal-acquire 0.6s ease-out both;
+}

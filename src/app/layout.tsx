@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 import { Plus_Jakarta_Sans, JetBrains_Mono, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -9,6 +9,7 @@ import ScrollToTop from "@/components/ui/ScrollToTop";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import { SITE_URL } from "@/lib/env";
 import Analytics from "@/components/ui/Analytics";
+import BroadcastStrip from "@/components/ui/BroadcastStrip";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -107,7 +108,8 @@ export default function RootLayout({
           <div className="absolute bottom-[8%] left-[8%] w-[32vw] h-[32vw] rounded-full arena-glow-indigo blur-[90px] opacity-60" />
         </div>
 
-        <div className="relative z-10 flex flex-col min-h-screen pt-24 md:pt-36">
+        <BroadcastStrip />
+        <div className="relative z-10 flex flex-col min-h-screen pt-[calc(1.75rem+6rem)] md:pt-[calc(1.75rem+9rem)]">
           <Suspense fallback={null}>
             <Header />
           </Suspense>
@@ -115,7 +117,20 @@ export default function RootLayout({
             <TrendingTicker />
           </Suspense>
           <main id="main-content" className="flex-1">
-            {children}
+            <ViewTransition
+              enter={{
+                "nav-forward": "nav-forward",
+                "nav-back": "nav-back",
+                default: "broadcast-crossfade",
+              }}
+              exit={{
+                "nav-forward": "nav-forward",
+                "nav-back": "nav-back",
+                default: "broadcast-crossfade",
+              }}
+            >
+              {children}
+            </ViewTransition>
           </main>
           <Footer />
           <ScrollToTop />

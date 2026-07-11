@@ -99,7 +99,8 @@ export const Header: React.FC = () => {
   return (
     <>
       <motion.header
-        className="fixed top-4 left-4 right-4 z-50 pointer-events-none"
+        className="fixed top-11 left-4 right-4 z-50 pointer-events-none"
+        style={{ viewTransitionName: "site-header" }}
       >
         <motion.div
           className="bezel-outer max-w-7xl mx-auto pointer-events-auto"
