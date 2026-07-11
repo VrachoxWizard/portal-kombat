@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Swords, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { springNav, duration, EASE_OUT } from "@/lib/motion";
+import { springNav } from "@/lib/motion";
 import { CATEGORIES } from "@/lib/constants";
 import CommandPalette from "@/components/ui/CommandPalette";
 import Magnetic from "@/components/ui/Magnetic";

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         }),
       }).catch(err => {
         // Suppress network errors in local dev/sandbox mode and just log them
-        console.log("[CRM SYNC SANDBOX] Network call bypassed. Local environment sandbox mode.");
+        console.log("[CRM SYNC SANDBOX] Network call bypassed. Local environment sandbox mode. Error:", err);
         return { ok: true, status: 200, json: async () => ({ success: true }) } as Response;
       });
 

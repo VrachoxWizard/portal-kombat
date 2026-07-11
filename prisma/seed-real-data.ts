@@ -91,7 +91,7 @@ async function main() {
     },
   });
 
-  const pereira = await prisma.fighter.create({
+  await prisma.fighter.create({
     data: {
       name: "Alex Pereira",
       slug: "alex-pereira",

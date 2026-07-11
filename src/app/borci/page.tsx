@@ -5,7 +5,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import SectionHeading from "@/components/ui/SectionHeading";
 import EmptyState from "@/components/ui/EmptyState";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { Users, Shield, MapPin, Search, Activity } from "lucide-react";
+import { Users, Shield, MapPin, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 

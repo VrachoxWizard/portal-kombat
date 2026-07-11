@@ -5,7 +5,6 @@ import {
   requireSession,
   requireAdmin,
   authErrorResponse,
-  isAdmin,
 } from "@/lib/auth-utils";
 import { PostType, PublishStatus, TrustLevel } from "@prisma/client";
 import { revalidatePostPaths } from "@/lib/revalidate";
