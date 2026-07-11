@@ -4,11 +4,17 @@ export interface AutoLinkEntity {
 }
 
 /**
- * Automatically wraps mentions of fighter names in Markdown link syntax,
- * avoiding already existing markdown links, image tags, and code blocks.
+ * Automatically wraps mentions of fighter names in Markdown link syntax.
+ * Performs AST-like isolation of existing links, images, and code blocks
+ * to ensure that text inside existing elements is not double-linked or modified.
+ * 
+ * @param text The raw markdown text content to process.
+ * @param entities An array of fighter entities containing name and slug.
+ * @returns The processed markdown text containing fighter links.
  */
 export function autoLinkFighters(text: string, entities: AutoLinkEntity[]): string {
   if (!text || !entities || entities.length === 0) return text;
+
 
   // 1. Temporarily extract code blocks and existing links to avoid modifying them
   const codeBlocks: string[] = [];

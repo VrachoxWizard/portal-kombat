@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import https from "node:https";
+import { slugify } from "./slugify";
 
 // Weight class mapping from UFC weights to Croatian category names
 const WEIGHT_CLASSES: Record<string, string> = {
@@ -13,7 +14,13 @@ const WEIGHT_CLASSES: Record<string, string> = {
   "265": "Teška (Heavyweight)",
 };
 
-// Helper to convert Date to Croatian day + month string (e.g. "12. srpnja")
+/**
+ * Formats a JavaScript Date object into a Croatian month-long string format.
+ * Example output: "11. srpnja" or "14. studenoga".
+ * 
+ * @param date The date object to format.
+ * @returns The formatted date string in Croatian.
+ */
 function formatCroatianDate(date: Date): string {
   const day = date.getDate();
   const months = [
@@ -34,19 +41,6 @@ function formatCroatianDate(date: Date): string {
   return `${day}. ${monthName}`;
 }
 
-// Slugify helper
-function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove accents
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
-}
 
 // Interface for parsed event
 interface ParsedEvent {
@@ -57,6 +51,13 @@ interface ParsedEvent {
   description: string;
 }
 
+/**
+ * Performs a secure HTTPS GET request to retrieve raw text data from a URL.
+ * Employs a modern User-Agent header to prevent requests from being blocked by anti-scraping firewalls.
+ * 
+ * @param url The external URL to fetch.
+ * @returns A promise resolving to the fetched string content.
+ */
 function fetchTextHttps(url: string): Promise<string> {
   return new Promise((resolve, reject) => {
     https.get(url, {
@@ -84,21 +85,30 @@ function fetchTextHttps(url: string): Promise<string> {
   });
 }
 
+/**
+ * Synchronizes upcoming UFC Events from a remote public iCalendar (.ics) feed.
+ * Parses events into structured matchup data, resolves database relations for fighters,
+ * and schedules revalidations for affected pages.
+ * 
+ * @returns A promise that resolves when the synchronization is complete.
+ */
 export async function syncUfcEvents() {
   console.log("Starting UFC Events synchronization...");
   try {
     const rawText = await fetchTextHttps("https://raw.githubusercontent.com/clarencechaan/ufc-cal/ics/UFC.ics");
 
-    // Unwrap folded lines in ICS file (lines starting with space/tab continue the previous line)
+    // Unwrap folded lines in iCalendar (ICS) format.
+    // In RFC 5545, lines longer than 75 octets should be folded by injecting a CRLF followed by a space/tab.
     const unwrappedText = rawText.replace(/\r?\n[ \t]/g, "");
 
-    // Regex to split into VEVENT blocks
+    // Extract individual VEVENT blocks using a global regex match
     const veventRegex = /BEGIN:VEVENT[\s\S]*?END:VEVENT/g;
     const veventBlocks = unwrappedText.match(veventRegex) || [];
 
     const parsedEvents: ParsedEvent[] = [];
 
     for (const block of veventBlocks) {
+      // Regex match properties within the VEVENT block
       const uidMatch = block.match(/UID:(.*)/);
       const summaryMatch = block.match(/SUMMARY:(.*)/);
       const dtstartMatch = block.match(/DTSTART;?.*:(.*)/);
@@ -109,12 +119,13 @@ export async function syncUfcEvents() {
 
       const uid = uidMatch[1].trim();
       const summary = summaryMatch[1].trim();
-      const dtstartStr = dtstartMatch[1].trim(); // e.g., 20260712T010000Z
+      const dtstartStr = dtstartMatch[1].trim(); // Format: YYYYMMDDTHHMMSSZ (UTC time)
       const location = locationMatch ? locationMatch[1].trim().replace(/\\,/g, ",") : "";
       
-      // Replace escaped newlines in description
+      // Clean up description content, resolving escaped newlines and commas
       let description = descriptionMatch ? descriptionMatch[1].trim() : "";
       description = description.replace(/\\n/g, "\n").replace(/\\,/g, ",");
+
 
       // Parse date: YYYYMMDDTHHMMSSZ
       const year = parseInt(dtstartStr.substring(0, 4), 10);

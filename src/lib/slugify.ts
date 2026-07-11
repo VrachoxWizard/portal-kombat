@@ -1,4 +1,11 @@
-/** Croatian-aware slugify for headings and URLs. */
+/**
+ * Converts a string into a URL-friendly slug.
+ * Replaces Croatian diacritics (Đ/Š/Ć/Č/Ž) with standard English letters,
+ * strips special characters, replaces whitespaces with hyphens, and trims margins.
+ * 
+ * @param text The input string to convert.
+ * @returns The generated slug.
+ */
 export function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -11,3 +18,4 @@ export function slugify(text: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
