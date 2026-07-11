@@ -10,6 +10,14 @@ export interface PredictionStats {
   accuracy: number | null;
 }
 
+/**
+ * Calculates correct/incorrect prediction statistics for a given author or year.
+ * Aggregates prediction count, resolved predictions count, correct predictions, 
+ * and computes accuracy percentage from database records.
+ * 
+ * @param options Optional filters (authorId and year).
+ * @returns Prediction stats object including total, resolved, correct, and accuracy percentage.
+ */
 export async function getPredictionStats(options?: {
   authorId?: string;
   year?: number;

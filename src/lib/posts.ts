@@ -38,7 +38,15 @@ export interface PaginatedResult<T> {
   hasPrev: boolean;
 }
 
-// ─── Public article fetch (published only, optional preview) ────
+/**
+ * Fetches a single public post matching a given slug.
+ * Supports token-signed preview access for drafts.
+ * Falls back to mock data if the database is offline/unreachable.
+ * 
+ * @param slug The unique article URL identifier/slug.
+ * @param options Optional parameters containing a preview token.
+ * @returns The PublicPost object, or null if the post is not found or unauthorized.
+ */
 export async function getPublicPost(
   slug: string,
   options?: { previewToken?: string }
@@ -69,7 +77,14 @@ export async function getPublicPost(
   return mock as PublicPost | null;
 }
 
-// ─── Main listing query (server-side pagination) ────────────────
+/**
+ * Main listing query fetching multiple posts using server-side pagination.
+ * Supports optional filtering by post type, category slug, tag, or search term.
+ * Falls back to local mock data filtering if the database is offline.
+ * 
+ * @param options Query and filter criteria (type, search, category, tag, page, pageSize).
+ * @returns A paginated result containing listing articles and metadata.
+ */
 export async function getPostListing(
   options: PostListingOptions = {}
 ): Promise<PaginatedResult<ListingPost>> {
