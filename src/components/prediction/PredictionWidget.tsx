@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSafeReducedMotion } from "@/lib/hooks";
 import { Swords, Award, Percent, Lightbulb } from "lucide-react";
@@ -18,6 +18,12 @@ interface PredictionProps {
   actualRound?: string | null;
   isCorrect?: boolean | null;
   resolvedAt?: Date | string | null;
+
+  // NEW fields
+  predictionId?: string;
+  postId?: string;
+  initialVotesA?: number;
+  initialVotesB?: number;
 }
 
 export const PredictionWidget: React.FC<PredictionProps> = ({
@@ -33,8 +39,61 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
   actualRound,
   isCorrect,
   resolvedAt,
+  predictionId,
+  postId,
+  initialVotesA = 0,
+  initialVotesB = 0,
 }) => {
   const prefersReducedMotion = useSafeReducedMotion();
+
+  const [hasVoted, setHasVoted] = useState(false);
+  const [votesA, setVotesA] = useState(initialVotesA);
+  const [votesB, setVotesB] = useState(initialVotesB);
+  const [isVoting, setIsVoting] = useState(false);
+
+  useEffect(() => {
+    if (!predictionId) return;
+    const stored = localStorage.getItem(`cp-vote-${predictionId}`);
+    if (stored === "A" || stored === "B") {
+      setTimeout(() => {
+        setHasVoted(true);
+      }, 0);
+    }
+  }, [predictionId]);
+
+  const handleVote = async (choice: "A" | "B") => {
+    if (!predictionId || !postId || hasVoted || isVoting) return;
+    setIsVoting(true);
+
+    if (choice === "A") setVotesA((prev) => prev + 1);
+    if (choice === "B") setVotesB((prev) => prev + 1);
+    setHasVoted(true);
+    localStorage.setItem(`cp-vote-${predictionId}`, choice);
+
+    try {
+      const res = await fetch(`/api/posts/${postId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fighter: choice }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVotesA(data.votesFighterA);
+        setVotesB(data.votesFighterB);
+      }
+    } catch (e) {
+      console.error("Greška pri glasanju:", e);
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
+  const totalVotes = votesA + votesB;
+  const pctA = totalVotes > 0 ? Math.round((votesA / totalVotes) * 100) : 50;
+  const pctB = totalVotes > 0 ? 100 - pctA : 50;
+  const communityWinner = pctA > pctB ? fighterA : pctA < pctB ? fighterB : "Izjednačeno";
+
+  const showVoting = predictionId && postId && !resolvedAt;
 
   const isWinnerA = winner === fighterA;
   const barColorClass = isWinnerA ? "bg-fighter-blue" : "bg-fighter-red";
@@ -71,10 +130,21 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
 
           <div className="grid grid-cols-12 gap-0 bezel-outer max-w-2xl mx-auto overflow-hidden">
             {/* Fighter A - Blue corner */}
-            <div className="col-span-5 bg-fighter-blue/15 p-4 text-left border-r border-white/5 flex flex-col justify-center min-h-[80px]">
-              <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block">{fighterA}</span>
-              <span className="text-[9px] text-fighter-blue/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Plavi kut</span>
-            </div>
+            {showVoting && !hasVoted ? (
+              <button
+                onClick={() => handleVote("A")}
+                disabled={isVoting}
+                className="col-span-5 bg-fighter-blue/10 hover:bg-fighter-blue/20 p-4 text-left border-r border-white/5 flex flex-col justify-center min-h-[80px] group/btn cursor-pointer transition-premium relative overflow-hidden"
+              >
+                <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block group-hover/btn:text-blue-400">{fighterA}</span>
+                <span className="text-[9px] text-fighter-blue/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Glasaj &uarr;</span>
+              </button>
+            ) : (
+              <div className="col-span-5 bg-fighter-blue/15 p-4 text-left border-r border-white/5 flex flex-col justify-center min-h-[80px]">
+                <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block">{fighterA}</span>
+                <span className="text-[9px] text-fighter-blue/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Plavi kut</span>
+              </div>
+            )}
             
             {/* VS Divider */}
             <div className="col-span-2 flex items-center justify-center font-display font-black text-sm sm:text-lg text-primary bg-background border-r border-white/5 py-4 shrink-0 italic select-none">
@@ -82,10 +152,21 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
             </div>
             
             {/* Fighter B - Red corner */}
-            <div className="col-span-5 bg-fighter-red/15 p-4 text-right flex flex-col justify-center min-h-[80px]">
-              <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block">{fighterB}</span>
-              <span className="text-[9px] text-fighter-red/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Crveni kut</span>
-            </div>
+            {showVoting && !hasVoted ? (
+              <button
+                onClick={() => handleVote("B")}
+                disabled={isVoting}
+                className="col-span-5 bg-fighter-red/10 hover:bg-fighter-red/20 p-4 text-right flex flex-col justify-center min-h-[80px] group/btn cursor-pointer transition-premium relative overflow-hidden"
+              >
+                <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block group-hover/btn:text-red-400">{fighterB}</span>
+                <span className="text-[9px] text-fighter-red/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Glasaj &uarr;</span>
+              </button>
+            ) : (
+              <div className="col-span-5 bg-fighter-red/15 p-4 text-right flex flex-col justify-center min-h-[80px]">
+                <span className="font-display font-bold italic text-base sm:text-2xl text-white uppercase tracking-tight leading-none truncate block">{fighterB}</span>
+                <span className="text-[9px] text-fighter-red/80 font-mono font-bold uppercase tracking-widest mt-1.5 block">Crveni kut</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -132,6 +213,45 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
             />
           </div>
         </div>
+
+        {/* Community split poll results */}
+        {predictionId && (
+          <div className="mb-6 bg-black/50 border border-white/10 p-4 rounded-none space-y-3">
+            <div className="flex justify-between text-xs font-black text-slate-400 uppercase tracking-widest">
+              <span className="flex items-center gap-1.5">
+                ⚡ Glas Naroda (Mišljenje čitatelja)
+              </span>
+              <span className="font-mono font-bold text-white">
+                {hasVoted ? `${pctA}% vs ${pctB}%` : "Aktivno glasanje"}
+              </span>
+            </div>
+            
+            {hasVoted ? (
+              <div className="space-y-2">
+                <div className="relative w-full h-5 bg-slate-950 border border-white/10 overflow-hidden flex">
+                  {pctA > 0 && (
+                    <div className="h-full bg-fighter-blue flex items-center pl-3 text-white font-mono text-[9px] font-black shrink-0" style={{ width: `${pctA}%` }}>
+                      {pctA}%
+                    </div>
+                  )}
+                  {pctB > 0 && (
+                    <div className="h-full bg-fighter-red flex items-center justify-end pr-3 text-white font-mono text-[9px] font-black ml-auto shrink-0" style={{ width: `${pctB}%` }}>
+                      {pctB}%
+                    </div>
+                  )}
+                </div>
+                <p className="text-[10px] text-slate-400 font-bold leading-normal">
+                  Čitatelji predviđaju pobjedu borca <span className={pctA > pctB ? "text-fighter-blue" : pctB > pctA ? "text-fighter-red" : "text-white"}>{communityWinner}</span> (Ukupno glasova: <span className="font-mono text-white">{totalVotes}</span>).
+                  {!resolvedAt && ` Portal prognozira pobjedu borca ${winner}.`}
+                </p>
+              </div>
+            ) : (
+              <p className="text-[10px] text-slate-400 font-bold italic">
+                Kliknite na plavi ili crveni kut iznad kako biste dali svoj glas i vidjeli rezultate ostalih čitatelja.
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="border-t border-white/10 pt-6">
           <h4 className="text-xs uppercase tracking-widest text-slate-400 font-black mb-2.5 flex items-center gap-1.5">

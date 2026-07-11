@@ -27,7 +27,6 @@ export const GlasNarodaWidget: React.FC<GlasNarodaProps> = ({
   expertWinner,
 }) => {
   const [hasVoted, setHasVoted] = useState(false);
-  const [voteChoice, setVoteChoice] = useState<"A" | "B" | null>(null);
   const [votesA, setVotesA] = useState(initialVotesA);
   const [votesB, setVotesB] = useState(initialVotesB);
   const [isVoting, setIsVoting] = useState(false);
@@ -35,8 +34,9 @@ export const GlasNarodaWidget: React.FC<GlasNarodaProps> = ({
   useEffect(() => {
     const stored = localStorage.getItem(`cp-vote-${predictionId}`);
     if (stored === "A" || stored === "B") {
-      setHasVoted(true);
-      setVoteChoice(stored);
+      setTimeout(() => {
+        setHasVoted(true);
+      }, 0);
     }
   }, [predictionId]);
 
@@ -48,7 +48,6 @@ export const GlasNarodaWidget: React.FC<GlasNarodaProps> = ({
     if (choice === "A") setVotesA((prev) => prev + 1);
     if (choice === "B") setVotesB((prev) => prev + 1);
     setHasVoted(true);
-    setVoteChoice(choice);
     localStorage.setItem(`cp-vote-${predictionId}`, choice);
 
     try {

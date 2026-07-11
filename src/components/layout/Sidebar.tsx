@@ -19,7 +19,21 @@ async function getSidebarData() {
     event: string;
     date: string;
   }> = [];
-  let activePrediction: any = null;
+  interface ActivePrediction {
+    id: string;
+    postId: string;
+    fighterA: string;
+    fighterB: string;
+    votesFighterA: number;
+    votesFighterB: number;
+    winner: string;
+    post: {
+      slug: string;
+      title: string;
+    };
+  }
+
+  let activePrediction: ActivePrediction | null = null;
 
   try {
     popularTags = await getCachedSidebarTags();

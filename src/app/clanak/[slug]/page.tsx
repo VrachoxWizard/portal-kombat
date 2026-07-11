@@ -378,6 +378,10 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           {article.type === "PREDICTION" && article.prediction && (
             <ScrollAnimationWrapper>
               <PredictionWidget
+                predictionId={article.prediction.id}
+                postId={article.id}
+                initialVotesA={article.prediction.votesFighterA}
+                initialVotesB={article.prediction.votesFighterB}
                 fighterA={article.prediction.fighterA}
                 fighterB={article.prediction.fighterB}
                 winner={article.prediction.winner}

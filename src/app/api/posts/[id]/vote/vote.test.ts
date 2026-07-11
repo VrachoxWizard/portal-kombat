@@ -61,7 +61,7 @@ describe("POST /api/posts/[id]/vote", () => {
     vi.mocked(prisma.prediction.update).mockResolvedValue({
       votesFighterA: 11,
       votesFighterB: 20,
-    } as any);
+    } as unknown as { id: string; postId: string; fighterA: string; fighterB: string; fighterAId: string | null; fighterBId: string | null; eventId: string | null; winner: string; method: string; predictedRound: string | null; confidenceScore: number; keyReasoning: string; votesFighterA: number; votesFighterB: number; actualWinner: string | null; actualMethod: string | null; actualRound: string | null; isCorrect: boolean | null; resolvedAt: Date | null });
 
     const request = new NextRequest("http://localhost/api/posts/123/vote", {
       method: "POST",
