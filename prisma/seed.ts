@@ -338,6 +338,8 @@ async function main() {
       predictedRound: '3. runda',
       confidenceScore: 75,
       keyReasoning: 'Jonesova sposobnost kontrole distance i korištenje laktova u klinču postupno će umoriti Miočića. Očekujemo rušenje u trećoj rundi i završetak borbe na tlu.',
+      votesFighterA: 45,
+      votesFighterB: 15,
     },
   });
 
@@ -368,6 +370,8 @@ async function main() {
       predictedRound: '5. runda',
       confidenceScore: 85,
       keyReasoning: 'Hari će krenuti iznimno eksplozivno u prve dvije runde, no Rico će preživjeti početni pritisak te zahvaljujući konstantnom ritmu i "low kickovima" dominirati u kasnijim rundama za sigurnu sudačku odluku.',
+      votesFighterA: 45,
+      votesFighterB: 15,
     },
   });
   console.log('Predikcije kreirane.');

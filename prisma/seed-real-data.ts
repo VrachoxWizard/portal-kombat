@@ -371,6 +371,8 @@ async function main() {
       predictedRound: "5. runda",
       confidenceScore: 70,
       keyReasoning: "McGregorov dugi izostanak i Hollowayev nevjerojatan volumen i izdržljivost presudit će u kasnijim rundama. Holloway će nadvladati ranu agresiju i uzeti pobjedu jednoglasnom odlukom.",
+      votesFighterA: 78,
+      votesFighterB: 22,
     },
   });
 

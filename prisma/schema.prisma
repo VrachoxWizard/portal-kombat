@@ -106,6 +106,9 @@ model Prediction {
   confidenceScore  Int
   keyReasoning     String @db.Text
 
+  votesFighterA    Int @default(0)
+  votesFighterB    Int @default(0)
+
   actualWinner     String?
   actualMethod     String?
   actualRound      String?
