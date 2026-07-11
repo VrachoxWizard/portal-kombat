@@ -5,6 +5,8 @@ import { getMockPopularTags, getMockUpcomingFights } from "@/lib/mockData";
 import { shouldUseMockData } from "@/lib/env";
 import { getCachedSidebarTags, getCachedUpcomingEvents } from "@/lib/cached-data";
 import { Calendar, Hash, Trophy } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import GlasNarodaWidget from "./GlasNarodaWidget";
 
 async function getSidebarData() {
   let popularTags: { name: string; slug: string; count: number }[] = [];
@@ -17,6 +19,7 @@ async function getSidebarData() {
     event: string;
     date: string;
   }> = [];
+  let activePrediction: any = null;
 
   try {
     popularTags = await getCachedSidebarTags();
@@ -30,6 +33,25 @@ async function getSidebarData() {
       event: e.event,
       date: e.date,
     }));
+
+    activePrediction = await prisma.prediction.findFirst({
+      where: {
+        isCorrect: null,
+      },
+      include: {
+        post: {
+          select: {
+            slug: true,
+            title: true,
+          },
+        },
+      },
+      orderBy: {
+        post: {
+          publishedAt: "desc",
+        },
+      },
+    });
   } catch (error) {
     console.warn("Sidebar data error:", error);
   }
@@ -46,7 +68,7 @@ async function getSidebarData() {
     }));
   }
 
-  return { popularTags, upcomingFights };
+  return { popularTags, upcomingFights, activePrediction };
 }
 
 function SearchSkeleton() {
@@ -58,13 +80,26 @@ function SearchSkeleton() {
 }
 
 export const Sidebar: React.FC = async () => {
-  const { popularTags, upcomingFights } = await getSidebarData();
+  const { popularTags, upcomingFights, activePrediction } = await getSidebarData();
 
   return (
     <aside className="space-y-8">
       <Suspense fallback={<SearchSkeleton />}>
         <SearchWidget />
       </Suspense>
+
+      {activePrediction && (
+        <GlasNarodaWidget
+          predictionId={activePrediction.id}
+          postId={activePrediction.postId}
+          fighterA={activePrediction.fighterA}
+          fighterB={activePrediction.fighterB}
+          initialVotesA={activePrediction.votesFighterA}
+          initialVotesB={activePrediction.votesFighterB}
+          postSlug={activePrediction.post.slug}
+          expertWinner={activePrediction.winner}
+        />
+      )}
 
       <div className="bezel-outer">
         <div className="bezel-inner p-6">
