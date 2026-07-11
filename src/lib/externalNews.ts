@@ -8,6 +8,14 @@ export interface ExternalArticle {
   source: string;
 }
 
+/**
+ * Fetches external combat sports RSS feeds (MMA Junkie, Boxing News 24).
+ * Parses items using regular expressions, extracts imagery from media tags,
+ * and normalizes the output into standard ExternalArticle objects.
+ * Saves results under server-side caching (revalidated every 5 minutes).
+ * 
+ * @returns A promise resolving to an array of normalized articles.
+ */
 export async function fetchExternalNews(): Promise<ExternalArticle[]> {
   const feeds = [
     { name: "MMA Junkie", url: "https://mmajunkie.usatoday.com/feed" },
@@ -108,6 +116,13 @@ export async function fetchExternalNews(): Promise<ExternalArticle[]> {
     .slice(0, 6);
 }
 
+/**
+ * Decodes standard HTML entities and unicode numeric character references
+ * into their corresponding UTF-8 string symbols.
+ * 
+ * @param str The string containing HTML entities.
+ * @returns The decoded plain string.
+ */
 function decodeHtmlEntities(str: string): string {
   return str
     .replace(/&amp;/g, "&")
