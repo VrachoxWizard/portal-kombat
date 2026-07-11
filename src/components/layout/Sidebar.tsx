@@ -7,6 +7,8 @@ import { getCachedSidebarTags, getCachedUpcomingEvents } from "@/lib/cached-data
 import { Calendar, Hash, Trophy } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import GlasNarodaWidget from "./GlasNarodaWidget";
+import BroadcastBadge from "@/components/ui/BroadcastBadge";
+import CountdownTimer from "@/components/ui/CountdownTimer";
 
 async function getSidebarData() {
   let popularTags: { name: string; slug: string; count: number }[] = [];
@@ -103,16 +105,19 @@ export const Sidebar: React.FC = async () => {
       </Suspense>
 
       {activePrediction && (
-        <GlasNarodaWidget
-          predictionId={activePrediction.id}
-          postId={activePrediction.postId}
-          fighterA={activePrediction.fighterA}
-          fighterB={activePrediction.fighterB}
-          initialVotesA={activePrediction.votesFighterA}
-          initialVotesB={activePrediction.votesFighterB}
-          postSlug={activePrediction.post.slug}
-          expertWinner={activePrediction.winner}
-        />
+        <div className="space-y-2">
+          <BroadcastBadge variant="poll-active" className="w-full justify-center" />
+          <GlasNarodaWidget
+            predictionId={activePrediction.id}
+            postId={activePrediction.postId}
+            fighterA={activePrediction.fighterA}
+            fighterB={activePrediction.fighterB}
+            initialVotesA={activePrediction.votesFighterA}
+            initialVotesB={activePrediction.votesFighterB}
+            postSlug={activePrediction.post.slug}
+            expertWinner={activePrediction.winner}
+          />
+        </div>
       )}
 
       <div className="bezel-outer">
@@ -156,6 +161,9 @@ export const Sidebar: React.FC = async () => {
                   ) : (
                     <span className="truncate max-w-[90px] text-right">{fight.fighterB}</span>
                   )}
+                </div>
+                <div className="mt-2.5 pt-2 border-t border-white/5 flex justify-center relative z-10">
+                  <CountdownTimer targetDate={fight.date} compact className="text-[9px] text-slate-400" />
                 </div>
               </div>
             ))}

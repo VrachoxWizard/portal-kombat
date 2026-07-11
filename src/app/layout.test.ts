@@ -1,5 +1,5 @@
 import { vi, describe, it, expect } from "vitest";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono, Barlow_Condensed } from "next/font/google";
 
 // Mock next/font/google
 vi.mock("next/font/google", () => {
@@ -12,6 +12,10 @@ vi.mock("next/font/google", () => {
       variable: "--font-jetbrains-mono",
       className: "class-jetbrains-mono",
     }),
+    Barlow_Condensed: vi.fn().mockReturnValue({
+      variable: "--font-barlow-condensed",
+      className: "class-barlow-condensed",
+    }),
   };
 });
 
@@ -22,6 +26,7 @@ vi.mock("@/components/layout/TrendingTicker", () => ({ default: () => null }));
 vi.mock("@/components/ui/ScrollToTop", () => ({ default: () => null }));
 vi.mock("@/components/layout/MobileBottomNav", () => ({ default: () => null }));
 vi.mock("@/components/ui/Analytics", () => ({ default: () => null }));
+vi.mock("@/components/ui/BroadcastStrip", () => ({ default: () => null }));
 vi.mock("@/lib/env", () => ({ SITE_URL: "https://combatportal.hr" }));
 
 describe("Typography Fonts Setup", () => {
@@ -42,6 +47,14 @@ describe("Typography Fonts Setup", () => {
         variable: "--font-jetbrains-mono",
         subsets: ["latin"],
         weight: ["400", "700"],
+      })
+    );
+
+    expect(Barlow_Condensed).toHaveBeenCalledWith(
+      expect.objectContaining({
+        variable: "--font-barlow-condensed",
+        subsets: ["latin"],
+        weight: ["700", "900"],
       })
     );
   });

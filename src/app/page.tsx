@@ -14,6 +14,8 @@ import { after } from "next/server";
 import { triggerAutoSync } from "@/lib/sync";
 import { getCachedUpcomingEvents } from "@/lib/cached-data";
 import CombatArena3D from "@/components/ui/CombatArena3DWrapper";
+import CountdownTimer from "@/components/ui/CountdownTimer";
+import BroadcastBadge from "@/components/ui/BroadcastBadge";
 
 interface PageProps {
   searchParams: Promise<{
@@ -77,9 +79,33 @@ export default async function HomePage({ searchParams }: PageProps) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {!isFiltered && currentPage === 1 && (
-        <ScrollAnimationWrapper className="mb-12">
-          <CombatArena3D upcomingEvents={upcomingEvents} />
-        </ScrollAnimationWrapper>
+        <>
+          {/* Broadcast Control Bar */}
+          <div className="flex items-center justify-between px-4 py-2 mb-2 border border-white/5 bg-black/80 backdrop-blur-sm select-none">
+            <div className="flex items-center gap-3">
+              <BroadcastBadge variant="live" label="UŽIVO" className="text-[7px]" />
+              <span className="text-[8px] font-mono font-bold text-slate-600 tracking-wider hidden sm:inline">
+                ZAGREB, CROATIA
+              </span>
+            </div>
+            {upcomingEvents.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-[8px] font-condensed font-black text-slate-500 tracking-widest uppercase hidden md:inline">
+                  NEXT EVENT:
+                </span>
+                <CountdownTimer
+                  targetDate={upcomingEvents[0].date}
+                  compact
+                  className="text-broadcast-cyan"
+                />
+              </div>
+            )}
+          </div>
+
+          <ScrollAnimationWrapper className="mb-12">
+            <CombatArena3D upcomingEvents={upcomingEvents} />
+          </ScrollAnimationWrapper>
+        </>
       )}
 
       {heroPost && (
@@ -100,35 +126,31 @@ export default async function HomePage({ searchParams }: PageProps) {
 
       {/* Massive Off-screen Typographic Divider (Kinetic Telemetry HUD) */}
       {!isFiltered && (
-        <div className="relative w-screen max-w-[100vw] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none pointer-events-none mb-12 h-24 sm:h-32 md:h-40 flex items-center bg-gradient-to-r from-black via-primary/[0.03] to-black border-y border-dashed border-white/10">
-          
-          {/* HUD Grid Overlay Marks */}
-          <div className="absolute inset-0 pointer-events-none z-10">
-            {/* Top-left tick corner */}
-            <div className="absolute top-2 left-6 w-3 h-3 border-l border-t border-primary/30" />
-            {/* Bottom-right tick corner */}
-            <div className="absolute bottom-2 right-6 w-3 h-3 border-r border-b border-primary/30" />
+        <>
+          <div className="w-screen max-w-[100vw] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[3px] bg-primary shadow-[0_0_10px_rgba(225,29,72,0.4)]" />
+          <div className="relative w-screen max-w-[100vw] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden select-none pointer-events-none mb-12 h-24 sm:h-32 md:h-40 flex items-center bg-gradient-to-r from-black via-primary/[0.03] to-black border-y border-dashed border-white/10">
             
-            {/* GPS coordinates telemetry */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden sm:flex flex-col text-[8px] font-mono font-black text-slate-500 tracking-wider text-right">
-              <span>LOC: ZAGREB, CROATIA</span>
-              <span className="text-primary/75">SYS: 45.8153° N, 15.9879° E</span>
-              <span>DEV: MATCH_PORTAL_V2</span>
+            {/* HUD Grid Overlay Marks */}
+            <div className="absolute inset-0 pointer-events-none z-10">
+              {/* Top-left tick corner */}
+              <div className="absolute top-2 left-6 w-3 h-3 border-l border-t border-primary/30" />
+              {/* Bottom-right tick corner */}
+              <div className="absolute bottom-2 right-6 w-3 h-3 border-r border-b border-primary/30" />
+              
+              {/* GPS coordinates telemetry */}
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden sm:flex flex-col text-[8px] font-mono font-black text-slate-500 tracking-wider text-right">
+                <span>LOC: ZAGREB, CROATIA</span>
+                <span className="text-primary/75">SYS: 45.8153° N, 15.9879° E</span>
+                <span>DEV: MATCH_PORTAL_V2</span>
+              </div>
             </div>
-          </div>
 
-          {/* Live Status indicator with fading backdrop mask */}
-          <div className="absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-black via-black/85 to-transparent flex items-center pl-6 z-20 pointer-events-auto">
-            <div className="flex items-center gap-2.5">
-              <span className="text-[9px] font-black font-mono tracking-widest text-primary uppercase border border-primary/30 px-2 py-1 bg-primary/5">
-                PRIJENOS UŽIVO
-              </span>
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-              </span>
+            {/* Live Status indicator with fading backdrop mask */}
+            <div className="absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-black via-black/85 to-transparent flex items-center pl-6 z-20 pointer-events-auto">
+              <div className="flex items-center gap-2.5">
+                <BroadcastBadge variant="live" label="PRIJENOS UŽIVO" className="text-[8px]" />
+              </div>
             </div>
-          </div>
 
           {/* Infinite Marquee Text Loop */}
           <div className="ticker-track ticker-track-no-pause flex gap-8 whitespace-nowrap z-0">
@@ -139,13 +161,19 @@ export default async function HomePage({ searchParams }: PageProps) {
               NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA • NAJNOVIJE OBJAVE • LATEST FIGHTS • NASLOVNICA
             </h2>
           </div>
-
         </div>
+        </>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           <ScrollAnimationWrapper>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-[9px] font-condensed font-black text-primary/60 tracking-[0.3em] uppercase">
+                CH.01
+              </span>
+              <div className="flex-1 h-px bg-white/5" />
+            </div>
             <SectionHeading
               title={isFiltered ? "Rezultati pretraživanja" : "Najnovije objave"}
               icon={Flame}
