@@ -188,10 +188,10 @@ export const Header: React.FC = () => {
         <motion.div
           animate={{
             opacity: scrolled ? 0 : 1,
-            y: scrolled ? -8 : 0,
+            y: scrolled ? -12 : 0,
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`max-w-7xl mx-auto mt-2 hidden md:flex justify-center overflow-hidden ${
+          className={`max-w-7xl mx-auto mt-4 hidden md:flex justify-center overflow-hidden ${
             scrolled ? "pointer-events-none" : "pointer-events-auto"
           }`}
         >
@@ -200,7 +200,7 @@ export const Header: React.FC = () => {
               <Link
                 key={cat.slug}
                 href={`/?category=${cat.slug}`}
-                className="shrink-0 rounded-none px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-200 border-2 border-white/10 border-l-[4px] border-l-primary bg-black/80 hover:bg-primary/10 hover:text-white hover:border-primary hover:border-l-primary hover:shadow-[0_0_10px_rgba(225,29,72,0.2)] transition-premium cursor-pointer"
+                className="shrink-0 rounded-none px-4 py-1.5 text-[10px] font-mono font-black uppercase tracking-widest text-slate-200 border-2 border-white/10 border-l-[4px] border-l-primary bg-black/80 hover:bg-primary/10 hover:text-white hover:border-primary hover:border-l-primary hover:shadow-[0_0_10px_rgba(225,29,72,0.2)] transition-premium cursor-pointer"
               >
                 {cat.name}
               </Link>

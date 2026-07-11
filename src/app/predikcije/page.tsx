@@ -77,7 +77,7 @@ export default async function PredictionsPage({ searchParams }: PageProps) {
             <>
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {paginated.items.map((post, index) => (
-                  <StaggerItem key={post.id} className={index === 0 ? "sm:col-span-2" : ""}>
+                  <StaggerItem key={post.id} className={index === 0 ? "col-span-2" : ""}>
                     <ArticleCard
                       title={post.title}
                       slug={post.slug}

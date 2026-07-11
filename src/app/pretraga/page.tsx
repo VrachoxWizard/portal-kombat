@@ -102,8 +102,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
           ) : (
             <>
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {paginated.items.map((post) => (
-                  <StaggerItem key={post.id}>
+                {paginated.items.map((post, index) => (
+                  <StaggerItem key={post.id} className={index === 0 ? "col-span-2" : ""}>
                     <ArticleCard
                       title={post.title}
                       slug={post.slug}
@@ -113,6 +113,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                       publishedAt={post.publishedAt}
                       category={post.category}
                       author={post.author}
+                      variant={index === 0 ? "horizontal" : "vertical"}
                       predictionTeaser={
                         post.type === "PREDICTION" && post.prediction
                           ? {

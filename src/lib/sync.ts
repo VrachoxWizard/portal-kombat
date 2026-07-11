@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import https from "node:https";
 
 // Weight class mapping from UFC weights to Croatian category names
 const WEIGHT_CLASSES: Record<string, string> = {
@@ -56,20 +57,37 @@ interface ParsedEvent {
   description: string;
 }
 
-export async function syncUfcEvents() {
-  console.log("Starting UFC Events synchronization...");
-  try {
-    const res = await fetch("https://raw.githubusercontent.com/clarencechaan/ufc-cal/ics/UFC.ics", {
+function fetchTextHttps(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    https.get(url, {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
       },
+    }, (res) => {
+      const { statusCode } = res;
+      if (statusCode && (statusCode < 200 || statusCode >= 300)) {
+        res.resume();
+        reject(new Error(`Failed to fetch: status code ${statusCode}`));
+        return;
+      }
+      res.setEncoding("utf8");
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        resolve(data);
+      });
+    }).on("error", (err) => {
+      reject(err);
     });
+  });
+}
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch UFC calendar: ${res.statusText}`);
-    }
-
-    const rawText = await res.text();
+export async function syncUfcEvents() {
+  console.log("Starting UFC Events synchronization...");
+  try {
+    const rawText = await fetchTextHttps("https://raw.githubusercontent.com/clarencechaan/ufc-cal/ics/UFC.ics");
 
     // Unwrap folded lines in ICS file (lines starting with space/tab continue the previous line)
     const unwrappedText = rawText.replace(/\r?\n[ \t]/g, "");
