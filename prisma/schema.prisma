@@ -128,6 +128,23 @@ model Fighter {
   bio         String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Tactical Skill Attributes (0-100 scale)
+  striking    Int      @default(70)
+  grappling   Int      @default(70)
+  power       Int      @default(70)
+  cardio      Int      @default(70)
+  chin        Int      @default(70)
+  tdDefense   Int      @default(70)
+
+  // Win Methods Breakdown (Percentages, sum = 100)
+  koPct       Int      @default(34)
+  subPct      Int      @default(33)
+  decPct      Int      @default(33)
+
+  // Physical stats
+  height      String?
+  reach       String?
   
   predictionsAsA Prediction[] @relation("FighterA")
   predictionsAsB Prediction[] @relation("FighterB")

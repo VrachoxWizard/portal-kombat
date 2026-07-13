@@ -10,6 +10,8 @@ import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/compone
 import { Shield, MapPin, Award, Calendar, ArrowLeft, Swords } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { RadarChart } from "@/components/fighters/RadarChart";
+import { WinMethodChart } from "@/components/fighters/WinMethodChart";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -192,12 +194,45 @@ export default async function FighterDetailPage({ params }: PageProps) {
                       </div>
                     )}
                   </div>
+
+                  {/* Compare Button */}
+                  <div className="mt-4 pt-2 flex justify-center md:justify-start">
+                    <Link
+                      href={`/borci/vs?fighterA=${fighter.slug}`}
+                      className="inline-flex items-center gap-2 bg-primary hover:bg-red-600 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white border border-red-500/20 transition-premium shadow-[var(--shadow-glow-sm)] btn-press cursor-pointer"
+                    >
+                      <Swords size={13} />
+                      Usporedi s drugim borcem
+                    </Link>
+                  </div>
                 </div>
-
-
               </div>
             </div>
           </ScrollAnimationWrapper>
+
+          {/* Stats Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ScrollAnimationWrapper delay={0.02}>
+              <div className="bezel-outer h-full overflow-hidden">
+                <div className="bezel-inner h-full">
+                  <RadarChart fighterA={fighter} />
+                </div>
+              </div>
+            </ScrollAnimationWrapper>
+
+            <ScrollAnimationWrapper delay={0.04}>
+              <div className="bezel-outer h-full overflow-hidden">
+                <div className="bezel-inner h-full">
+                  <WinMethodChart
+                    koPct={fighter.koPct}
+                    subPct={fighter.subPct}
+                    decPct={fighter.decPct}
+                    fighterName={fighter.name}
+                  />
+                </div>
+              </div>
+            </ScrollAnimationWrapper>
+          </div>
 
           {/* Biography */}
           {fighter.bio && (

@@ -8,8 +8,9 @@ import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ScrollAnimationWrapper, StaggerContainer, StaggerItem } from "@/components/ui/ScrollAnimationWrapper";
-import { Swords } from "lucide-react";
+import { Swords, Trophy } from "lucide-react";
 import PredictionStatsBanner from "@/components/prediction/PredictionStatsBanner";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Predikcije i Prognoze Borbi",
@@ -54,6 +55,32 @@ export default async function PredictionsPage({ searchParams }: PageProps) {
               icon={Swords}
               as="h1"
             />
+          </ScrollAnimationWrapper>
+
+          <ScrollAnimationWrapper delay={0.05}>
+            <Link
+              href="/liga"
+              className="group block border border-primary/30 bg-slate-950/60 p-4 font-condensed hover:border-primary transition-premium shadow-[var(--shadow-glow-sm)] cursor-pointer"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
+                    <Trophy size={16} className="animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-black italic text-sm text-white uppercase tracking-wider group-hover:text-primary transition-colors">
+                      Liga Analitičara & Šampionski Pojasevi
+                    </h3>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                      Glasaj na mečeve, skupljaj pobjede i osvoji šampionski pojas. Provjeri svoj ranking →
+                    </p>
+                  </div>
+                </div>
+                <div className="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0">
+                  OTVORI LIGU &rarr;
+                </div>
+              </div>
+            </Link>
           </ScrollAnimationWrapper>
 
           <ScrollAnimationWrapper delay={0.1}>

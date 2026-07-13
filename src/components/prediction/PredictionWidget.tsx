@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSafeReducedMotion } from "@/lib/hooks";
 import { Swords, Award, Percent, Lightbulb } from "lucide-react";
+import Link from "next/link";
+import { slugify } from "@/lib/slugify";
 
 interface PredictionProps {
   fighterA: string;
@@ -261,6 +263,17 @@ export const PredictionWidget: React.FC<PredictionProps> = ({
           <p className="text-slate-300 italic text-sm leading-relaxed border-l-4 border-primary pl-4 py-1">
             &ldquo;{keyReasoning}&rdquo;
           </p>
+        </div>
+
+        {/* Comparison HUD Link */}
+        <div className="mt-6 pt-6 border-t border-white/10 flex justify-end">
+          <Link
+            href={`/borci/vs?fighterA=${slugify(fighterA)}&fighterB=${slugify(fighterB)}`}
+            className="inline-flex items-center gap-2 bg-slate-900 border border-white/10 hover:border-primary/30 text-[10px] font-bold uppercase tracking-widest text-slate-300 hover:text-white px-4 py-2.5 transition-premium cursor-pointer btn-press"
+          >
+            <Swords size={12} className="text-primary" />
+            Taktička usporedba boraca (VS HUD)
+          </Link>
         </div>
 
         {resolvedAt && actualWinner && (

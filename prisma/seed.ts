@@ -106,7 +106,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Jackson Wink MMA',
       imageUrl: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Jon Jones se smatra jednim od najvećih MMA boraca svih vremena, bivši dugogodišnji prvak poluteške kategorije i trenutni UFC prvak teške kategorije.'
+      bio: 'Jon Jones se smatra jednim od najvećih MMA boraca svih vremena, bivši dugogodišnji prvak poluteške kategorije i trenutni UFC prvak teške kategorije.',
+      striking: 80,
+      grappling: 95,
+      power: 82,
+      cardio: 90,
+      chin: 92,
+      tdDefense: 94,
+      koPct: 37,
+      subPct: 33,
+      decPct: 30,
+      height: '193 cm',
+      reach: '215 cm'
     }
   });
 
@@ -119,7 +130,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Strong Style Fight Team',
       imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Stipe Miočić je najuspješniji prvak teške kategorije u povijesti UFC-a s najviše uzastopnih obrana naslova.'
+      bio: 'Stipe Miočić je najuspješniji prvak teške kategorije u povijesti UFC-a s najviše uzastopnih obrana naslova.',
+      striking: 88,
+      grappling: 84,
+      power: 86,
+      cardio: 88,
+      chin: 85,
+      tdDefense: 82,
+      koPct: 65,
+      subPct: 0,
+      decPct: 35,
+      height: '193 cm',
+      reach: '203 cm'
     }
   });
 
@@ -132,7 +154,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Superpro Sportcenter',
       imageUrl: 'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Rico Verhoeven je nizozemski kickboksač i trenutni Glory prvak u teškoj kategoriji, poznat kao Kralj Kickboksa.'
+      bio: 'Rico Verhoeven je nizozemski kickboksač i trenutni Glory prvak u teškoj kategoriji, poznat kao Kralj Kickboksa.',
+      striking: 95,
+      grappling: 10,
+      power: 85,
+      cardio: 96,
+      chin: 92,
+      tdDefense: 80,
+      koPct: 40,
+      subPct: 0,
+      decPct: 60,
+      height: '196 cm',
+      reach: '208 cm'
     }
   });
 
@@ -145,7 +178,18 @@ async function main() {
       stance: 'Orthodox',
       team: "Mike's Gym",
       imageUrl: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Badr Hari je marokansko-nizozemski kickboksač i bivši K-1 teškaški prvak, poznat po izrazito agresivnom stilu borbe.'
+      bio: 'Badr Hari je marokansko-nizozemski kickboksač i bivši K-1 teškaški prvak, poznat po izrazito agresivnom stilu borbe.',
+      striking: 92,
+      grappling: 5,
+      power: 95,
+      cardio: 72,
+      chin: 75,
+      tdDefense: 50,
+      koPct: 80,
+      subPct: 0,
+      decPct: 20,
+      height: '198 cm',
+      reach: '210 cm'
     }
   });
 
@@ -158,7 +202,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Ben Davison Academy',
       imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Anthony Joshua je britanski profesionalni boksač i dvostruki bivši ujedinjeni svjetski prvak u teškoj kategoriji.'
+      bio: 'Anthony Joshua je britanski profesionalni boksač i dvostruki bivši ujedinjeni svjetski prvak u teškoj kategoriji.',
+      striking: 90,
+      grappling: 5,
+      power: 92,
+      cardio: 82,
+      chin: 78,
+      tdDefense: 40,
+      koPct: 85,
+      subPct: 0,
+      decPct: 15,
+      height: '198 cm',
+      reach: '208 cm'
     }
   });
 
@@ -171,7 +226,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Albanian Boxing',
       imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Kristian Prenga je brzorastući albanski teškaški boksač s impresivnim omjerom nokauta.'
+      bio: 'Kristian Prenga je brzorastući albanski teškaški boksač s impresivnim omjerom nokauta.',
+      striking: 82,
+      grappling: 15,
+      power: 88,
+      cardio: 75,
+      chin: 80,
+      tdDefense: 30,
+      koPct: 80,
+      subPct: 0,
+      decPct: 20,
+      height: '193 cm',
+      reach: '200 cm'
     }
   });
 
@@ -184,7 +250,18 @@ async function main() {
       stance: 'Southpaw',
       team: 'Eagles MMA',
       imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Islam Makhachev je ruski MMA borac i trenutni UFC prvak u lakoj kategoriji.'
+      bio: 'Islam Makhachev je ruski MMA borac i trenutni UFC prvak u lakoj kategoriji.',
+      striking: 82,
+      grappling: 96,
+      power: 76,
+      cardio: 92,
+      chin: 88,
+      tdDefense: 93,
+      koPct: 18,
+      subPct: 46,
+      decPct: 36,
+      height: '178 cm',
+      reach: '180 cm'
     }
   });
 
@@ -197,7 +274,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Kill Cliff FC',
       imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Ian Garry je irski neporaženi UFC borac velter kategorije.'
+      bio: 'Ian Garry je irski neporaženi UFC borac velter kategorije.',
+      striking: 88,
+      grappling: 75,
+      power: 74,
+      cardio: 88,
+      chin: 84,
+      tdDefense: 80,
+      koPct: 47,
+      subPct: 6,
+      decPct: 47,
+      height: '191 cm',
+      reach: '188 cm'
     }
   });
 
@@ -209,7 +297,18 @@ async function main() {
       record: '17-1-0',
       stance: 'Orthodox',
       imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Filip Hrgović je hrvatski teškaški boksač i osvajač brončane medalje na Olimpijskim igrama 2016.'
+      bio: 'Filip Hrgović je hrvatski teškaški boksač i osvajač brončane medalje na Olimpijskim igrama 2016.',
+      striking: 85,
+      grappling: 30,
+      power: 84,
+      cardio: 85,
+      chin: 90,
+      tdDefense: 60,
+      koPct: 82,
+      subPct: 0,
+      decPct: 18,
+      height: '198 cm',
+      reach: '208 cm'
     }
   });
 
@@ -220,8 +319,19 @@ async function main() {
       weightClass: 'Teška (Heavyweight)',
       record: '9-0-0',
       stance: 'Southpaw',
-      imageUrl: 'https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Moses Itauma je iznimno perspektivni britanski teškaški boksač.'
+      imageUrl: "https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?auto=format&fit=crop&w=400&h=400&q=80",
+      bio: 'Moses Itauma je iznimno perspektivni britanski teškaški boksač.',
+      striking: 88,
+      grappling: 20,
+      power: 90,
+      cardio: 80,
+      chin: 85,
+      tdDefense: 50,
+      koPct: 89,
+      subPct: 0,
+      decPct: 11,
+      height: '198 cm',
+      reach: '203 cm'
     }
   });
 
@@ -234,7 +344,18 @@ async function main() {
       stance: 'Orthodox',
       team: 'Trojan Pula',
       imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&h=400&q=80',
-      bio: 'Ivan Vitasović je hrvatski teškaški MMA borac i bivši FNC prvak teške kategorije.'
+      bio: 'Ivan Vitasović je hrvatski teškaški MMA borac i bivši FNC prvak teške kategorije.',
+      striking: 78,
+      grappling: 74,
+      power: 80,
+      cardio: 82,
+      chin: 80,
+      tdDefense: 72,
+      koPct: 62,
+      subPct: 23,
+      decPct: 15,
+      height: '190 cm',
+      reach: '195 cm'
     }
   });
 
